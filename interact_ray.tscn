@@ -1,0 +1,93 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://interact_ray.gd" id="1_owxp2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_prompt"]
+content_margin_left = 18.0
+content_margin_top = 11.0
+content_margin_right = 20.0
+content_margin_bottom = 11.0
+bg_color = Color(0.022, 0.022, 0.03, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.62, 0.14, 0.14, 0.85)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_keycap"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+bg_color = Color(0.11, 0.11, 0.13, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.85, 0.22, 0.22, 0.85)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="Interact_Ray" type="RayCast3D"]
+target_position = Vector3(0, 0, -4)
+script = ExtResource("1_owxp2")
+
+[node name="Promt" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -132.0
+offset_right = 260.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_prompt")
+
+[node name="Row" type="HBoxContainer" parent="Promt"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="KeyCap" type="PanelContainer" parent="Promt/Row"]
+custom_minimum_size = Vector2(40, 38)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_keycap")
+
+[node name="Key" type="Label" parent="Promt/Row/KeyCap"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.92, 1)
+theme_override_font_sizes/font_size = 19
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Text" type="VBoxContainer" parent="Promt/Row"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="Action" type="Label" parent="Promt/Row/Text"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.96, 0.95, 1)
+theme_override_font_sizes/font_size = 20
+text = "Interact"
+
+[node name="Hint" type="Label" parent="Promt/Row/Text"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.61, 0.57, 0.56, 1)
+theme_override_font_sizes/font_size = 11
+text = "PRESS OR CLICK"

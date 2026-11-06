@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cpgwyhbkmblm1"]
+
+[ext_resource type="PackedScene" uid="uid://v47qai2sas7f" path="res://fridge.glb" id="1_ypa8n"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_085p4"]
+size = Vector3(4.3002625, 7.7806244, 3.923027)
+
+[node name="StaticBody3D" type="StaticBody3D" unique_id=401700898]
+
+[node name="fridge" parent="." unique_id=1300317370 instance=ExtResource("1_ypa8n")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1845779968]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.60087585, 0.46623993, -4.2713666)
+shape = SubResource("BoxShape3D_085p4")
+
+[editable path="fridge"]

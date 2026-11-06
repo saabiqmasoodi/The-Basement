@@ -1,0 +1,195 @@
+[gd_scene format=3 uid="uid://dpe1g0jmlueny"]
+
+[ext_resource type="Script" uid="uid://c8udx2xqls53" path="res://menu.gd" id="1_menu"]
+[ext_resource type="AudioStream" uid="uid://wx6pc35arvac" path="res://universfield-click-button-140881.mp3" id="2_click"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.07, 0.07, 0.08, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.08)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btnhover"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.13, 0.05, 0.05, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.75, 0.18, 0.18, 0.55)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="MainMenu" type="Control" unique_id=1912631557]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1686497965]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.021, 0.021, 0.026, 1)
+
+[node name="Title" type="Label" parent="." unique_id=344905038]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 90.0
+offset_right = 400.0
+offset_bottom = 170.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.88, 0.86, 0.84, 1)
+theme_override_colors/font_shadow_color = Color(0.45, 0.05, 0.05, 0.85)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 4
+theme_override_font_sizes/font_size = 72
+text = "The Basement"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitle" type="Label" parent="." unique_id=668190364]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 168.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.5, 0.47, 0.45, 1)
+theme_override_font_sizes/font_size = 16
+text = "Horror"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Menu" type="VBoxContainer" parent="." unique_id=1476724758]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = -20.0
+offset_right = 170.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="NewGame" type="Button" parent="Menu" unique_id=172272269]
+custom_minimum_size = Vector2(340, 52)
+layout_mode = 2
+focus_mode = 1
+theme_override_colors/font_color = Color(0.9, 0.88, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btnhover")
+text = "NEW GAME"
+
+[node name="LoadGame" type="Button" parent="Menu" unique_id=1877814335]
+custom_minimum_size = Vector2(340, 52)
+layout_mode = 2
+focus_mode = 1
+theme_override_colors/font_color = Color(0.9, 0.88, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btnhover")
+text = "LOAD SAVED GAME"
+
+[node name="Settings" type="Button" parent="Menu" unique_id=2066778601]
+custom_minimum_size = Vector2(340, 52)
+layout_mode = 2
+focus_mode = 1
+theme_override_colors/font_color = Color(0.9, 0.88, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btnhover")
+text = "SETTINGS"
+
+[node name="Quit" type="Button" parent="Menu" unique_id=780399658]
+custom_minimum_size = Vector2(340, 52)
+layout_mode = 2
+focus_mode = 1
+theme_override_colors/font_color = Color(0.9, 0.88, 0.86, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btnhover")
+text = "QUIT"
+
+[node name="Status" type="Label" parent="." unique_id=974314126]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -96.0
+offset_right = 400.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.72, 0.4, 0.36, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hint" type="Label" parent="." unique_id=1124056321]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -52.0
+offset_right = 400.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.35, 0.34, 0.33, 1)
+theme_override_font_sizes/font_size = 13
+text = "WASD move   ·   E interact   ·   F flashlight   ·   Shift sprint   ·   Space jump   ·   F5 save"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ClickPlayer" type="AudioStreamPlayer" parent="." unique_id=1633396398]
+stream = ExtResource("2_click")
+volume_db = -6.0
+bus = &"SFX"

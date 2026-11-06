@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cgd6nnh1j804n"]
+
+[ext_resource type="PackedScene" uid="uid://dw58vd41lwj3t" path="res://TEXTURES & MODELS/crate_box.glb" id="1_g2tbl"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_oq5cr"]
+points = PackedVector3Array(29.636257, 29.618155, 69.48359, -29.574415, -29.594091, 0.5820604, -29.557476, 29.547462, 0.60177237, 29.649101, 29.631, 0.50456476, 29.645557, -29.657145, 0.5086892, -29.571003, -29.59068, 69.41707, 29.636457, -29.648045, 69.48382, -29.56086, 29.550846, 69.405266)
+
+[node name="StaticBody3D" type="StaticBody3D" unique_id=42274824]
+
+[node name="Sketchfab_Scene" parent="." unique_id=1054127609 instance=ExtResource("1_g2tbl")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=865040746]
+transform = Transform3D(1.9470718e-07, -0.99999994, -3.7560632e-08, 0, -4.3711385e-08, 0.8592871, -1, -1.9470717e-07, -7.313325e-15, 0.44202113, 0.0070997574, 1.5147793)
+shape = SubResource("ConvexPolygonShape3D_oq5cr")
+
+[editable path="Sketchfab_Scene"]
