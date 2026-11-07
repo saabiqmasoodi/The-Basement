@@ -28,12 +28,35 @@
 [ext_resource type="PackedScene" path="res://pause_menu.tscn" id="26_pause"]
 [ext_resource type="Shader" path="res://horror_post.gdshader" id="27_horror"]
 [ext_resource type="Script" path="res://light_flicker.gd" id="28_flicker"]
+[ext_resource type="Texture2D" uid="uid://c18y4bxlmgohn" path="res://interior_tiles_diff_4k.jpg" id="30_tile"]
+[ext_resource type="Texture2D" uid="uid://bsfti6khv3fko" path="res://materials/generated/wall_beige_normal.png" id="31_beige_n"]
+[ext_resource type="Texture2D" uid="uid://c5l5iyuxgx6ox" path="res://materials/generated/wall_beige_roughness.png" id="32_beige_r"]
+[ext_resource type="Texture2D" uid="uid://dyevbye1mwo5e" path="res://materials/generated/wall_beige_ao.png" id="33_beige_ao"]
+[ext_resource type="Texture2D" uid="uid://blvom5j87yun0" path="res://materials/generated/wall_concrete_normal.png" id="34_concrete_n"]
+[ext_resource type="Texture2D" uid="uid://7436jwfw8q5l" path="res://materials/generated/wall_concrete_roughness.png" id="35_concrete_r"]
+[ext_resource type="Texture2D" uid="uid://cwrc7fvjeq4te" path="res://materials/generated/wall_concrete_ao.png" id="36_concrete_ao"]
+[ext_resource type="Texture2D" uid="uid://brlbo2mc70jo5" path="res://materials/generated/wall_painted_normal.png" id="37_painted_n"]
+[ext_resource type="Texture2D" uid="uid://cidefx3yrp46t" path="res://materials/generated/wall_painted_roughness.png" id="38_painted_r"]
+[ext_resource type="Texture2D" uid="uid://d1mdb5tgt2phi" path="res://materials/generated/wall_painted_ao.png" id="39_painted_ao"]
+[ext_resource type="Texture2D" uid="uid://brwgculw4o70e" path="res://materials/generated/floor_wood_normal.png" id="40_wood_n"]
+[ext_resource type="Texture2D" uid="uid://cvdpulw7a65mw" path="res://materials/generated/floor_wood_roughness.png" id="41_wood_r"]
+[ext_resource type="Texture2D" uid="uid://cb6w1up4fdfd" path="res://materials/generated/floor_wood_ao.png" id="42_wood_ao"]
+[ext_resource type="Texture2D" uid="uid://xlidetre6154" path="res://materials/generated/floor_tile_normal.png" id="43_tile_n"]
+[ext_resource type="Texture2D" uid="uid://creyne3guc0ad" path="res://materials/generated/floor_tile_roughness.png" id="44_tile_r"]
+[ext_resource type="Texture2D" uid="uid://cb3wa0q1wott6" path="res://materials/generated/floor_tile_ao.png" id="45_tile_ao"]
+[ext_resource type="Texture2D" uid="uid://bwulwky3obapp" path="res://materials/generated/floor_basement_normal.png" id="46_bfloor_n"]
+[ext_resource type="Texture2D" uid="uid://csfvdabsblhgk" path="res://materials/generated/floor_basement_roughness.png" id="47_bfloor_r"]
+[ext_resource type="Texture2D" uid="uid://buemwfq631fdx" path="res://materials/generated/floor_basement_ao.png" id="48_bfloor_ao"]
+[ext_resource type="Script" path="res://light_fixture.gd" id="50_fixture"]
+[ext_resource type="Script" path="res://atmosphere.gd" id="51_atmos"]
+[ext_resource type="Script" path="res://appearance.gd" id="52_appearance"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_c6gwx"]
-sky_top_color = Color(0.15686275, 0.11372549, 0.07450981, 1)
-sky_horizon_color = Color(0.1882353, 0.12156863, 0.101960786, 1)
+sky_top_color = Color(0.02, 0.025, 0.04, 1)
+sky_horizon_color = Color(0.06, 0.055, 0.05, 1)
 ground_bottom_color = Color(0, 0, 0, 1)
 ground_horizon_color = Color(0, 0, 0, 1)
+sky_energy_multiplier = 0.6
 
 [sub_resource type="Sky" id="Sky_2dftf"]
 sky_material = SubResource("ProceduralSkyMaterial_c6gwx")
@@ -41,87 +64,314 @@ sky_material = SubResource("ProceduralSkyMaterial_c6gwx")
 [sub_resource type="Environment" id="Environment_bcbcq"]
 background_mode = 2
 sky = SubResource("Sky_2dftf")
-ambient_light_source = 2
-ambient_light_color = Color(0.4, 0.48, 0.62, 1)
-ambient_light_energy = 0.42
-tonemap_mode = 3
-tonemap_exposure = 1.0
+ambient_light_source = 3
+ambient_light_color = Color(0.15, 0.19, 0.26, 1)
+ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.65
+tonemap_mode = 4
+tonemap_exposure = 1.22
+tonemap_agx_white = 8.0
+tonemap_agx_contrast = 1.12
 sdfgi_enabled = true
 sdfgi_use_occlusion = true
+sdfgi_read_sky_light = true
+sdfgi_cascades = 3
+sdfgi_min_cell_size = 0.2
+sdfgi_bounce_feedback = 0.6
+sdfgi_energy = 1.15
+sdfgi_normal_bias = 1.1
+sdfgi_probe_bias = 1.2
+ssr_enabled = true
+ssr_max_steps = 40
+ssr_fade_in = 0.15
+ssr_fade_out = 1.5
+ssr_depth_tolerance = 0.35
 ssao_enabled = true
-ssao_radius = 1.4
-ssao_intensity = 1.6
-ssao_power = 1.5
-ssao_detail = 0.5
+ssao_radius = 1.05
+ssao_intensity = 1.75
+ssao_power = 1.65
+ssao_detail = 0.6
+ssao_horizon = 0.06
+ssao_sharpness = 0.98
+ssao_light_affect = 0.08
+ssao_ao_channel_affect = 0.0
 glow_enabled = true
-glow_intensity = 1.1
-glow_strength = 1.0
-glow_bloom = 0.06
-glow_hdr_threshold = 1.0
+glow_levels/1 = 0.0
+glow_levels/2 = 0.8
+glow_levels/3 = 0.5
+glow_levels/4 = 0.2
+glow_levels/5 = 0.0
+glow_levels/6 = 0.0
+glow_levels/7 = 0.0
+glow_normalized = false
+glow_intensity = 0.55
+glow_strength = 0.9
+glow_mix = 0.0
+glow_bloom = 0.02
+glow_blend_mode = 1
+glow_hdr_threshold = 1.15
+glow_hdr_scale = 2.0
+glow_hdr_luminance_cap = 12.0
 fog_enabled = true
-fog_light_color = Color(0.16, 0.19, 0.25, 1)
-fog_light_energy = 0.45
-fog_density = 0.012
+fog_mode = 0
+fog_light_color = Color(0.08, 0.1, 0.13, 1)
+fog_light_energy = 0.3
+fog_sun_scatter = 0.0
+fog_density = 0.0035
+fog_aerial_perspective = 0.2
+fog_sky_affect = 0.3
 fog_height = 1.0
-fog_height_density = 0.15
-fog_aerial_perspective = 0.35
-fog_sky_affect = 0.6
+fog_height_density = 0.08
+fog_depth_curve = 1.0
+fog_depth_begin = 8.0
+fog_depth_end = 90.0
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.012
-volumetric_fog_albedo = Color(0.55, 0.57, 0.62, 1)
-volumetric_fog_emission = Color(0.11, 0.04, 0.035, 1)
-volumetric_fog_emission_energy = 0.15
-volumetric_fog_anisotropy = 0.4
-volumetric_fog_length = 64.0
+volumetric_fog_density = 0.01
+volumetric_fog_albedo = Color(0.7, 0.72, 0.78, 1)
+volumetric_fog_emission = Color(0.015, 0.008, 0.005, 1)
+volumetric_fog_emission_energy = 0.05
+volumetric_fog_gi_inject = 0.6
+volumetric_fog_anisotropy = 0.35
+volumetric_fog_length = 48.0
+volumetric_fog_detail_spread = 2.0
+volumetric_fog_ambient_inject = 0.35
+volumetric_fog_sky_affect = 0.25
+volumetric_fog_temporal_reprojection_enabled = true
+volumetric_fog_temporal_reprojection_amount = 0.9
 adjustment_enabled = true
 adjustment_brightness = 1.0
-adjustment_contrast = 1.12
-adjustment_saturation = 0.82
+adjustment_contrast = 1.07
+adjustment_saturation = 0.9
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kva58"]
-albedo_color = Color(0.27369767, 0.5024738, 0.33544144, 1)
-albedo_texture = ExtResource("2_fv4w7")
+albedo_color = Color(0.85, 0.74, 0.62, 1)
+albedo_texture = ExtResource("2_2dftf")
+metallic_specular = 0.55
+roughness_texture = ExtResource("41_wood_r")
+normal_enabled = true
+normal_texture = ExtResource("40_wood_n")
+normal_scale = 1.0
+ao_enabled = true
+ao_texture = ExtResource("42_wood_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.32, 0.32, 0.32)
+texture_filter = 5
+clearcoat_enabled = true
+clearcoat = 0.06
+clearcoat_roughness = 0.45
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bcbcq"]
+albedo_color = Color(0.85, 0.74, 0.62, 1)
 albedo_texture = ExtResource("2_2dftf")
+metallic_specular = 0.55
+roughness_texture = ExtResource("41_wood_r")
+normal_enabled = true
+normal_texture = ExtResource("40_wood_n")
+normal_scale = 1.0
+ao_enabled = true
+ao_texture = ExtResource("42_wood_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.32, 0.32, 0.32)
+texture_filter = 5
+clearcoat_enabled = true
+clearcoat = 0.06
+clearcoat_roughness = 0.45
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5c0m"]
-albedo_color = Color(0.27450982, 0.5019608, 0.3372549, 1)
-albedo_texture = ExtResource("2_fv4w7")
+albedo_color = Color(0.85, 0.74, 0.62, 1)
+albedo_texture = ExtResource("2_2dftf")
+metallic_specular = 0.55
+roughness_texture = ExtResource("41_wood_r")
+normal_enabled = true
+normal_texture = ExtResource("40_wood_n")
+normal_scale = 1.0
+ao_enabled = true
+ao_texture = ExtResource("42_wood_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.32, 0.32, 0.32)
+texture_filter = 5
+clearcoat_enabled = true
+clearcoat = 0.06
+clearcoat_roughness = 0.45
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_js7pq"]
-albedo_color = Color(0.39132866, 0.28260177, 0.048212856, 1)
+albedo_color = Color(0.72, 0.68, 0.6, 1)
+albedo_texture = ExtResource("2_fv4w7")
+metallic_specular = 0.35
+roughness_texture = ExtResource("32_beige_r")
+normal_enabled = true
+normal_texture = ExtResource("31_beige_n")
+normal_scale = 0.5
+ao_enabled = true
+ao_texture = ExtResource("33_beige_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.28, 0.28, 0.28)
+texture_filter = 5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eu7l1"]
+albedo_color = Color(0.9, 0.86, 0.78, 1)
 albedo_texture = ExtResource("2_fv4w7")
+metallic_specular = 0.45
+roughness_texture = ExtResource("32_beige_r")
+normal_enabled = true
+normal_texture = ExtResource("31_beige_n")
+normal_scale = 0.8
+ao_enabled = true
+ao_texture = ExtResource("33_beige_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.45, 0.45, 0.45)
+texture_filter = 5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p1v5b"]
+albedo_color = Color(0.9, 0.86, 0.78, 1)
 albedo_texture = ExtResource("2_fv4w7")
+metallic_specular = 0.45
+roughness_texture = ExtResource("32_beige_r")
+normal_enabled = true
+normal_texture = ExtResource("31_beige_n")
+normal_scale = 0.8
+ao_enabled = true
+ao_texture = ExtResource("33_beige_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.45, 0.45, 0.45)
+texture_filter = 5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wygdx"]
-albedo_texture = ExtResource("4_fvag4")
+albedo_color = Color(0.8, 0.78, 0.72, 1)
+albedo_texture = ExtResource("30_tile")
+metallic_specular = 0.55
+roughness_texture = ExtResource("44_tile_r")
+normal_enabled = true
+normal_texture = ExtResource("43_tile_n")
+normal_scale = 0.7
+ao_enabled = true
+ao_texture = ExtResource("45_tile_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+texture_filter = 5
+clearcoat_enabled = true
+clearcoat = 0.15
+clearcoat_roughness = 0.25
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b2ar6"]
+albedo_color = Color(0.62, 0.64, 0.6, 1)
 albedo_texture = ExtResource("10_kva58")
+metallic_specular = 0.4
+roughness_texture = ExtResource("38_painted_r")
+normal_enabled = true
+normal_texture = ExtResource("37_painted_n")
+normal_scale = 1.0
+ao_enabled = true
+ao_texture = ExtResource("39_painted_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.4, 0.4, 0.4)
+texture_filter = 5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ee7l0"]
+albedo_color = Color(0.55, 0.56, 0.54, 1)
 albedo_texture = ExtResource("10_kva58")
+metallic_specular = 0.4
+roughness_texture = ExtResource("38_painted_r")
+normal_enabled = true
+normal_texture = ExtResource("37_painted_n")
+normal_scale = 1.1
+ao_enabled = true
+ao_texture = ExtResource("39_painted_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.45, 0.45, 0.45)
+texture_filter = 5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gn8l5"]
+albedo_color = Color(0.52, 0.54, 0.52, 1)
 albedo_texture = ExtResource("10_kva58")
+metallic_specular = 0.55
+roughness_texture = ExtResource("47_bfloor_r")
+normal_enabled = true
+normal_texture = ExtResource("46_bfloor_n")
+normal_scale = 1.1
+ao_enabled = true
+ao_texture = ExtResource("48_bfloor_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.38, 0.38, 0.38)
+texture_filter = 5
+clearcoat_enabled = true
+clearcoat = 0.18
+clearcoat_roughness = 0.35
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6w02q"]
+albedo_color = Color(0.52, 0.54, 0.52, 1)
 albedo_texture = ExtResource("10_kva58")
+metallic_specular = 0.55
+roughness_texture = ExtResource("47_bfloor_r")
+normal_enabled = true
+normal_texture = ExtResource("46_bfloor_n")
+normal_scale = 1.1
+ao_enabled = true
+ao_texture = ExtResource("48_bfloor_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.38, 0.38, 0.38)
+texture_filter = 5
+clearcoat_enabled = true
+clearcoat = 0.18
+clearcoat_roughness = 0.35
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1fphk"]
+albedo_color = Color(0.52, 0.54, 0.52, 1)
 albedo_texture = ExtResource("10_kva58")
+metallic_specular = 0.55
+roughness_texture = ExtResource("47_bfloor_r")
+normal_enabled = true
+normal_texture = ExtResource("46_bfloor_n")
+normal_scale = 1.1
+ao_enabled = true
+ao_texture = ExtResource("48_bfloor_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.38, 0.38, 0.38)
+texture_filter = 5
+clearcoat_enabled = true
+clearcoat = 0.18
+clearcoat_roughness = 0.35
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sjtuv"]
+albedo_color = Color(0.7, 0.72, 0.7, 1)
 albedo_texture = ExtResource("12_f5c0m")
+metallic_specular = 0.4
+roughness_texture = ExtResource("35_concrete_r")
+normal_enabled = true
+normal_texture = ExtResource("34_concrete_n")
+normal_scale = 1.0
+ao_enabled = true
+ao_texture = ExtResource("36_concrete_ao")
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.38, 0.38, 0.38)
+texture_filter = 5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jhssr"]
-albedo_color = Color(0.6542321, 0.6542321, 0.654232, 1)
+albedo_color = Color(0.2, 0.21, 0.22, 1)
 albedo_texture = ExtResource("12_f5c0m")
+metallic = 0.65
+metallic_specular = 0.6
+roughness = 0.45
+normal_enabled = true
+normal_texture = ExtResource("34_concrete_n")
+normal_scale = 0.6
+uv1_triplanar = true
+uv1_world_triplanar = true
+uv1_scale = Vector3(0.9, 0.9, 0.9)
+texture_filter = 5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jhssr"]
 size = Vector3(3.7895508, 0.12841797, 1.0125732)
@@ -144,23 +394,29 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_post"]
 shader = ExtResource("27_horror")
-shader_parameter/vignette_strength = 0.55
-shader_parameter/vignette_start = 0.36
-shader_parameter/grain_amount = 0.026
+shader_parameter/vignette_strength = 0.46
+shader_parameter/vignette_start = 0.4
+shader_parameter/grain_amount = 0.022
 shader_parameter/grain_speed = 37.0
-shader_parameter/desaturation = 0.2
-shader_parameter/tint_amount = 0.35
-shader_parameter/chromatic_aberration = 0.0009
-shader_parameter/shadow_tint = Color(0.7, 0.81, 1, 1)
-shader_parameter/highlight_tint = Color(1.05, 0.98, 0.9, 1)
+shader_parameter/desaturation = 0.12
+shader_parameter/tint_amount = 0.28
+shader_parameter/chromatic_aberration = 0.0007
+shader_parameter/shadow_tint = Color(0.72, 0.82, 1, 1)
+shader_parameter/highlight_tint = Color(1.04, 0.99, 0.92, 1)
 
 [node name="Node3D" type="Node3D" unique_id=1472109502]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=707249585]
 environment = SubResource("Environment_bcbcq")
 
+[node name="Polish" type="Node" parent="."]
+script = ExtResource("52_appearance")
+
+[node name="Atmosphere" type="Node" parent="."]
+script = ExtResource("51_atmos")
+
 [node name="PostFX" type="CanvasLayer" parent="."]
-layer = 5
+layer = 0
 
 [node name="Grade" type="ColorRect" parent="PostFX"]
 material = SubResource("ShaderMaterial_post")
@@ -469,67 +725,324 @@ transform = Transform3D(-2.6226834e-08, 1.3113418e-08, -0.3, -0.3, 1.3113417e-08
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=2005973225]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.841194, 3.3857622, 12.37123)
-light_color = Color(1, 0.82, 0.62, 1)
-light_energy = 1.0
+light_color = Color(1, 0.8, 0.58, 1)
+light_energy = 1.95
 shadow_enabled = true
-omni_range = 15.0
-omni_attenuation = 1.2
+shadow_bias = 0.06
+shadow_normal_bias = 1.15
+shadow_blur = 0.6
+omni_range = 14.0
+omni_attenuation = 1.0
+light_size = 0.04
+light_specular = 0.5
+light_volumetric_fog_energy = 0.6
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D2"]
+script = ExtResource("50_fixture")
+style = "pendant"
+cord_length = 2.2
+bulb_color = Color(1, 0.8, 0.58, 1)
+shade_color = Color(0.085, 0.065, 0.045, 1)
 
 [node name="OmniLight3D5" type="OmniLight3D" parent="." unique_id=1684798203]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.340839, -1.5778579, 11.722512)
+light_color = Color(1, 0.84, 0.66, 1)
+light_energy = 1.5
 shadow_enabled = true
-omni_range = 20.01
+shadow_bias = 0.06
+shadow_normal_bias = 1.1
+shadow_blur = 0.55
+omni_range = 13.0
+omni_attenuation = 1.1
+light_size = 0.05
+light_specular = 0.45
+light_volumetric_fog_energy = 0.8
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D5"]
+script = ExtResource("50_fixture")
+style = "bare_bulb"
+cord_length = 1.0
+bulb_color = Color(1, 0.84, 0.66, 1)
+cage = true
 
 [node name="OmniLight3D6" type="OmniLight3D" parent="." unique_id=791419029]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.53849, -2.006658, 21.361773)
-light_energy = 1.34
+light_color = Color(1, 0.86, 0.7, 1)
+light_energy = 1.7
 shadow_enabled = true
-shadow_blur = 0.0
-omni_range = 20.01
+shadow_bias = 0.06
+shadow_normal_bias = 1.1
+shadow_blur = 0.6
+omni_range = 15.0
+omni_attenuation = 1.1
+light_size = 0.06
+light_specular = 0.45
+light_volumetric_fog_energy = 0.8
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D6"]
+script = ExtResource("50_fixture")
+style = "bare_bulb"
+cord_length = 1.0
+bulb_color = Color(1, 0.86, 0.7, 1)
+cage = true
 
 [node name="OmniLight3D9" type="OmniLight3D" parent="." unique_id=486530893]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.340988, -2.006658, 25.630022)
-light_energy = 0.238
-shadow_enabled = true
-shadow_blur = 0.0
-omni_range = 20.01
+light_color = Color(0.52, 0.63, 0.8, 1)
+light_energy = 0.14
+shadow_enabled = false
+omni_range = 6.0
+omni_attenuation = 1.5
+light_size = 0.03
+light_specular = 0.3
+light_volumetric_fog_energy = 0.2
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D9"]
+script = ExtResource("50_fixture")
+style = "bare_bulb"
+cord_length = 1.0
+bulb_color = Color(0.52, 0.63, 0.8, 1)
+cage = false
+fixture_scale = 0.8
 
 [node name="OmniLight3D8" type="OmniLight3D" parent="." unique_id=836688256]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.340839, -1.5778579, 30.065407)
-light_energy = 0.604
+light_color = Color(1, 0.82, 0.62, 1)
+light_energy = 1.3
 shadow_enabled = true
-omni_range = 20.01
+shadow_bias = 0.06
+shadow_normal_bias = 1.1
+shadow_blur = 0.55
+omni_range = 13.0
+omni_attenuation = 1.1
+light_size = 0.05
+light_specular = 0.45
+light_volumetric_fog_energy = 0.7
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D8"]
+script = ExtResource("50_fixture")
+style = "bare_bulb"
+cord_length = 1.0
+bulb_color = Color(1, 0.82, 0.62, 1)
+cage = true
 
 [node name="OmniLight3D7" type="OmniLight3D" parent="." unique_id=1560963985]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1037788, -1.5778579, 22.495375)
-light_energy = 1.713
+light_color = Color(1, 0.88, 0.72, 1)
+light_energy = 1.9
 shadow_enabled = true
-omni_range = 30.205
+shadow_bias = 0.06
+shadow_normal_bias = 1.1
+shadow_blur = 0.5
+omni_range = 16.0
+omni_attenuation = 1.05
+light_size = 0.06
+light_specular = 0.45
+light_volumetric_fog_energy = 0.8
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D7"]
+script = ExtResource("50_fixture")
+style = "bare_bulb"
+cord_length = 1.0
+bulb_color = Color(1, 0.88, 0.72, 1)
+cage = true
 
 [node name="OmniLight3D3" type="OmniLight3D" parent="." unique_id=376822024]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.841194, 3.3857622, -4.546277)
-light_color = Color(1, 0.87, 0.72, 1)
-light_energy = 2.0
+light_color = Color(1, 0.86, 0.7, 1)
+light_energy = 2.8
 shadow_enabled = true
-omni_range = 14.0
-omni_attenuation = 1.1
+shadow_bias = 0.06
+shadow_normal_bias = 1.1
+shadow_blur = 0.55
+omni_range = 16.0
+omni_attenuation = 1.05
+light_size = 0.05
+light_specular = 0.5
+light_volumetric_fog_energy = 0.7
 script = ExtResource("28_flicker")
 flicker_amount = 0.05
 flicker_speed = 4.5
 dip_interval = 38.0
 
+[node name="Fixture" type="Node3D" parent="OmniLight3D3"]
+script = ExtResource("50_fixture")
+style = "pendant"
+cord_length = 2.2
+bulb_color = Color(1, 0.86, 0.7, 1)
+shade_color = Color(0.1, 0.075, 0.05, 1)
+
 [node name="OmniLight3D4" type="OmniLight3D" parent="." unique_id=980189256]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.841494, 3.3857622, -4.546277)
-light_color = Color(1, 0.82, 0.65, 1)
-light_energy = 1.7
+light_color = Color(1, 0.8, 0.62, 1)
+light_energy = 2.4
 shadow_enabled = true
-omni_range = 13.0
-omni_attenuation = 1.1
+shadow_bias = 0.06
+shadow_normal_bias = 1.1
+shadow_blur = 0.55
+omni_range = 15.0
+omni_attenuation = 1.05
+light_size = 0.05
+light_specular = 0.5
+light_volumetric_fog_energy = 0.7
 script = ExtResource("28_flicker")
 flicker_amount = 0.09
 flicker_speed = 5.2
 dip_interval = 27.0
 dip_strength = 0.55
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D4"]
+script = ExtResource("50_fixture")
+style = "pendant"
+cord_length = 2.2
+bulb_color = Color(1, 0.8, 0.62, 1)
+shade_color = Color(0.085, 0.06, 0.045, 1)
+
+[node name="OmniLight3D10" type="OmniLight3D" parent="." unique_id=635209441]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.3, 2.2, -7.0)
+light_color = Color(1, 0.78, 0.58, 1)
+light_energy = 2.2
+shadow_enabled = true
+shadow_bias = 0.06
+shadow_normal_bias = 1.1
+shadow_blur = 0.55
+omni_range = 12.0
+omni_attenuation = 1.1
+light_size = 0.05
+light_specular = 0.5
+light_volumetric_fog_energy = 0.6
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D10"]
+script = ExtResource("50_fixture")
+style = "floor_lamp"
+bulb_color = Color(1, 0.78, 0.58, 1)
+shade_color = Color(0.12, 0.085, 0.055, 1)
+
+[node name="OmniLight3D11" type="OmniLight3D" parent="." unique_id=635209442]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.0, 3.35, 17.0)
+light_color = Color(1, 0.8, 0.6, 1)
+light_energy = 1.4
+shadow_enabled = true
+shadow_bias = 0.06
+shadow_normal_bias = 1.1
+shadow_blur = 0.6
+omni_range = 10.0
+omni_attenuation = 1.1
+light_size = 0.05
+light_specular = 0.45
+light_volumetric_fog_energy = 0.6
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D11"]
+script = ExtResource("50_fixture")
+style = "pendant"
+cord_length = 2.2
+bulb_color = Color(1, 0.8, 0.6, 1)
+shade_color = Color(0.08, 0.06, 0.045, 1)
+
+[node name="OmniLight3D12" type="OmniLight3D" parent="." unique_id=635209443]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 3.35, 10.5)
+light_color = Color(1, 0.85, 0.68, 1)
+light_energy = 1.6
+shadow_enabled = true
+shadow_bias = 0.06
+shadow_normal_bias = 1.1
+shadow_blur = 0.55
+omni_range = 11.0
+omni_attenuation = 1.1
+light_size = 0.05
+light_specular = 0.45
+light_volumetric_fog_energy = 0.6
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D12"]
+script = ExtResource("50_fixture")
+style = "pendant"
+cord_length = 2.2
+bulb_color = Color(1, 0.85, 0.68, 1)
+shade_color = Color(0.095, 0.07, 0.05, 1)
+
+[node name="OmniLight3D13" type="OmniLight3D" parent="." unique_id=635209444]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5, 2.2, -9.5)
+light_color = Color(1, 0.82, 0.64, 1)
+light_energy = 1.45
+shadow_enabled = true
+shadow_bias = 0.06
+shadow_normal_bias = 1.1
+shadow_blur = 0.55
+omni_range = 8.5
+omni_attenuation = 1.1
+light_size = 0.05
+light_specular = 0.5
+light_volumetric_fog_energy = 0.5
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D13"]
+script = ExtResource("50_fixture")
+style = "floor_lamp"
+bulb_color = Color(1, 0.82, 0.64, 1)
+shade_color = Color(0.115, 0.08, 0.052, 1)
+
+[node name="OmniLight3D14" type="OmniLight3D" parent="." unique_id=635209445]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0, 2.2, -3.5)
+light_color = Color(1, 0.84, 0.66, 1)
+light_energy = 1.8
+shadow_enabled = true
+shadow_bias = 0.06
+shadow_normal_bias = 1.1
+shadow_blur = 0.55
+omni_range = 9.0
+omni_attenuation = 1.1
+light_size = 0.05
+light_specular = 0.5
+light_volumetric_fog_energy = 0.5
+
+[node name="Fixture" type="Node3D" parent="OmniLight3D14"]
+script = ExtResource("50_fixture")
+style = "floor_lamp"
+bulb_color = Color(1, 0.84, 0.66, 1)
+shade_color = Color(0.105, 0.075, 0.05, 1)
+
+[node name="ReflectionProbe_Living" type="ReflectionProbe" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.57, 2.7, -4.73)
+update_mode = 0
+intensity = 0.75
+blend_distance = 1.0
+max_distance = 30.0
+size = Vector3(33.3, 5.4, 18.2)
+box_projection = true
+interior = true
+enable_shadows = true
+
+[node name="ReflectionProbe_BackRoom" type="ReflectionProbe" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.84, 2.7, 12.0)
+update_mode = 0
+intensity = 0.65
+blend_distance = 1.0
+max_distance = 25.0
+size = Vector3(19.7, 5.4, 14.7)
+box_projection = true
+interior = true
+enable_shadows = true
+
+[node name="ReflectionProbe_Basement" type="ReflectionProbe" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.0, -1.9, 21.0)
+update_mode = 0
+intensity = 0.55
+blend_distance = 1.2
+max_distance = 22.0
+size = Vector3(20.0, 3.0, 16.0)
+box_projection = true
+interior = true
+enable_shadows = true
+
+[node name="ReflectionProbe_BasementRight" type="ReflectionProbe" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, -1.9, 22.0)
+update_mode = 0
+intensity = 0.55
+blend_distance = 1.2
+max_distance = 20.0
+size = Vector3(13.5, 3.0, 15.0)
+box_projection = true
+interior = true
+enable_shadows = true
 
 [node name="Fuze" parent="." unique_id=1561646736 instance=ExtResource("17_1fphk")]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 4.6989727, -3.265069, 18.800983)

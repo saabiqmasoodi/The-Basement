@@ -10,13 +10,13 @@ render_mode unshaded;
 
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_linear;
 
-uniform float vignette_strength : hint_range(0.0, 1.0) = 0.55;
-uniform float vignette_start : hint_range(0.0, 1.0) = 0.36;
-uniform float grain_amount : hint_range(0.0, 0.12) = 0.028;
+uniform float vignette_strength : hint_range(0.0, 1.0) = 0.46;
+uniform float vignette_start : hint_range(0.0, 1.0) = 0.4;
+uniform float grain_amount : hint_range(0.0, 0.12) = 0.022;
 uniform float grain_speed : hint_range(0.0, 120.0) = 37.0;
-uniform float desaturation : hint_range(0.0, 1.0) = 0.20;
-uniform float tint_amount : hint_range(0.0, 1.0) = 0.35;
-uniform float chromatic_aberration : hint_range(0.0, 0.01) = 0.0009;
+uniform float desaturation : hint_range(0.0, 1.0) = 0.12;
+uniform float tint_amount : hint_range(0.0, 1.0) = 0.28;
+uniform float chromatic_aberration : hint_range(0.0, 0.01) = 0.0007;
 uniform vec3 shadow_tint : source_color = vec3(0.70, 0.81, 1.0);
 uniform vec3 highlight_tint : source_color = vec3(1.05, 0.98, 0.90);
 

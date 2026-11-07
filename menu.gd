@@ -3,6 +3,7 @@ extends Control
 # Settings are built in code so adding options never breaks the scene file.
 
 const WORLD_SCENE := "res://World.tscn"
+const MENU_BG_SHADER := "res://menu_background.gdshader"
 
 const ACTIONS := [
 	["forward", "Move forward"],
@@ -40,10 +41,23 @@ var awaiting_button: Button = null
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	status.text = ""
+	_style_background()
 	$Menu/NewGame.pressed.connect(_on_new_game)
 	$Menu/LoadGame.pressed.connect(_on_load_game)
 	$Menu/Settings.pressed.connect(_open_settings)
 	$Menu/Quit.pressed.connect(_on_quit)
+
+
+func _style_background() -> void:
+	var bg := $Background as ColorRect
+	if bg == null:
+		return
+	var shader := load(MENU_BG_SHADER) as Shader
+	if shader == null:
+		return
+	var mat := ShaderMaterial.new()
+	mat.shader = shader
+	bg.material = mat
 
 
 func _click() -> void:

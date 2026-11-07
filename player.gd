@@ -20,7 +20,8 @@ const NORMAL_HEAD_HEIGHT := 0.85498893
 
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
-@onready var flashlight: SpotLight3D = $Head/Camera3D/SpotLight3D
+@onready var flashlight_pivot: Node3D = $Head/FlashlightPivot
+@onready var flashlight: SpotLight3D = $Head/FlashlightPivot/SpotLight3D
 
 # Remember the camera position set in the editor.
 var camera_start_position: Vector3
@@ -32,7 +33,21 @@ var gravity: float = 9.8
 
 func _ready() -> void:
 	camera_start_position = camera.position
+	flashlight_pivot.global_transform = camera.global_transform
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func _process(delta: float) -> void:
+	# A handheld torch never points perfectly where the eyes do. Let the beam
+	# settle a few frames behind the camera, which reads as weight and makes
+	# fast turns sweep the light naturally instead of feeling welded on.
+	if flashlight_pivot == null or camera == null:
+		return
+	var target := camera.global_transform
+	var current_q := flashlight_pivot.global_transform.basis.get_rotation_quaternion()
+	var target_q := target.basis.get_rotation_quaternion()
+	var q := current_q.slerp(target_q, clampf(delta * 20.0, 0.0, 1.0))
+	flashlight_pivot.global_transform = Transform3D(Basis(q), target.origin)
 
 
 # Poses used by the opening cutscene. position is the player's global

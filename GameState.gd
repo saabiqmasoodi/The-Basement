@@ -248,13 +248,32 @@ func apply_settings():
 		DisplayServer.window_set_size(Vector2i(int(settings["window_width"]), int(settings["window_height"])))
 	var vsync_mode := DisplayServer.VSYNC_ENABLED if settings["vsync"] else DisplayServer.VSYNC_DISABLED
 	DisplayServer.window_set_vsync_mode(vsync_mode)
-	# Graphics quality (GL Compatibility renderer)
+	# Graphics quality: MSAA is optional; the TAA in project.godot handles normal
+	# edge quality. Keep the 3D at native resolution on small windows, but scale
+	# the 3D internally on high-DPI / 4K displays so the M2 Pro stays smooth.
+	# The UI and post-processing remain full-resolution.
 	var level: int = int(settings["msaa"])
 	var vp := get_viewport()
 	if vp and level == 0:
 		vp.msaa_3d = Viewport.MSAA_DISABLED
 	elif vp and level > 0:
 		vp.msaa_3d = Viewport.MSAA_2X if level == 2 else Viewport.MSAA_4X
+	if vp:
+		var target_w := int(settings["window_width"])
+		var render_scale := 1.0
+		if target_w >= 3200:
+			render_scale = 0.5
+		elif target_w >= 2400:
+			render_scale = 0.65
+		elif target_w >= 1800:
+			render_scale = 0.85
+		elif target_w >= 1500:
+			render_scale = 0.9
+		vp.scaling_3d_scale = render_scale
+		if render_scale < 1.0 and OS.get_name() == "macOS":
+			vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_METALFX_SPATIAL
+		else:
+			vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
 	# Input (apply stored keybinds directly; rebind_key() saves without
 	# re-entering apply_settings to avoid recursion).
 	for action in settings["keybinds"].keys():
