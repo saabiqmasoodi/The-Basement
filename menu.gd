@@ -112,14 +112,19 @@ func _build_settings() -> void:
 	add_child(settings_root)
 
 	var dim := ColorRect.new()
-	dim.color = Color(0.0, 0.0, 0.0, 0.65)
+	dim.color = Color(0.0, 0.0, 0.0, 0.78)
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	settings_root.add_child(dim)
 
 	settings_panel = PanelContainer.new()
 	var panel_style := StyleBoxFlat.new()
-	panel_style.bg_color = Color(0.055, 0.055, 0.065, 0.98)
-	panel_style.set_corner_radius_all(10)
+	panel_style.bg_color = Color(0.012, 0.018, 0.017, 0.985)
+	panel_style.border_width_left = 1
+	panel_style.border_width_top = 1
+	panel_style.border_width_right = 1
+	panel_style.border_width_bottom = 1
+	panel_style.border_color = Color(0.22, 0.31, 0.28, 0.48)
+	panel_style.set_corner_radius_all(4)
 	panel_style.set_content_margin_all(20)
 	settings_panel.add_theme_stylebox_override("panel", panel_style)
 	# Clamp to the window so the window can never spill off-screen.
@@ -148,7 +153,7 @@ func _build_settings() -> void:
 	var heading := Label.new()
 	heading.text = "SETTINGS"
 	heading.add_theme_font_size_override("font_size", 26)
-	heading.add_theme_color_override("font_color", Color(0.88, 0.86, 0.84))
+	heading.add_theme_color_override("font_color", Color(0.78, 0.85, 0.81))
 	outer.add_child(heading)
 
 	var scroll := ScrollContainer.new()
@@ -209,7 +214,7 @@ func _add_section(box: VBoxContainer, title: String) -> void:
 	var lbl := Label.new()
 	lbl.text = title
 	lbl.add_theme_font_size_override("font_size", 15)
-	lbl.add_theme_color_override("font_color", Color(0.62, 0.34, 0.32))
+	lbl.add_theme_color_override("font_color", Color(0.66, 0.19, 0.14))
 	box.add_child(lbl)
 
 

@@ -32,6 +32,7 @@ var dialogue_text: Label
 
 var cutscene_active := false
 var sway_time := 0.0
+var shake := 0.0
 
 
 func _ready() -> void:
@@ -103,6 +104,7 @@ func _play_opening_cutscene() -> void:
 	await get_tree().create_timer(SCREAM_DELAY, false).timeout
 	if scream:
 		scream.play()
+	shake = 1.0
 
 	await get_tree().create_timer(EAT_DELAY, false).timeout
 	if eat:
@@ -171,6 +173,7 @@ func _process(delta: float) -> void:
 		return
 
 	sway_time += delta
+	shake = maxf(0.0, shake - delta * 0.52)
 
 	var has_target := false
 	if friend and friend.visible:
@@ -194,9 +197,12 @@ func _process(delta: float) -> void:
 	# Subtle breathing / handheld sway.
 	want_yaw += sin(sway_time * 0.5) * 0.006
 	want_pitch += sin(sway_time * 0.34 + 0.6) * 0.005
+	want_yaw += sin(sway_time * 31.0) * 0.020 * shake
+	want_pitch += sin(sway_time * 27.0 + 1.7) * 0.016 * shake
 
 	var blend := 1.0 - exp(-2.2 * delta)
 	head.rotation.y = lerp_angle(head.rotation.y, want_yaw, blend)
+	head.rotation.z = lerp_angle(head.rotation.z, sin(sway_time * 23.0) * 0.013 * shake, blend)
 	camera_node.rotation.x = lerp(camera_node.rotation.x, want_pitch, blend)
 
 

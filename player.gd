@@ -73,6 +73,7 @@ func exit_cutscene(spawn_pos: Vector3, spawn_yaw: float) -> void:
 	rotation.y = spawn_yaw
 	head.position.y = NORMAL_HEAD_HEIGHT
 	head.rotation.y = 0.0
+	head.rotation.z = 0.0
 	camera.rotation.x = 0.0
 	camera.fov = GameState.get_setting("fov")
 	velocity = Vector3.ZERO

@@ -165,23 +165,42 @@ func _dress_friend(friend: Node) -> void:
 	if friend == null:
 		return
 
-	var skin := _friend_material(Color(0.63, 0.43, 0.33), 0.58, 0.0)
+	# The FBX ships with untextured, evenly lit materials. Keep the silhouette
+	# and animations, but replace the cheerful placeholder colours with a pale,
+	# dirty, physically plausible set. The jacket and trousers get a woven
+	# albedo/normal/roughness set so he no longer reads as a plastic doll.
+	var fabric_albedo := load("res://materials/generated/friend_fabric_albedo.png") as Texture2D
+	var fabric_normal := load("res://materials/generated/friend_fabric_normal.png") as Texture2D
+	var fabric_rough := load("res://materials/generated/friend_fabric_roughness.png") as Texture2D
+
+	var skin := _friend_material(Color(0.52, 0.43, 0.38), 0.62, 0.0)
 	skin.subsurf_scatter_enabled = true
-	skin.subsurf_scatter_strength = 0.12
+	skin.subsurf_scatter_strength = 0.08
 	skin.subsurf_scatter_skin_mode = true
-	var eyes := _friend_material(Color(0.78, 0.74, 0.66), 0.16, 0.0)
-	eyes.metallic_specular = 0.7
-	var hair := _friend_material(Color(0.055, 0.042, 0.03), 0.62, 0.0)
-	var jacket := _friend_material(Color(0.105, 0.125, 0.11), 0.74, 0.0)
-	var pants := _friend_material(Color(0.075, 0.085, 0.105), 0.84, 0.0)
-	var shoes := _friend_material(Color(0.028, 0.026, 0.024), 0.48, 0.15)
+	skin.rim_enabled = true
+	skin.rim = 0.25
+	skin.rim_tint = 0.35
+
+	var eyes := _friend_material(Color(0.18, 0.22, 0.13), 0.2, 0.0)
+	eyes.emission_enabled = true
+	eyes.emission = Color(0.58, 0.83, 0.38)
+	eyes.emission_energy_multiplier = 1.45
+	eyes.metallic_specular = 0.65
+
+	var hair := _friend_material(Color(0.018, 0.016, 0.014), 0.72, 0.0)
+	hair.rim_enabled = true
+	hair.rim = 0.22
+	hair.rim_tint = 0.45
+
+	var jacket := _fabric_material(Color(0.27, 0.30, 0.25), fabric_albedo, fabric_normal, fabric_rough)
+	var pants := _fabric_material(Color(0.22, 0.25, 0.26), fabric_albedo, fabric_normal, fabric_rough)
+	var shoe_upper := _friend_material(Color(0.020, 0.018, 0.016), 0.44, 0.12)
+	var shoe_sole := _friend_material(Color(0.032, 0.030, 0.027), 0.8, 0.0)
 
 	for mi in friend.find_children("*", "MeshInstance3D", true, false):
 		var key := mi.name.to_lower()
 		var mat: StandardMaterial3D = null
-		if key.contains("body") or key.contains("skin"):
-			mat = skin
-		elif key.contains("eye"):
+		if key.contains("eye"):
 			mat = eyes
 		elif key.contains("hair"):
 			mat = hair
@@ -190,13 +209,20 @@ func _dress_friend(friend: Node) -> void:
 		elif key.contains("pant") or key.contains("trouser"):
 			mat = pants
 		elif key.contains("shoe") or key.contains("boot"):
-			mat = shoes
+			mat = shoe_upper
+		elif key.contains("body") or key.contains("skin"):
+			mat = skin
+
 		if mat != null:
-			mi.material_override = mat
+			if key.contains("shoe") and mi.mesh != null and mi.mesh.get_surface_count() > 1:
+				mi.set_surface_override_material(0, shoe_upper)
+				mi.set_surface_override_material(1, shoe_sole)
+			else:
+				mi.material_override = mat
 			mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 
 	# The FBX contains a stray imported lamp (energy 1000, range 0.06) far from
-	# the character. Turn it off and add a controlled, warm fill instead.
+	# the character. Turn it off and add controlled, cold fill and a red edge.
 	var stray := friend.get_node_or_null("Light") as Light3D
 	if stray != null:
 		stray.light_energy = 0.0
@@ -205,28 +231,46 @@ func _dress_friend(friend: Node) -> void:
 	var fill := OmniLight3D.new()
 	fill.name = "CutsceneFill"
 	fill.position = Vector3(0.35, 0.65, 0.15)
-	fill.light_color = Color(1.0, 0.82, 0.65)
-	fill.light_energy = 0.5
-	fill.omni_range = 3.5
-	fill.omni_attenuation = 1.4
-	fill.light_specular = 0.3
+	fill.light_color = Color(0.55, 0.70, 0.66)
+	fill.light_energy = 0.34
+	fill.omni_range = 3.2
+	fill.omni_attenuation = 1.5
+	fill.light_specular = 0.26
 	fill.light_volumetric_fog_energy = 0.0
 	fill.shadow_enabled = false
 	friend.add_child(fill)
 
-	# Cool rim from the back separates the dark hair and jacket from the warm
-	# room without adding a second frontal key.
+	# A red edge from behind makes his silhouette feel staged and wrong without
+	# adding a second frontal key that would flatten the face.
 	var rim := OmniLight3D.new()
 	rim.name = "CutsceneRim"
 	rim.position = Vector3(0.1, 0.65, -0.55)
-	rim.light_color = Color(0.45, 0.6, 0.85)
-	rim.light_energy = 0.4
-	rim.omni_range = 2.5
-	rim.omni_attenuation = 1.6
-	rim.light_specular = 0.25
+	rim.light_color = Color(0.88, 0.10, 0.035)
+	rim.light_energy = 0.45
+	rim.omni_range = 2.3
+	rim.omni_attenuation = 1.7
+	rim.light_specular = 0.2
 	rim.light_volumetric_fog_energy = 0.0
 	rim.shadow_enabled = false
 	friend.add_child(rim)
+
+
+func _fabric_material(
+	color: Color,
+	albedo: Texture2D,
+	normal_map: Texture2D,
+	roughness_map: Texture2D
+) -> StandardMaterial3D:
+	var mat := _friend_material(color, 0.92, 0.0)
+	mat.albedo_texture = albedo
+	mat.normal_texture = normal_map
+	mat.normal_enabled = true
+	mat.normal_scale = 0.85
+	mat.roughness_texture = roughness_map
+	mat.roughness_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_GRAYSCALE
+	mat.texture_repeat = true
+	mat.uv1_scale = Vector3(2.6, 2.6, 2.6)
+	return mat
 
 
 func _friend_material(color: Color, roughness: float, metallic: float) -> StandardMaterial3D:
