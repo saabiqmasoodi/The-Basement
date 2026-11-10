@@ -5,6 +5,13 @@ extends Control
 const WORLD_SCENE := "res://World.tscn"
 const MENU_BG_SHADER := "res://menu_background.gdshader"
 
+const GRAPHICS_HELP := {
+	"low": "Fastest mode. Fog, practicals and the film grade; expensive effects are thinned for high FPS.",
+	"medium": "60 FPS target. Blood decals, glow and shadows return; volumetrics and SSAO stay off.",
+	"high": "The horror mode. Volumetric fog, SSAO, particles and the full post grade.",
+	"very_high": "Showpiece mode. SDFGI, SSR, full fog and the cleanest, most detailed image.",
+}
+
 const ACTIONS := [
 	["forward", "Move forward"],
 	["backward", "Move backward"],
@@ -19,6 +26,7 @@ const ACTIONS := [
 @onready var status: Label = $Status
 @onready var click_player: AudioStreamPlayer = $ClickPlayer
 @onready var menu_box: VBoxContainer = $Menu
+@onready var portrait_viewport: SubViewport = $PortraitViewport
 
 # ---- settings window placement ---------------------------------------------
 # Select "MainMenu" in menu.tscn and edit these in the Inspector, or change
@@ -36,16 +44,26 @@ var settings_panel: PanelContainer = null
 var rebind_buttons: Dictionary = {}
 var awaiting_action := ""
 var awaiting_button: Button = null
+var background_material: ShaderMaterial = null
+var graphics_help: Label = null
+var msaa_option: OptionButton = null
 
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	status.text = ""
 	_style_background()
+	_sync_portrait_msaa()
+	if not GameState.settings_changed.is_connected(_sync_portrait_msaa):
+		GameState.settings_changed.connect(_sync_portrait_msaa)
 	$Menu/NewGame.pressed.connect(_on_new_game)
 	$Menu/LoadGame.pressed.connect(_on_load_game)
 	$Menu/Settings.pressed.connect(_open_settings)
 	$Menu/Quit.pressed.connect(_on_quit)
+	_animate_intro()
+	_wire_menu_buttons()
+	if menu_box.get_child_count() > 0 and menu_box.get_child(0) is Button:
+		(menu_box.get_child(0) as Button).grab_focus()
 
 
 func _style_background() -> void:
@@ -55,9 +73,82 @@ func _style_background() -> void:
 	var shader := load(MENU_BG_SHADER) as Shader
 	if shader == null:
 		return
-	var mat := ShaderMaterial.new()
-	mat.shader = shader
-	bg.material = mat
+	background_material = ShaderMaterial.new()
+	background_material.shader = shader
+	if portrait_viewport != null:
+		background_material.set_shader_parameter("portrait", portrait_viewport.get_texture())
+		background_material.set_shader_parameter("image_size", Vector2(portrait_viewport.size))
+	bg.material = background_material
+	bg.color = Color.WHITE
+	_update_background_size()
+	get_viewport().size_changed.connect(_update_background_size)
+
+
+func _update_background_size() -> void:
+	if background_material == null:
+		return
+	var size := get_viewport_rect().size
+	background_material.set_shader_parameter("screen_size", Vector2(maxf(size.x, 1.0), maxf(size.y, 1.0)))
+	if portrait_viewport != null:
+		background_material.set_shader_parameter("image_size", Vector2(portrait_viewport.size))
+
+
+func _sync_portrait_msaa() -> void:
+	if portrait_viewport == null:
+		return
+	var level := int(GameState.get_setting("msaa"))
+	portrait_viewport.msaa_3d = (
+		Viewport.MSAA_DISABLED if level == 0
+		else Viewport.MSAA_2X if level == 2
+		else Viewport.MSAA_4X
+	)
+
+
+func _animate_intro() -> void:
+	var title := $Title as Control
+	var subtitle := $Subtitle as Control
+	var status := $Status as Control
+	var hint := $Hint as Control
+	var elements: Array[Control] = [title, subtitle, menu_box, status, hint]
+	for element in elements:
+		if element != null:
+			element.modulate.a = 0.0
+	var tween := create_tween().set_parallel(true)
+	if title != null:
+		tween.tween_property(title, "modulate:a", 1.0, 0.75).set_delay(0.08)
+	if subtitle != null:
+		tween.tween_property(subtitle, "modulate:a", 1.0, 0.75).set_delay(0.24)
+	if menu_box != null:
+		tween.tween_property(menu_box, "modulate:a", 1.0, 0.8).set_delay(0.42)
+	if status != null:
+		tween.tween_property(status, "modulate:a", 1.0, 0.8).set_delay(0.58)
+	if hint != null:
+		tween.tween_property(hint, "modulate:a", 1.0, 0.8).set_delay(0.70)
+	for i in menu_box.get_child_count():
+		var button := menu_box.get_child(i) as Button
+		if button == null:
+			continue
+		button.modulate.a = 0.0
+		var bt := create_tween()
+		bt.tween_property(button, "modulate:a", 1.0, 0.6).set_delay(0.42 + float(i) * 0.10)
+
+
+func _wire_menu_buttons() -> void:
+	for child in menu_box.get_children():
+		var button := child as Button
+		if button == null:
+			continue
+		button.pivot_offset = button.size * 0.5
+		button.mouse_entered.connect(_on_menu_button_hover.bind(button, true))
+		button.mouse_exited.connect(_on_menu_button_hover.bind(button, false))
+
+
+func _on_menu_button_hover(button: Button, entered: bool) -> void:
+	if not is_instance_valid(button):
+		return
+	var tween := create_tween()
+	tween.tween_property(button, "scale", Vector2(1.018, 1.018) if entered else Vector2.ONE, 0.16) \
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
 func _click() -> void:
@@ -177,6 +268,7 @@ func _build_settings() -> void:
 	_add_check(box, "Fullscreen", "fullscreen")
 	_add_check(box, "V-Sync", "vsync")
 	_add_resolution(box)
+	_add_graphics_quality(box)
 	_add_msaa(box)
 
 	# ---- camera
@@ -296,6 +388,40 @@ func _add_resolution(box: VBoxContainer) -> void:
 	box.add_child(row)
 
 
+func _add_graphics_quality(box: VBoxContainer) -> void:
+	var row := HBoxContainer.new()
+	var lbl := Label.new()
+	lbl.text = "Graphics quality"
+	lbl.custom_minimum_size = Vector2(180, 0)
+	row.add_child(lbl)
+
+	var opt := OptionButton.new()
+	var current := 0
+	for i in GameState.GRAPHICS_QUALITY_ORDER.size():
+		var quality: String = GameState.GRAPHICS_QUALITY_ORDER[i]
+		opt.add_item(str(GameState.GRAPHICS_QUALITY_LABELS[quality]), i)
+		if quality == GameState.get_graphics_quality():
+			current = i
+	opt.select(current)
+	opt.item_selected.connect(func(idx: int) -> void:
+		var quality: String = GameState.GRAPHICS_QUALITY_ORDER[idx]
+		GameState.set_graphics_quality(quality)
+		if graphics_help != null:
+			graphics_help.text = str(GRAPHICS_HELP.get(quality, ""))
+		_sync_msaa_option()
+	)
+	row.add_child(opt)
+	box.add_child(row)
+
+	graphics_help = Label.new()
+	graphics_help.text = str(GRAPHICS_HELP.get(GameState.get_graphics_quality(), ""))
+	graphics_help.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	graphics_help.add_theme_font_size_override("font_size", 12)
+	graphics_help.add_theme_color_override("font_color", Color(0.43, 0.53, 0.49))
+	graphics_help.custom_minimum_size = Vector2(0, 34)
+	box.add_child(graphics_help)
+
+
 func _add_msaa(box: VBoxContainer) -> void:
 	var row := HBoxContainer.new()
 	var lbl := Label.new()
@@ -304,11 +430,12 @@ func _add_msaa(box: VBoxContainer) -> void:
 	row.add_child(lbl)
 
 	var opt := OptionButton.new()
+	msaa_option = opt
 	opt.add_item("Off", 0)
 	opt.add_item("2x", 1)
 	opt.add_item("4x", 2)
-	var current: int = int(GameState.get_setting("msaa"))
-	opt.select(current)
+	var msaa_level: int = int(GameState.get_setting("msaa"))
+	opt.select(1 if msaa_level == 2 else (2 if msaa_level == 4 else 0))
 	opt.item_selected.connect(func(idx: int) -> void:
 		var level := 0
 		if idx == 1:
@@ -319,6 +446,13 @@ func _add_msaa(box: VBoxContainer) -> void:
 	)
 	row.add_child(opt)
 	box.add_child(row)
+
+
+func _sync_msaa_option() -> void:
+	if msaa_option == null:
+		return
+	var level := int(GameState.get_setting("msaa"))
+	msaa_option.select(1 if level == 2 else (2 if level == 4 else 0))
 
 
 func _add_keybind_row(box: VBoxContainer, action: String, title: String) -> void:

@@ -161,6 +161,7 @@ var settings := {
 	"window_height": 720,
 	"vsync": true,
 	"msaa": 0, # 0, 2, 4
+	"graphics_quality": "high", # low, medium, high, very_high
 	"mouse_sensitivity": 1.0,   # multiplier applied to the existing 0.003 step
 	"invert_y": false,
 	"fov": 75.0,
@@ -169,9 +170,70 @@ var settings := {
 
 const SETTINGS_SAVE_FORMAT := "{settings}"
 
+const GRAPHICS_QUALITY_ORDER := ["low", "medium", "high", "very_high"]
+const GRAPHICS_QUALITY_LABELS := {
+	"low": "Low",
+	"medium": "Medium",
+	"high": "High",
+	"very_high": "Very High",
+}
+const GRAPHICS_QUALITY_MSAA := {
+	"low": 0,
+	"medium": 0,
+	"high": 0,
+	"very_high": 2,
+}
+
 
 func get_setting(key: String):
 	return settings.get(key)
+
+
+func get_graphics_quality() -> String:
+	var quality := str(settings.get("graphics_quality", "high"))
+	return quality if GRAPHICS_QUALITY_ORDER.has(quality) else "high"
+
+
+func set_graphics_quality(quality: String) -> void:
+	quality = quality if GRAPHICS_QUALITY_ORDER.has(quality) else "high"
+	settings["graphics_quality"] = quality
+	# The quality preset also chooses a sensible anti-aliasing baseline. The
+	# separate MSAA control can still override it afterwards.
+	settings["msaa"] = int(GRAPHICS_QUALITY_MSAA[quality])
+	save_settings()
+	apply_settings()
+
+
+func _quality_render_scale(target_width: int, quality: String) -> float:
+	if target_width >= 3200:
+		return {
+			"low": 0.50,
+			"medium": 0.65,
+			"high": 0.80,
+			"very_high": 1.00,
+		}.get(quality, 0.80)
+	if target_width >= 2400:
+		return {
+			"low": 0.60,
+			"medium": 0.75,
+			"high": 0.88,
+			"very_high": 1.00,
+		}.get(quality, 0.88)
+	if target_width >= 1800:
+		return {
+			"low": 0.80,
+			"medium": 0.90,
+			"high": 1.00,
+			"very_high": 1.00,
+		}.get(quality, 1.0)
+	if target_width >= 1500:
+		return {
+			"low": 0.90,
+			"medium": 0.96,
+			"high": 1.00,
+			"very_high": 1.00,
+		}.get(quality, 1.0)
+	return 1.0
 
 
 func set_setting(key: String, value) -> void:
@@ -225,6 +287,10 @@ func load_settings():
 				for k in parsed[key]:
 					kb[k] = int(parsed[key][k])
 				settings["keybinds"] = kb
+			elif key == "graphics_quality":
+				var quality := str(parsed[key])
+				if GRAPHICS_QUALITY_ORDER.has(quality):
+					settings[key] = quality
 			else:
 				settings[key] = parsed[key]
 
@@ -260,15 +326,8 @@ func apply_settings():
 		vp.msaa_3d = Viewport.MSAA_2X if level == 2 else Viewport.MSAA_4X
 	if vp:
 		var target_w := int(settings["window_width"])
-		var render_scale := 1.0
-		if target_w >= 3200:
-			render_scale = 0.5
-		elif target_w >= 2400:
-			render_scale = 0.65
-		elif target_w >= 1800:
-			render_scale = 0.85
-		elif target_w >= 1500:
-			render_scale = 0.9
+		var quality := get_graphics_quality()
+		var render_scale := _quality_render_scale(target_w, quality)
 		vp.scaling_3d_scale = render_scale
 		if render_scale < 1.0 and OS.get_name() == "macOS":
 			vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_METALFX_SPATIAL

@@ -31,6 +31,7 @@ var _settings_panel: PanelContainer = null
 var _rebind_buttons: Dictionary = {}
 var _awaiting_action := ""
 var _awaiting_button: Button = null
+var _msaa_option: OptionButton = null
 
 
 func _ready() -> void:
@@ -215,6 +216,7 @@ func _build_settings() -> void:
 	_add_check(box, "Fullscreen", "fullscreen")
 	_add_check(box, "V-Sync", "vsync")
 	_add_resolution(box)
+	_add_graphics_quality(box)
 	_add_msaa(box)
 
 	# ---- camera
@@ -331,6 +333,29 @@ func _add_resolution(box: VBoxContainer) -> void:
 	box.add_child(row)
 
 
+func _add_graphics_quality(box: VBoxContainer) -> void:
+	var row := HBoxContainer.new()
+	var lbl := Label.new()
+	lbl.text = "Graphics quality"
+	lbl.custom_minimum_size = Vector2(180, 0)
+	row.add_child(lbl)
+
+	var opt := OptionButton.new()
+	var current := 0
+	for i in GameState.GRAPHICS_QUALITY_ORDER.size():
+		var quality: String = GameState.GRAPHICS_QUALITY_ORDER[i]
+		opt.add_item(str(GameState.GRAPHICS_QUALITY_LABELS[quality]), i)
+		if quality == GameState.get_graphics_quality():
+			current = i
+	opt.select(current)
+	opt.item_selected.connect(func(idx: int) -> void:
+		GameState.set_graphics_quality(GameState.GRAPHICS_QUALITY_ORDER[idx])
+		_sync_msaa_option()
+	)
+	row.add_child(opt)
+	box.add_child(row)
+
+
 func _add_msaa(box: VBoxContainer) -> void:
 	var row := HBoxContainer.new()
 	var lbl := Label.new()
@@ -339,10 +364,12 @@ func _add_msaa(box: VBoxContainer) -> void:
 	row.add_child(lbl)
 
 	var opt := OptionButton.new()
+	_msaa_option = opt
 	opt.add_item("Off", 0)
 	opt.add_item("2x", 1)
 	opt.add_item("4x", 2)
-	opt.select(int(GameState.get_setting("msaa")))
+	var msaa_level: int = int(GameState.get_setting("msaa"))
+	opt.select(1 if msaa_level == 2 else (2 if msaa_level == 4 else 0))
 	opt.item_selected.connect(func(idx: int) -> void:
 		var level := 0
 		if idx == 1:
@@ -353,6 +380,13 @@ func _add_msaa(box: VBoxContainer) -> void:
 	)
 	row.add_child(opt)
 	box.add_child(row)
+
+
+func _sync_msaa_option() -> void:
+	if _msaa_option == null:
+		return
+	var level := int(GameState.get_setting("msaa"))
+	_msaa_option.select(1 if level == 2 else (2 if level == 4 else 0))
 
 
 func _add_keybind_row(box: VBoxContainer, action: String, title_text: String) -> void:

@@ -55,6 +55,7 @@
 [ext_resource type="Script" path="res://horror_dressing.gd" id="55_dress"]
 [ext_resource type="Script" path="res://horror_director.gd" id="56_director"]
 [ext_resource type="Script" path="res://horror_drone.gd" id="57_drone"]
+[ext_resource type="Script" path="res://graphics_quality.gd" id="58_quality"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_c6gwx"]
 sky_top_color = Color(0.006, 0.010, 0.016, 1)
@@ -448,6 +449,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 1)
+
+[node name="GraphicsQuality" type="Node" parent="."]
+script = ExtResource("58_quality")
 
 [node name="Player" parent="." unique_id=277558030 instance=ExtResource("1_c6gwx")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.11867678, 2.0272808, -6.2971916)
