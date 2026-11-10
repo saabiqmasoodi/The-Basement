@@ -91,10 +91,10 @@ func _process(delta: float) -> void:
 	# The neck wound breathes like a dying emergency light.
 	if _wound_light != null:
 		var breath := 0.72 + 0.28 * sin(_time * 2.3 + sin(_time * 0.37) * 2.0)
-		_wound_light.light_energy = 0.65 + breath * 0.55
+		_wound_light.light_energy = 0.28 + breath * 0.20
 	if _red_wash != null:
 		var flicker := 0.82 + 0.18 * sin(_time * 7.3) * sin(_time * 0.91)
-		_red_wash.light_energy = 2.6 + flicker * 0.45
+		_red_wash.light_energy = 2.0 + flicker * 0.35
 
 	# A tiny headless twitch on top of the source idle animation. The animation
 	# tree writes the pose first, then this additive shoulder/neck motion makes
@@ -279,7 +279,6 @@ func _build_friend() -> void:
 	_spine_bone = _skeleton.find_bone("mixamorig_Spine2") if _skeleton != null else -1
 	_lift_friend_materials(_friend)
 	_decapitate(_friend)
-	_orient_normals(_friend)
 	_add_neck_wound(_friend)
 	_add_drip_particles(_friend)
 
@@ -290,33 +289,18 @@ func _lift_friend_materials(friend: Node3D) -> void:
 		return
 	for mi in friend.find_children("*", "MeshInstance3D", true, false):
 		var key := mi.name.to_lower()
-		var albedo := Color(0.55, 0.47, 0.41)
-		var emission := Color(0.020, 0.016, 0.013)
-		var roughness := 0.82
-		if key == "body":
-			albedo = Color(0.66, 0.56, 0.49)
-			emission = Color(0.082, 0.061, 0.050)
-			roughness = 0.78
-		elif key == "jacket":
-			albedo = Color(0.46, 0.48, 0.41)
-			emission = Color(0.036, 0.042, 0.031)
-			roughness = 0.88
-		elif key == "pants":
-			albedo = Color(0.38, 0.40, 0.41)
-			emission = Color(0.031, 0.036, 0.037)
-			roughness = 0.90
-		elif key == "shoes":
-			albedo = Color(0.11, 0.10, 0.09)
-			emission = Color(0.019, 0.017, 0.014)
-			roughness = 0.70
-		else:
+		# Only meshes that carry head-weighted geometry need the portrait clip.
+		# Pants and shoes keep their authored materials, and every clipped mesh
+		# keeps the Friend's vertex colours instead of being tinted flat grey.
+		if key != "body" and key != "jacket":
 			continue
+		var roughness := 0.78 if key == "body" else 0.88
 		var m := ShaderMaterial.new()
 		m.shader = headless_shader
-		m.set_shader_parameter("albedo", albedo)
-		m.set_shader_parameter("emission_color", emission)
+		m.set_shader_parameter("albedo", Color(0.70, 0.70, 0.70) if key == "body" else Color(0.78, 0.78, 0.78))
+		m.set_shader_parameter("emission_color", Color(0.008, 0.006, 0.005))
 		m.set_shader_parameter("roughness", roughness)
-		m.set_shader_parameter("rim_strength", 0.64)
+		m.set_shader_parameter("rim_strength", 0.28)
 		m.set_shader_parameter("cutoff_y", 1.49)
 		mi.material_override = m
 
@@ -396,31 +380,6 @@ func _decapitate(friend: Node3D) -> void:
 	print("MenuPortrait: removed_triangles=", removed_total, " kept=", kept_total)
 
 
-func _orient_normals(friend: Node3D) -> void:
-	var cam_dir := Vector3(0.0, 0.0, 1.0)
-	for mi in friend.find_children("*", "MeshInstance3D", true, false):
-		if mi.mesh == null or mi.mesh.get_surface_count() == 0:
-			continue
-		if mi.name.to_lower().contains("eye") or mi.name.to_lower().contains("hair"):
-			continue
-		var arrays: Array = mi.mesh.surface_get_arrays(0)
-		var normals: PackedVector3Array = arrays[Mesh.ARRAY_NORMAL]
-		if normals.is_empty():
-			continue
-		var avg := Vector3.ZERO
-		for n in normals:
-			avg += n
-		avg = (friend.transform.basis * avg).normalized()
-		if avg.dot(cam_dir) < 0.0:
-			for i in normals.size():
-				normals[i] = -normals[i]
-			arrays[Mesh.ARRAY_NORMAL] = normals
-			var nm := ArrayMesh.new()
-			nm.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-			nm.surface_set_material(0, mi.mesh.surface_get_material(0))
-			mi.mesh = nm
-
-
 func _add_neck_wound(friend: Node3D) -> void:
 	var neck_idx := _skeleton.find_bone("mixamorig_Neck")
 	var head_idx := _skeleton.find_bone("mixamorig_Head")
@@ -468,12 +427,12 @@ func _add_neck_wound(friend: Node3D) -> void:
 	_wound_light = OmniLight3D.new()
 	_wound_light.name = "WoundLight"
 	_wound_light.light_color = Color(0.82, 0.045, 0.020)
-	_wound_light.light_energy = 1.05
-	_wound_light.omni_range = 1.05
+	_wound_light.light_energy = 0.40
+	_wound_light.omni_range = 0.48
 	_wound_light.omni_attenuation = 1.7
 	_wound_light.shadow_enabled = false
 	_world.add_child(_wound_light)
-	_wound_light.global_position = Vector3(neck_pos.x, neck_pos.y - 0.05, neck_pos.z + 0.32)
+	_wound_light.global_position = Vector3(neck_pos.x, neck_pos.y - 0.04, neck_pos.z + 0.22)
 
 
 func _add_drip_particles(friend: Node3D) -> void:
@@ -529,7 +488,7 @@ func _build_lights() -> void:
 	rim.name = "RedRim"
 	rim.position = Vector3(1.38, 1.42, -0.55)
 	rim.light_color = Color(0.95, 0.070, 0.026)
-	rim.light_energy = 2.5
+	rim.light_energy = 1.8
 	rim.omni_range = 2.1
 	rim.omni_attenuation = 1.5
 	rim.shadow_enabled = true
@@ -539,7 +498,7 @@ func _build_lights() -> void:
 	_red_wash.name = "BackWash"
 	_red_wash.position = Vector3(1.35, 2.25, 0.25)
 	_red_wash.light_color = Color(0.82, 0.030, 0.010)
-	_red_wash.light_energy = 3.5
+	_red_wash.light_energy = 2.6
 	_red_wash.spot_range = 4.8
 	_red_wash.spot_angle = 38.0
 	_red_wash.spot_attenuation = 1.35
@@ -573,7 +532,7 @@ func _build_lights() -> void:
 	top.name = "TopWoundLight"
 	top.position = Vector3(0.72, 3.0, 0.15)
 	top.light_color = Color(0.80, 0.16, 0.08)
-	top.light_energy = 1.45
+	top.light_energy = 0.75
 	top.spot_range = 3.5
 	top.spot_angle = 19.0
 	top.spot_attenuation = 1.4

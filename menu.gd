@@ -108,7 +108,7 @@ func _animate_intro() -> void:
 	var title := $Title as Control
 	var subtitle := $Subtitle as Control
 	var status := $Status as Control
-	var hint := $Hint as Control
+	var hint := get_node_or_null("Hint") as Control
 	var elements: Array[Control] = [title, subtitle, menu_box, status, hint]
 	for element in elements:
 		if element != null:

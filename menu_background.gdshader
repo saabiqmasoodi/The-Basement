@@ -67,10 +67,10 @@ void fragment() {
 	// cool rim and dirty amber practicals.
 	float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
 	float blood_mask = smoothstep(0.06, 0.30, col.r - max(col.g, col.b));
-	col = mix(col, vec3(luma), 0.22);
+	col = mix(col, vec3(luma), 0.12);
 	col = max((col - 0.125) * 1.08 + 0.125, vec3(0.0));
 	vec3 tint = mix(cool_tint.rgb, warm_tint.rgb, smoothstep(0.04, 0.72, luma));
-	col *= mix(vec3(1.0), tint, 0.34);
+	col *= mix(vec3(1.0), tint, 0.26);
 	col *= 0.90;
 
 	// Deliberate editorial falloff: the title and buttons live in this dark
