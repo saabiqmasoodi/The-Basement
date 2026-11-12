@@ -11,3 +11,4 @@ godot-mcp/
 
 # Local builds and exports
 build/
+packaging/*.import

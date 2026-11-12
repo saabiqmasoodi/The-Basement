@@ -4,6 +4,7 @@ extends Control
 
 const WORLD_SCENE := "res://scenes/world/World.tscn"
 const MENU_BG_SHADER := "res://materials/shaders/menu_background.gdshader"
+const WORLD_PRELOAD_DELAY := 0.35
 
 const GRAPHICS_HELP := {
 	"low":
@@ -49,6 +50,19 @@ var background_material: ShaderMaterial = null
 var graphics_help: Label = null
 var msaa_option: OptionButton = null
 
+# The world is a large scene. Load it on a background thread while the player
+# reads the menu, and keep a loading overlay up if they start before it is
+# ready. This prevents the "application is not responding" freeze on first
+# launch, especially on Windows and on machines without the assets cached.
+var _world_scene: PackedScene = null
+var _world_loading := false
+var _world_load_failed := false
+var _world_transition_pending := false
+var _loading_overlay: CanvasLayer = null
+var _loading_bar: ProgressBar = null
+var _loading_label: Label = null
+var _loading_pulse := 0.0
+
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -65,6 +79,53 @@ func _ready() -> void:
 	_wire_menu_buttons()
 	if menu_box.get_child_count() > 0 and menu_box.get_child(0) is Button:
 		(menu_box.get_child(0) as Button).grab_focus()
+	call_deferred("_begin_world_preload")
+
+
+func _process(delta: float) -> void:
+	_loading_pulse += delta
+	if _loading_overlay != null and _loading_overlay.visible and _loading_label != null:
+		var dots := int(_loading_pulse * 3.0) % 4
+		_loading_label.text = "ENTERING THE BASEMENT" + "...".substr(0, dots)
+	if not _world_loading:
+		return
+	var progress: Array = []
+	var state := ResourceLoader.load_threaded_get_status(WORLD_SCENE, progress)
+	if state == ResourceLoader.THREAD_LOAD_LOADED:
+		_world_scene = ResourceLoader.load_threaded_get(WORLD_SCENE) as PackedScene
+		_world_loading = false
+		if _loading_bar != null:
+			_loading_bar.value = 100.0
+		if _world_scene == null:
+			_world_load_failed = true
+			_show_load_error("The world loaded without a usable scene.")
+		elif _world_transition_pending:
+			_enter_world()
+	elif state == ResourceLoader.THREAD_LOAD_FAILED:
+		_world_loading = false
+		_world_load_failed = true
+		_show_load_error("The basement could not be loaded.")
+	elif state == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+		_world_loading = false
+		_world_load_failed = true
+		_show_load_error("The basement scene is missing.")
+	elif _loading_bar != null and progress.size() > 0:
+		_loading_bar.value = clampf(float(progress[0]) * 100.0, 0.0, 100.0)
+
+
+func _begin_world_preload() -> void:
+	if _world_scene != null or _world_loading or _world_load_failed:
+		return
+	# Let the menu render its first frame before starting the disk/import work.
+	await get_tree().create_timer(WORLD_PRELOAD_DELAY, false).timeout
+	if not is_inside_tree() or _world_scene != null or _world_loading:
+		return
+	var err := ResourceLoader.load_threaded_request(WORLD_SCENE, "PackedScene", true)
+	if err != OK:
+		_world_load_failed = true
+		status.text = "Failed to prepare the world (error %d)." % err
+		return
+	_world_loading = true
 
 
 func _style_background() -> void:
@@ -183,9 +244,100 @@ func _on_load_game() -> void:
 
 
 func _start_world() -> void:
-	var err := get_tree().change_scene_to_file(WORLD_SCENE)
+	_world_transition_pending = true
+	if _world_scene != null and not _world_load_failed:
+		_enter_world()
+		return
+	_show_loading_overlay()
+	if _world_load_failed:
+		_show_load_error("The basement could not be loaded.")
+		return
+	if not _world_loading:
+		_begin_world_preload()
+
+
+func _enter_world() -> void:
+	if _world_scene == null:
+		return
+	_world_transition_pending = false
+	var err := get_tree().change_scene_to_packed(_world_scene)
 	if err != OK:
-		status.text = "Failed to load the world (error %d)." % err
+		_show_load_error("Failed to enter the basement (error %d)." % err)
+
+
+func _show_loading_overlay() -> void:
+	if _loading_overlay != null:
+		_loading_overlay.visible = true
+		return
+	_loading_overlay = CanvasLayer.new()
+	_loading_overlay.name = "LoadingOverlay"
+	_loading_overlay.layer = 100
+	add_child(_loading_overlay)
+
+	var backdrop := ColorRect.new()
+	backdrop.color = Color(0.012, 0.014, 0.013, 0.985)
+	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
+	backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
+	_loading_overlay.add_child(backdrop)
+
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_loading_overlay.add_child(center)
+
+	var column := VBoxContainer.new()
+	column.custom_minimum_size = Vector2(620.0, 0.0)
+	column.add_theme_constant_override("separation", 18)
+	center.add_child(column)
+
+	var title := Label.new()
+	title.text = "THE BASEMENT"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 42)
+	title.add_theme_color_override("font_color", Color(0.66, 0.045, 0.025, 1.0))
+	title.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.9))
+	title.add_theme_constant_override("shadow_offset_x", 3)
+	title.add_theme_constant_override("shadow_offset_y", 4)
+	column.add_child(title)
+	_loading_label = Label.new()
+	_loading_label.text = "ENTERING THE BASEMENT"
+	_loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_loading_label.add_theme_font_size_override("font_size", 13)
+	_loading_label.add_theme_color_override("font_color", Color(0.58, 0.62, 0.58, 1.0))
+	column.add_child(_loading_label)
+
+	_loading_bar = ProgressBar.new()
+	_loading_bar.custom_minimum_size = Vector2(620.0, 12.0)
+	_loading_bar.show_percentage = false
+	_loading_bar.value = 0.0
+	var bar_bg := StyleBoxFlat.new()
+	bar_bg.bg_color = Color(0.025, 0.028, 0.026, 1.0)
+	bar_bg.border_width_left = 1
+	bar_bg.border_width_top = 1
+	bar_bg.border_width_right = 1
+	bar_bg.border_width_bottom = 1
+	bar_bg.border_color = Color(0.20, 0.24, 0.21, 0.8)
+	var bar_fill := StyleBoxFlat.new()
+	bar_fill.bg_color = Color(0.53, 0.018, 0.009, 1.0)
+	_loading_bar.add_theme_stylebox_override("background", bar_bg)
+	_loading_bar.add_theme_stylebox_override("fill", bar_fill)
+	column.add_child(_loading_bar)
+
+	var hint := Label.new()
+	hint.text = "The dark is still settling. Please do not close the game."
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.add_theme_font_size_override("font_size", 14)
+	hint.add_theme_color_override("font_color", Color(0.35, 0.39, 0.35, 1.0))
+	column.add_child(hint)
+
+
+func _show_load_error(message: String) -> void:
+	status.text = message
+	if _loading_overlay != null:
+		_loading_overlay.visible = true
+	if _loading_label != null:
+		_loading_label.text = message
+	if _loading_bar != null:
+		_loading_bar.value = 0.0
 
 
 func _on_quit() -> void:

@@ -97,6 +97,18 @@ Export templates for the exact Godot version must be installed locally for
 packaged into `build/artifacts/`; both directories are ignored by Git. The
 Linux AppImage is assembled in CI on Ubuntu.
 
+The macOS `.dmg` uses a decorated drag-to-Applications window with a
+blood-red horror background and a painted arrow. Install `dmgbuild` locally
+(`python3 -m pip install dmgbuild`) to reproduce that layout; without it the
+build script falls back to a plain DMG. CI always installs `dmgbuild`.
+
+Exports run with the editor renderer active so Godot's shader baker can embed
+precompiled shaders in the PCK. Keep `--headless` for imports and tests, but not
+for `--export-release`; otherwise the first New Game has to compile every
+Forward+ shader on the player's GPU driver. The baked macOS build targets macOS
+14 or newer on Apple Silicon, and Windows now uses Vulkan so its export can be
+baked from macOS as well.
+
 The project defaults are tuned for responsive play: Jolt Physics at a 60 Hz
 simulation tick, 4× anisotropic filtering, render-scale reduction on high-DPI
 displays, and TAA only in the High and Very High quality presets.

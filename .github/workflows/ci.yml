@@ -96,6 +96,14 @@ jobs:
           mkdir -p "$HOME/Library/Application Support/Godot/export_templates/${GODOT_NUMBER}.stable"
           cp -R "$RUNNER_TEMP/templates/templates/." "$HOME/Library/Application Support/Godot/export_templates/${GODOT_NUMBER}.stable/"
 
+      - name: Set up Python for DMG packaging
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install DMG builder
+        run: python -m pip install --disable-pip-version-check dmgbuild
+
       - name: Import project
         timeout-minutes: 20
         run: '"$GODOT_BIN" --headless --path . --import'
@@ -105,19 +113,23 @@ jobs:
         run: |
           mkdir -p build/releases/windows build/releases/macos build/releases/linux build/artifacts
 
-          "$GODOT_BIN" --headless --path . --export-release "Windows Desktop" build/releases/windows/NotToLove.exe
+          "$GODOT_BIN" --path . --export-release "Windows Desktop" build/releases/windows/NotToLove.exe
           cp build/releases/windows/NotToLove.exe build/artifacts/NotToLove-Windows-x86_64.exe
 
-          "$GODOT_BIN" --headless --path . --export-release "macOS" build/releases/macos/NotToLove.app
-          "$GODOT_BIN" --headless --path . --export-release "Linux" build/releases/linux/NotToLove.x86_64
+          "$GODOT_BIN" --path . --export-release "macOS" build/releases/macos/NotToLove.app
+          "$GODOT_BIN" --path . --export-release "Linux" build/releases/linux/NotToLove.x86_64
           cp build/releases/linux/NotToLove.x86_64 build/artifacts/NotToLove-Linux-x86_64
 
           DMG_STAGE="$RUNNER_TEMP/dmg"
           rm -rf "$DMG_STAGE"
           mkdir -p "$DMG_STAGE"
           cp -R build/releases/macos/NotToLove.app "$DMG_STAGE/Not To Love.app"
-          ln -s /Applications "$DMG_STAGE/Applications"
-          hdiutil create -volname "Not To Love" -srcfolder "$DMG_STAGE" -ov -format UDZO build/artifacts/NotToLove-macOS-universal.dmg
+          rm -f build/artifacts/NotToLove-macOS-universal.dmg
+          python -m dmgbuild \
+            -s packaging/dmg_settings.py \
+            -D app="$DMG_STAGE/Not To Love.app" \
+            "Not To Love" \
+            build/artifacts/NotToLove-macOS-universal.dmg
 
       - name: Upload Windows build
         uses: actions/upload-artifact@v4
@@ -234,8 +246,17 @@ jobs:
           cat > "$RUNNER_TEMP/release-notes.md" <<'EOF'
           Not To Love release.
 
-          This build keeps the 3D scene responsive on high-DPI and 4K displays
-          with adaptive render scaling while the UI stays at native resolution.
+          New Game now preloads the basement on a background thread, with a
+          horror-styled loading screen if you start before it is ready. The
+          export also bakes Forward+ shaders into each build, so the first
+          launch no longer sits on a black screen while the GPU driver compiles
+          shaders. Together these remove the first-launch freeze and the
+          "application is not responding" window.
+
+          This build also keeps the 3D scene responsive on high-DPI and 4K
+          displays with adaptive render scaling while the UI stays at native
+          resolution. The macOS disk image opens a decorated drag-to-Applications
+          window with a blood-red horror background and painted arrow.
 
           ## Downloads
 
@@ -248,9 +269,10 @@ jobs:
           ## Notes
 
           These builds are unsigned. On macOS, right-click the app and choose
-          **Open** the first time. On Windows, SmartScreen may ask you to choose
-          **More info → Run anyway**. On Linux, mark the AppImage as executable
-          with `chmod +x NotToLove-Linux-x86_64.AppImage` before running it.
+          **Open** the first time. The Apple Silicon build requires macOS 14 or
+          newer. On Windows, SmartScreen may ask you to choose **More info →
+          Run anyway**. On Linux, mark the AppImage as executable with
+          `chmod +x NotToLove-Linux-x86_64.AppImage` before running it.
           EOF
           gh release create "$GITHUB_REF_NAME" \
             release-assets/NotToLove-Windows-x86_64.exe \
