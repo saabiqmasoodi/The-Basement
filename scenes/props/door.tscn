@@ -1,0 +1,296 @@
+[gd_scene format=4 uid="uid://q5thuswv5tt0"]
+
+[ext_resource type="Script" uid="uid://dxemk7v7y87s8" path="res://scripts/world/door.gd" id="1_ba8gm"]
+[ext_resource type="Texture2D" uid="uid://dudee1tuecqsk" path="res://assets/textures/props/doors/free_airlock_door_0.png" id="2_v6xrn"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fos22"]
+albedo_texture = ExtResource("2_v6xrn")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wya1a"]
+resource_name = "door"
+cull_mode = 2
+metallic = 1.0
+metallic_texture_channel = 2
+roughness_texture_channel = 1
+normal_enabled = true
+metadata/_gltf_primary_texture_coord = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_o16a6"]
+resource_name = "models_Door"
+_surfaces = [{
+"aabb": AABB(-2.5, 0, -0.25000012, 5, 5, 0.5000001),
+"attribute_data": PackedByteArray("/////wEAYD/8/58+/////wEAID8AAAA+/////wEAYD8AAAA+/////wEAID8AABA//////wYAgD4AABA//////wYAgD4AAAA+/////wAAgDP8/58+/////wAAgDMAAAA+/////wEAID8AAIA//////wEAYD/8/58+/////wEAYD8AAIA//////wEAID8AABA//////wIA4D4AAIA//////wIA4D4AABA//////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAA4D4AAIA/////////fz4AABA//////wAA4D4AABA/////////fz4AAIA//////wAAAAD8/58+/////wAAAAAAAIA//////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAAAD8/58+////////fz4AAAA+////////fz4AABA//////wAAAAAAAAA+//////7/Hz8AABA///////7/Hz8AAAA+/////wAAYD/8/58+/////wAAYD8AAAA+/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAAAA/////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAIA//////wAAgD8AAAAA/////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA//////7/Hz8AAIA//////wAAYD/8/58+/////wAAYD8AAIA///////7/Hz8AABA//////wAA4D4AAIA//////wAA4D4AABA//////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wIA4D4AAIA//////wYAgD4AABA//////wIA4D4AABA//////wYAgD4AAIA//////wAAgDP8/58+/////wAAgDMAAIA//////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA/////wAAYD8AAIA//////wAAgD8AAAAA/////wAAgD8AAIA//////wAAYD8AAAAA"),
+"bone_aabbs": [AABB(0, 0, 0, -1, -1, -1), AABB(-2.5, 0, -0.25, 2.5000002, 3.9285715, 0.5), AABB(0, 0, -0.25000012, 2.5, 3.9285715, 0.5000001), AABB(-2.5, 2.5, -0.25000012, 5, 2.5, 0.5000001)],
+"format": 34359745567,
+"index_count": 204,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAABAAMABAAFAAEABgAFAAQABgAHAAUACAAJAAoACAALAAkADAALAAgADAANAAsADgAPABAADgARAA8AEgATABQAEgAVABMAFQAWABMAFQAXABYAGAAZABoAGAAbABkAHAAdAB4AHAAfAB0AIAAhACIAIAAjACEAJAAiACEAJAAhACUAJgAkACUAJgAlACcAKAApACoAKAArACkALAAtAC4ALAAvAC0AMAAxADIAMAAzADEANAA1ADYANAA3ADUAOAA5ADoAOAA7ADkAPAA9AD4APAA/AD0APABAAEEAPABBAEIAQwBEAEIAQwBFAEQARgBHAEgARgBJAEcASgBLAEwASgBNAEsATgBNAEoATgBPAE0AUABRAFIAUABTAFEAVABVAFYAVABXAFUAVwBYAFUAVwBZAFgAWgBbAFwAWgBdAFsAXgBfAGAAXgBhAF8AYgBjAGQAYgBlAGMAZgBnAGgAZgBpAGcAagBrAGwAagBtAGsAbgBvAHAAbgBxAG8AcgBzAHQAcgB1AHMA"),
+"material": SubResource("StandardMaterial3D_wya1a"),
+"name": "door",
+"primitive": 3,
+"skin_data": PackedByteArray("AwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAEAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAgAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAADAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAA=="),
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 118,
+"vertex_data": PackedByteArray("AAAgwLdte0AEAIC+kiSJvwAAoEAAAIC+AAAgwAAAoEAAAIC+kiSJvwEAIEAAAIC+kySJPwAAIEAAAIC+kySJPwAAoEAAAIC+AAAgQLdte0AEAIC+AAAgQAAAoEAEAIC+kiSJvwAAAAAAAIC+AAAgwLdte0AAAIC+AAAgwAAAAAAAAIC+kySJvwAAIEAAAIC+AAAgNAAAAAAAAIC+AAAAAAEAIEAAAIC+kiSJvwEAIEAAAIA+AAAgwLdte0AAAIC+kySJvwAAIEAAAIC+AAAgwLdte0D4/38+AAAgNAAAAAAAAIA+kiSJvwEAIEAAAIA+AAAAAAEAIEAAAIA+kiSJvwAAAAAAAIA+AAAgwLdte0D4/38+AAAgwAAAAAAAAIA+AAAAAAEAIEAAAIA+kySJvwAAIEAAAIC+AAAAAAEAIEAAAIC+kiSJvwEAIEAAAIA+kiSJvwAAAAAAAIA+AAAgNAAAAAAAAIC+kiSJvwAAAAAAAIC+AAAgNAAAAAAAAIA+AAAgwLdte0AAAIA+kiSJvwAAoEAAAIA+lCSJvwAAIED8/38+AAAgwAAAoEAAAIA+lCSJPwAAIED8/38+lCSJPwAAoED8/38+AAAgQLdte0D4/38+AAAgQAAAoED4/38+AAAgwLdte0AAAIA+kiSJvwEAIEAAAIC+AAAgwLdte0AEAIC+lCSJvwAAIED8/38+AAAgwAAAAAAAAIA+kiSJvwAAAAAAAIC+AAAgwAAAAAAAAIC+kiSJvwAAAAAAAIA+kySJPwAAIEAAAIC+AAAgQLdte0D4/38+lCSJPwAAIED8/38+AAAgQLdte0AEAIC+AAAgwAAAoEAAAIA+AAAgwLdte0AEAIC+AAAgwAAAoEAAAIC+AAAgwLdte0AAAIA+AAAgNAAAAAAAAIA+AAAAAAEAIEAAAIC+AAAgNAAAAAAAAIC+AAAAAAEAIEAAAIA+kiSJvwAAoEAAAIA+AAAgwAAAoEAAAIC+kiSJvwAAoEAAAIC+AAAgwAAAoEAAAIA+kiSJvwAAoEAAAIC+kySJPwAAoEAAAIC+lCSJPwAAoED8/38+kySJPwAAoEAAAIC+AAAgQAAAoED4/38+AAAgQAAAoEAEAIC+kySJPwAAIEAAAIC+lCSJvwAAIED8/38+lCSJPwAAIED8/38+kiSJvwEAIEAAAIC+lCSJPwAAAAD8/38+AAAgQLdte0D4/38+AAAgQAAAAAD4/38+lCSJPwAAIED8/38+Su9ONAAAAAAAAIA+AAAAAAAAIEAAAIA+AAAgwLdte0D4/38+AAAgwAAAAAAAAIC+AAAgwLdte0AAAIC+AAAgwAAAAAAAAIA+aCHiMwAAAAAAAIC+kySJPwAAIEAAAIC+AAAAAAAAIEAAAIC+kySJPwAAAAAAAIC+AAAgQLdte0AEAIC+AAAgQAAAAAAEAIC+AAAAAAAAIEAAAIC+lCSJPwAAIED8/38+AAAAAAAAIEAAAIA+kySJPwAAIEAAAIC+kySJPwAAAAAAAIC+Su9ONAAAAAAAAIA+lCSJPwAAAAD8/38+aCHiMwAAAAAAAIC+AAAgQAAAAAAEAIC+lCSJPwAAAAD8/38+AAAgQAAAAAD4/38+kySJPwAAAAAAAIC+aCHiMwAAAAAAAIC+AAAAAAAAIEAAAIA+Su9ONAAAAAAAAIA+AAAAAAAAIEAAAIC+AAAgQLdte0AEAIC+AAAgQAAAAAD4/38+AAAgQLdte0D4/38+AAAgQAAAAAAEAIC+AAAgQLdte0AEAIC+lCSJPwAAIED8/38+AAAgQLdte0D4/38+kySJPwAAIEAAAIC+AAAgQAAAoEAEAIC+AAAgQLdte0D4/38+AAAgQAAAoED4/38+AAAgQLdte0AEAIC+/////wAA/7//////AAD/v/////8AAP+//////wAA/7//////AAD/v/////8AAP+//////wAA/7//////AAD/v/////8AAP+//////wAA/7//////AAD/v/////8AAP+//////wAA/7//////AAD/v/+//7/+/wCA/7//v///AID/v/+//v8AgP+//7///////3//f////7//f/9//v//v/9//3////+//3//f////7//f/9//v//v/9//3////+//3//////////f///AAD+//9//////////3///wAA/v//fwAA//////9/AAD//////38AAP//////fwAA//////9//3/+//+//3//f/7//7//f/9//v//v/9//3////+//3//f/7//7//f/9//v//v/9//3/+//+//3//f////7//P/8/AAAAgP8//z8AAACA/z//P///////P/8/AAAAgP9/AAD//////38AAP//////fwAA//////9/AAD//////z//v/9//7//P/+//3//v/8//7//f/+//z//v/9//78AAP9//////wAA/3//////AAD/f/////8AAP9//////////3//////////f/////////9//////////3///////3///////7//f/////////9//////////3//////////f///////v/9///////+//3///////7//f////3//v/9/////f/+//3////9//7//fwAA/3//v/9/AAD/f/+//38AAP9//7//fwAA/3//v/9//3////+//3//f/7//7//f/9/////v/9//3/+//+//3//f////7//f/9/////vwAA/3//////AAD/f/////8AAP9//////wAA/3///////////wAA/7//////AAD/v/////8AAP+//////wAA/7//////AAD/v/////8AAP+//3////9//7//f////3//v/9/////f/+//3////9//7//fwAA/3//v/9/AAD/f/+//38AAP9//7//fwAA/3//v/9/AAD/f/+//38AAP9//7//fwAA/3//v/9/AAD/f/+/AAD/f/9//78AAP9//3//vwAA/3//f/+/AAD/f/9//7////9//3//v////3//f/+/////f/9//7////9//3//v/+//z//f/+//7//P/9//7//v/8//3//v/+//z//f/+/////f/9//7////9//3//v////3//f/+/////f/9//78=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="Skin" id="Skin_vxc72"]
+resource_name = "Skin"
+bind_count = 4
+bind/0/name = &"root"
+bind/0/bone = -1
+bind/0/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+bind/1/name = &"panel.l"
+bind/1/bone = -1
+bind/1/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+bind/2/name = &"panel.r"
+bind/2/bone = -1
+bind/2/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+bind/3/name = &"panel.t"
+bind/3/bone = -1
+bind/3/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jhssr"]
+size = Vector3(2.5, 2.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v6xrn"]
+size = Vector3(5, 2.5, 0.5)
+
+[sub_resource type="Animation" id="Animation_bw4xr"]
+resource_name = "ChestClose"
+length = 0.6666667
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("ChestArmature/Skeleton3D:Lid")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -0.13052621, 0, 0, 0.9914448, 0.033333335, 1, -0.12807877, 0, 0, 0.991764, 0.06666667, 1, -0.12072737, 0, 0, 0.9926857, 0.1, 1, -0.10844741, 0, 0, 0.9941022, 0.13333334, 1, -0.09120683, 0, 0, 0.995832, 0.16666667, 1, -0.068979435, 0, 0, 0.9976181, 0.2, 1, -0.041764535, 0, 0, 0.99912757, 0.23333333, 1, -0.009611529, 0, 0, 0.9999538, 0.26666668, 1, -0.011755595, 0, 0, 0.9999309, 0.3, 1, -0.023667531, 0, 0, 0.9997199, 0.33333334, 1, -0.030639147, 0, 0, 0.9995305, 0.36666667, 1, -0.032663584, 0, 0, 0.9994664, 0.4, 1, -0.029739479, 0, 0, 0.9995577, 0.43333334, 1, -0.021868825, 0, 0, 0.99976087, 0.46666667, 1, -0.009060262, 0, 0, 0.999959, 0.5, 1, -0.003569894, 0, 0, 0.9999937, 0.53333336, 1, -0.007835356, 0, 0, 0.9999693, 0.56666666, 1, -0.007161718, 0, 0, 0.99997437, 0.6, 1, -0.0015501599, 0, 0, 0.9999988, 0.6333333, 1, -0.0020193406, 0, 0, 0.999998, 0.6666667, 1, 0, 0, 0, 1)
+tracks/1/type = "position_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("DoorArmature/Skeleton3D:panel.l")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -1, 0, 0)
+tracks/2/type = "position_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("DoorArmature/Skeleton3D:panel.r")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 1, 0, 0)
+tracks/3/type = "position_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("DoorArmature/Skeleton3D:panel.t")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, 3, 0)
+
+[sub_resource type="Animation" id="Animation_02mbo"]
+resource_name = "ChestOpen"
+length = 0.6666667
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("ChestArmature/Skeleton3D:Lid")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.033333335, 1, -0.0009932653, 0, 0, 0.9999995, 0.06666667, 1, -0.004010529, 0, 0, 0.99999195, 0.1, 1, -0.009049801, 0, 0, 0.99995905, 0.13333334, 1, -0.016008176, 0, 0, 0.99987197, 0.16666667, 1, -0.024660695, 0, 0, 0.99969584, 0.2, 1, -0.03465941, 0, 0, 0.9993992, 0.23333333, 1, -0.045560595, 0, 0, 0.99896157, 0.3, 1, -0.06813744, 0, 0, 0.99767596, 0.33333334, 1, -0.0789398, 0, 0, 0.99687946, 0.36666667, 1, -0.088975474, 0, 0, 0.9960338, 0.4, 1, -0.09803486, 0, 0, 0.995183, 0.43333334, 1, -0.1059946, 0, 0, 0.9943667, 0.46666667, 1, -0.112798944, 0, 0, 0.99361783, 0.5, 1, -0.11844013, 0, 0, 0.9929613, 0.53333336, 1, -0.1229416, 0, 0, 0.9924139, 0.56666666, 1, -0.12634625, 0, 0, 0.9919862, 0.6, 1, -0.12870686, 0, 0, 0.9916827, 0.6333333, 1, -0.1300809, 0, 0, 0.99150336, 0.6666667, 1, -0.13052623, 0, 0, 0.99144495)
+tracks/1/type = "position_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("DoorArmature/Skeleton3D:panel.l")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, -1, 0, 0)
+tracks/2/type = "position_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("DoorArmature/Skeleton3D:panel.r")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 1, 0, 0)
+tracks/3/type = "position_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("DoorArmature/Skeleton3D:panel.t")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, 3, 0)
+
+[sub_resource type="Animation" id="Animation_dkys2"]
+resource_name = "DoorClose"
+length = 1.6666666
+tracks/0/type = "position_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("DoorArmature/Skeleton3D:panel.l")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -3.3, 0, 0, 0.033333335, 1, -3.2960677, 0, 0, 0.06666667, 1, -3.2836957, 0, 0, 0.1, 1, -3.2619867, 0, 0, 0.13333334, 1, -3.2300336, 0, 0, 0.16666667, 1, -3.1869943, 0, 0, 0.2, 1, -3.1322076, 0, 0, 0.23333333, 1, -3.0653582, 0, 0, 0.26666668, 1, -2.9866629, 0, 0, 0.3, 1, -2.897048, 0, 0, 0.33333334, 1, -2.798224, 0, 0, 0.36666667, 1, -2.6925955, 0, 0, 0.4, 1, -2.582988, 0, 0, 0.43333334, 1, -2.4722695, 0, 0, 0.46666667, 1, -2.3629997, 0, 0, 0.5, 1, -2.2572088, 0, 0, 0.53333336, 1, -2.156331, 0, 0, 0.56666666, 1, -2.0612574, 0, 0, 0.6, 1, -1.9724426, 0, 0, 0.6333333, 1, -1.8900244, 0, 0, 0.6666667, 1, -1.8139273, 0, 0, 0.7, 1, -1.7439426, 0, 0, 0.73333335, 1, -1.6797857, 0, 0, 0.76666665, 1, -1.6211356, 0, 0, 0.8, 1, -1.5676587, 0, 0, 0.8333333, 1, -1.5190257, 0, 0, 0.8666667, 1, -1.4749207, 0, 0, 0.9, 1, -1.435044, 0, 0, 0.93333334, 1, -1.3991182, 0, 0, 0.96666664, 1, -1.366884, 0, 0, 1, 1, -1.3381045, 0, 0, 1.0333333, 1, -1.3125596, 0, 0, 1.0666667, 1, -1.2900503, 0, 0, 1.1, 1, -1.2703915, 0, 0, 1.1333333, 1, -1.2534142, 0, 0, 1.1666666, 1, -1.2389638, 0, 0, 1.2, 1, -1.2268972, 0, 0, 1.2333333, 1, -1.2170839, 0, 0, 1.2666667, 1, -1.2094028, 0, 0, 1.3, 1, -1.2037423, 0, 0, 1.3333334, 1, -1.2, 0, 0, 1.3666667, 1, -1.184875, 0, 0, 1.4, 1, -1.1395, 0, 0, 1.4333333, 1, -1.063875, 0, 0, 1.4666667, 1, -1.018, 0, 0, 1.5, 1, -1.046875, 0, 0, 1.5333333, 1, -1.0455, 0, 0, 1.5666667, 1, -1.013875, 0, 0, 1.6, 1, -1.012, 0, 0, 1.6333333, 1, -1.002375, 0, 0, 1.6666666, 1, -1, 0, 0)
+tracks/1/type = "position_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("DoorArmature/Skeleton3D:panel.r")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 3.3, 0, 0, 0.033333335, 1, 3.2960677, 0, 0, 0.06666667, 1, 3.2836957, 0, 0, 0.1, 1, 3.2619867, 0, 0, 0.13333334, 1, 3.2300336, 0, 0, 0.16666667, 1, 3.1869943, 0, 0, 0.2, 1, 3.1322079, 0, 0, 0.23333333, 1, 3.0653584, 0, 0, 0.26666668, 1, 2.986663, 0, 0, 0.3, 1, 2.8970482, 0, 0, 0.33333334, 1, 2.7982244, 0, 0, 0.36666667, 1, 2.692596, 0, 0, 0.4, 1, 2.5829885, 0, 0, 0.43333334, 1, 2.47227, 0, 0, 0.46666667, 1, 2.3630004, 0, 0, 0.5, 1, 2.2572093, 0, 0, 0.53333336, 1, 2.1563315, 0, 0, 0.56666666, 1, 2.061258, 0, 0, 0.6, 1, 1.9724433, 0, 0, 0.6333333, 1, 1.8900251, 0, 0, 0.6666667, 1, 1.8139278, 0, 0, 0.7, 1, 1.743943, 0, 0, 0.73333335, 1, 1.6797861, 0, 0, 0.76666665, 1, 1.621136, 0, 0, 0.8, 1, 1.567659, 0, 0, 0.8333333, 1, 1.5190262, 0, 0, 0.8666667, 1, 1.4749209, 0, 0, 0.9, 1, 1.4350445, 0, 0, 0.93333334, 1, 1.3991184, 0, 0, 0.96666664, 1, 1.366884, 0, 0, 1, 1, 1.3381042, 0, 0, 1.0333333, 1, 1.3125598, 0, 0, 1.0666667, 1, 1.2900503, 0, 0, 1.1, 1, 1.2703912, 0, 0, 1.1333333, 1, 1.2534142, 0, 0, 1.1666666, 1, 1.2389638, 0, 0, 1.2, 1, 1.2268972, 0, 0, 1.2333333, 1, 1.2170839, 0, 0, 1.2666667, 1, 1.2094028, 0, 0, 1.3, 1, 1.203742, 0, 0, 1.3333334, 1, 1.2, 0, 0, 1.3666667, 1, 1.184875, 0, 0, 1.4, 1, 1.1395, 0, 0, 1.4333333, 1, 1.063875, 0, 0, 1.4666667, 1, 1.018, 0, 0, 1.5, 1, 1.046875, 0, 0, 1.5333333, 1, 1.0455, 0, 0, 1.5666667, 1, 1.013875, 0, 0, 1.6, 1, 1.012, 0, 0, 1.6333333, 1, 1.002375, 0, 0, 1.6666666, 1, 1, 0, 0)
+tracks/2/type = "position_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("DoorArmature/Skeleton3D:panel.t")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0, 5.3, 0, 0.033333335, 1, 0, 5.2960677, 0, 0.06666667, 1, 0, 5.2836957, 0, 0.1, 1, 0, 5.2619867, 0, 0.13333334, 1, 0, 5.230034, 0, 0.16666667, 1, 0, 5.1869946, 0, 0.2, 1, 0, 5.132208, 0, 0.23333333, 1, 0, 5.065358, 0, 0.26666668, 1, 0, 4.986663, 0, 0.3, 1, 0, 4.897048, 0, 0.33333334, 1, 0, 4.7982244, 0, 0.36666667, 1, 0, 4.692596, 0, 0.4, 1, 0, 4.5829887, 0, 0.43333334, 1, 0, 4.47227, 0, 0.46666667, 1, 0, 4.3630004, 0, 0.5, 1, 0, 4.2572093, 0, 0.53333336, 1, 0, 4.1563315, 0, 0.56666666, 1, 0, 4.0612583, 0, 0.6, 1, 0, 3.9724433, 0, 0.6333333, 1, 0, 3.8900251, 0, 0.6666667, 1, 0, 3.8139277, 0, 0.7, 1, 0, 3.743943, 0, 0.73333335, 1, 0, 3.6797862, 0, 0.76666665, 1, 0, 3.621136, 0, 0.8, 1, 0, 3.567659, 0, 0.8333333, 1, 0, 3.5190263, 0, 0.8666667, 1, 0, 3.4749207, 0, 0.9, 1, 0, 3.4350445, 0, 0.93333334, 1, 0, 3.3991184, 0, 0.96666664, 1, 0, 3.366884, 0, 1, 1, 0, 3.3381042, 0, 1.0333333, 1, 0, 3.3125598, 0, 1.0666667, 1, 0, 3.2900503, 0, 1.1, 1, 0, 3.2703912, 0, 1.1333333, 1, 0, 3.2534142, 0, 1.1666666, 1, 0, 3.2389638, 0, 1.2, 1, 0, 3.2268972, 0, 1.2333333, 1, 0, 3.217084, 0, 1.2666667, 1, 0, 3.2094028, 0, 1.3, 1, 0, 3.203742, 0, 1.3333334, 1, 0, 3.2, 0, 1.3666667, 1, 0, 3.184875, 0, 1.4, 1, 0, 3.1395, 0, 1.4333333, 1, 0, 3.063875, 0, 1.4666667, 1, 0, 3.018, 0, 1.5, 1, 0, 3.046875, 0, 1.5333333, 1, 0, 3.0455, 0, 1.5666667, 1, 0, 3.013875, 0, 1.6, 1, 0, 3.012, 0, 1.6333333, 1, 0, 3.0023751, 0, 1.6666666, 1, 0, 3, 0)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("ChestArmature/Skeleton3D:Lid")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_wo3xn"]
+resource_name = "DoorOpen"
+length = 1.6666666
+tracks/0/type = "position_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("DoorArmature/Skeleton3D:panel.l")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -1, 0, 0, 0.033333335, 1, -1.0037812, 0, 0, 0.06666667, 1, -1.015125, 0, 0, 0.1, 1, -1.0340313, 0, 0, 0.13333334, 1, -1.0605, 0, 0, 0.16666667, 1, -1.0945313, 0, 0, 0.2, 1, -1.136125, 0, 0, 0.23333333, 1, -1.1852813, 0, 0, 0.26666668, 1, -1.182, 0, 0, 0.3, 1, -1.1637813, 0, 0, 0.33333334, 1, -1.153125, 0, 0, 0.36666667, 1, -1.1500312, 0, 0, 0.4, 1, -1.1545, 0, 0, 0.43333334, 1, -1.1665312, 0, 0, 0.46666667, 1, -1.186125, 0, 0, 0.5, 1, -1.1945312, 0, 0, 0.53333336, 1, -1.188, 0, 0, 0.56666666, 1, -1.1890312, 0, 0, 0.6, 1, -1.197625, 0, 0, 0.6333333, 1, -1.1969062, 0, 0, 0.6666667, 1, -1.2, 0, 0, 0.7, 1, -1.2348778, 0, 0, 0.73333335, 1, -1.2790222, 0, 0, 0.76666665, 1, -1.3317001, 0, 0, 0.8, 1, -1.3921778, 0, 0, 0.8333333, 1, -1.4597223, 0, 0, 0.8666667, 1, -1.5336, 0, 0, 0.9, 1, -1.6130779, 0, 0, 0.93333334, 1, -1.6974223, 0, 0, 0.96666664, 1, -1.7859001, 0, 0, 1, 1, -1.8777778, 0, 0, 1.0333333, 1, -1.9723222, 0, 0, 1.0666667, 1, -2.0688, 0, 0, 1.1666666, 1, -2.3625002, 0, 0, 1.2, 1, -2.459378, 0, 0, 1.2333333, 1, -2.5545223, 0, 0, 1.2666667, 1, -2.6472, 0, 0, 1.3, 1, -2.7366776, 0, 0, 1.3333334, 1, -2.8222225, 0, 0, 1.3666667, 1, -2.9031, 0, 0, 1.4, 1, -2.978578, 0, 0, 1.4333333, 1, -3.0479224, 0, 0, 1.4666667, 1, -3.1104002, 0, 0, 1.5, 1, -3.165278, 0, 0, 1.5333333, 1, -3.2118225, 0, 0, 1.5666667, 1, -3.2493002, 0, 0, 1.6, 1, -3.276978, 0, 0, 1.6333333, 1, -3.2941225, 0, 0, 1.6666666, 1, -3.3, 0, 0)
+tracks/1/type = "position_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("DoorArmature/Skeleton3D:panel.r")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 1, 0, 0, 0.033333335, 1, 1.0037812, 0, 0, 0.06666667, 1, 1.015125, 0, 0, 0.1, 1, 1.0340313, 0, 0, 0.13333334, 1, 1.0605, 0, 0, 0.16666667, 1, 1.0945313, 0, 0, 0.2, 1, 1.136125, 0, 0, 0.23333333, 1, 1.1852813, 0, 0, 0.26666668, 1, 1.182, 0, 0, 0.3, 1, 1.1637813, 0, 0, 0.33333334, 1, 1.153125, 0, 0, 0.36666667, 1, 1.1500312, 0, 0, 0.4, 1, 1.1545, 0, 0, 0.43333334, 1, 1.1665312, 0, 0, 0.46666667, 1, 1.186125, 0, 0, 0.5, 1, 1.1945312, 0, 0, 0.53333336, 1, 1.188, 0, 0, 0.56666666, 1, 1.1890312, 0, 0, 0.6, 1, 1.197625, 0, 0, 0.6333333, 1, 1.1969062, 0, 0, 0.6666667, 1, 1.2, 0, 0, 0.7, 1, 1.2348778, 0, 0, 0.73333335, 1, 1.2790222, 0, 0, 0.76666665, 1, 1.3317001, 0, 0, 0.8, 1, 1.3921778, 0, 0, 0.8333333, 1, 1.4597223, 0, 0, 0.8666667, 1, 1.5336, 0, 0, 0.9, 1, 1.6130779, 0, 0, 0.93333334, 1, 1.6974223, 0, 0, 0.96666664, 1, 1.7859001, 0, 0, 1, 1, 1.8777778, 0, 0, 1.0333333, 1, 1.9723222, 0, 0, 1.0666667, 1, 2.0688, 0, 0, 1.1666666, 1, 2.3625002, 0, 0, 1.2, 1, 2.459378, 0, 0, 1.2333333, 1, 2.5545223, 0, 0, 1.2666667, 1, 2.6472, 0, 0, 1.3, 1, 2.7366776, 0, 0, 1.3333334, 1, 2.8222225, 0, 0, 1.3666667, 1, 2.9031, 0, 0, 1.4, 1, 2.978578, 0, 0, 1.4333333, 1, 3.0479224, 0, 0, 1.4666667, 1, 3.1104002, 0, 0, 1.5, 1, 3.165278, 0, 0, 1.5333333, 1, 3.2118225, 0, 0, 1.5666667, 1, 3.2493002, 0, 0, 1.6, 1, 3.276978, 0, 0, 1.6333333, 1, 3.2941225, 0, 0, 1.6666666, 1, 3.3, 0, 0)
+tracks/2/type = "position_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("DoorArmature/Skeleton3D:panel.t")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0, 3, 0, 0.033333335, 1, 0, 3.0037813, 0, 0.06666667, 1, 0, 3.015125, 0, 0.1, 1, 0, 3.0340312, 0, 0.13333334, 1, 0, 3.0605, 0, 0.16666667, 1, 0, 3.0945313, 0, 0.2, 1, 0, 3.136125, 0, 0.23333333, 1, 0, 3.1852813, 0, 0.26666668, 1, 0, 3.182, 0, 0.3, 1, 0, 3.1637812, 0, 0.33333334, 1, 0, 3.153125, 0, 0.36666667, 1, 0, 3.1500313, 0, 0.4, 1, 0, 3.1545, 0, 0.43333334, 1, 0, 3.1665313, 0, 0.46666667, 1, 0, 3.186125, 0, 0.5, 1, 0, 3.1945312, 0, 0.53333336, 1, 0, 3.188, 0, 0.56666666, 1, 0, 3.1890314, 0, 0.6, 1, 0, 3.197625, 0, 0.6333333, 1, 0, 3.1969063, 0, 0.6666667, 1, 0, 3.2, 0, 0.7, 1, 0, 3.2348778, 0, 0.73333335, 1, 0, 3.2790222, 0, 0.76666665, 1, 0, 3.3317, 0, 0.8, 1, 0, 3.3921778, 0, 0.8333333, 1, 0, 3.4597223, 0, 0.8666667, 1, 0, 3.5335999, 0, 0.9, 1, 0, 3.6130779, 0, 0.93333334, 1, 0, 3.6974223, 0, 0.96666664, 1, 0, 3.7859, 0, 1, 1, 0, 3.8777778, 0, 1.0333333, 1, 0, 3.9723222, 0, 1.0666667, 1, 0, 4.0688, 0, 1.1666666, 1, 0, 4.3625, 0, 1.2, 1, 0, 4.4593782, 0, 1.2333333, 1, 0, 4.5545225, 0, 1.2666667, 1, 0, 4.6472, 0, 1.3, 1, 0, 4.7366776, 0, 1.3333334, 1, 0, 4.8222227, 0, 1.3666667, 1, 0, 4.9031, 0, 1.4, 1, 0, 4.978578, 0, 1.4333333, 1, 0, 5.047922, 0, 1.4666667, 1, 0, 5.1104, 0, 1.5, 1, 0, 5.165278, 0, 1.5333333, 1, 0, 5.2118225, 0, 1.5666667, 1, 0, 5.2493, 0, 1.6, 1, 0, 5.276978, 0, 1.6333333, 1, 0, 5.2941227, 0, 1.6666666, 1, 0, 5.3, 0)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("ChestArmature/Skeleton3D:Lid")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6le8q"]
+_data = {
+&"ChestClose": SubResource("Animation_bw4xr"),
+&"ChestOpen": SubResource("Animation_02mbo"),
+&"DoorClose": SubResource("Animation_dkys2"),
+&"DoorOpen": SubResource("Animation_wo3xn")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0phs7"]
+animation = &"DoorClose"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_50cdl"]
+animation = &"DoorOpen"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_y5njw"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4xadh"]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6hwww"]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_jhssr"]
+states/DoorClose/node = SubResource("AnimationNodeAnimation_0phs7")
+states/DoorClose/position = Vector2(374, 168)
+states/DoorOpen/node = SubResource("AnimationNodeAnimation_50cdl")
+states/DoorOpen/position = Vector2(374, 50)
+transitions = ["Start", "DoorClose", SubResource("AnimationNodeStateMachineTransition_y5njw"), "DoorOpen", "DoorClose", SubResource("AnimationNodeStateMachineTransition_4xadh"), "DoorClose", "DoorOpen", SubResource("AnimationNodeStateMachineTransition_6hwww")]
+
+[node name="Node3D" type="Node3D" unique_id=1199699723]
+script = ExtResource("1_ba8gm")
+
+[node name="DoorArmature" type="Node3D" parent="." unique_id=279100907]
+
+[node name="Skeleton3D" type="Skeleton3D" parent="DoorArmature" unique_id=1050917915]
+bones/0/name = "root"
+bones/0/parent = -1
+bones/0/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+bones/0/enabled = true
+bones/0/position = Vector3(0, 0, 0)
+bones/0/rotation = Quaternion(0, 0, 0, 1)
+bones/0/scale = Vector3(1, 1, 1)
+bones/1/name = "panel.l"
+bones/1/parent = 0
+bones/1/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+bones/1/enabled = true
+bones/1/position = Vector3(-1, 0, 0)
+bones/1/rotation = Quaternion(0, 0, 0, 1)
+bones/1/scale = Vector3(1, 1, 1)
+bones/2/name = "panel.r"
+bones/2/parent = 0
+bones/2/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+bones/2/enabled = true
+bones/2/position = Vector3(1, 0, 0)
+bones/2/rotation = Quaternion(0, 0, 0, 1)
+bones/2/scale = Vector3(1, 1, 1)
+bones/3/name = "panel.t"
+bones/3/parent = 0
+bones/3/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+bones/3/enabled = true
+bones/3/position = Vector3(0, 3, 0)
+bones/3/rotation = Quaternion(0, 0, 0, 1)
+bones/3/scale = Vector3(1, 1, 1)
+
+[node name="Door" type="MeshInstance3D" parent="DoorArmature/Skeleton3D" unique_id=251822690]
+material_override = SubResource("StandardMaterial3D_fos22")
+mesh = SubResource("ArrayMesh_o16a6")
+skin = SubResource("Skin_vxc72")
+skeleton = NodePath("..")
+
+[node name="BoneAttachmentLeft" type="BoneAttachment3D" parent="DoorArmature/Skeleton3D" unique_id=875557276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+bone_name = "panel.l"
+bone_idx = 1
+
+[node name="StaticBody3D" type="StaticBody3D" parent="DoorArmature/Skeleton3D/BoneAttachmentLeft" unique_id=897511904]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorArmature/Skeleton3D/BoneAttachmentLeft/StaticBody3D" unique_id=1330479272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1.25, 0)
+shape = SubResource("BoxShape3D_jhssr")
+
+[node name="BoneAttachmentRight" type="BoneAttachment3D" parent="DoorArmature/Skeleton3D" unique_id=1408228458]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+bone_name = "panel.r"
+bone_idx = 2
+
+[node name="StaticBody3D" type="StaticBody3D" parent="DoorArmature/Skeleton3D/BoneAttachmentRight" unique_id=1339067478]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorArmature/Skeleton3D/BoneAttachmentRight/StaticBody3D" unique_id=252467320]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2531724, 1.25, 0)
+shape = SubResource("BoxShape3D_jhssr")
+
+[node name="BoneAttachmentTop" type="BoneAttachment3D" parent="DoorArmature/Skeleton3D" unique_id=1473592693]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+bone_name = "panel.t"
+bone_idx = 3
+
+[node name="StaticBody3D" type="StaticBody3D" parent="DoorArmature/Skeleton3D/BoneAttachmentTop" unique_id=1505240579]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorArmature/Skeleton3D/BoneAttachmentTop/StaticBody3D" unique_id=1158184595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("BoxShape3D_v6xrn")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=134752777]
+libraries/ = SubResource("AnimationLibrary_6le8q")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1125012929]
+tree_root = SubResource("AnimationNodeStateMachine_jhssr")
+anim_player = NodePath("../AnimationPlayer")

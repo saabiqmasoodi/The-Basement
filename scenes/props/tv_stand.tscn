@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://ckmcxqnkyn6fi"]
+
+[ext_resource type="PackedScene" uid="uid://347lhxo0evpt" path="res://assets/models/props/small_tv_stand/small_tv_stand.glb" id="1_j65q7"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ntmdp"]
+points = PackedVector3Array(0.61399037, 0.230727, 0.34107006, 0.75000006, 0.21719302, 0.424882, 0.61399037, 0.230727, 0.32177344, -0.6167073, 0.230727, 0.34107006, 0.75000006, -0.2, 0.424882, 0.75000006, 0.21719302, 0.40711752, -0.7500733, 0.21719302, 0.424882, 0.75000006, 0.21183844, 0.007105951, -0.6167073, 0.230727, 0.32177344, 0.75000006, -0.2, 0.001847, -0.7500733, -0.2, 0.424882, -0.7500733, 0.21183844, 0.007105951, -0.750514, 0.21571733, 0.40720034, 0.75000006, 0.19999091, 0.001847, -0.7500733, -0.2, 0.001847, -0.750514, 0.1833791, 0.40720034, -0.7500733, 0.19999091, 0.001847)
+
+[node name="StaticBody3D" type="StaticBody3D" unique_id=1221076459]
+
+[node name="Sketchfab_Scene" parent="." unique_id=722572722 instance=ExtResource("1_j65q7")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1414725589]
+transform = Transform3D(1.5025887, 0, 0, 0, 3.3364173e-16, 1.5025887, 0, -1.5025887, 3.3364173e-16, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_ntmdp")

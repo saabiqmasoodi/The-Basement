@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cberqd11efai1"]
+
+[ext_resource type="PackedScene" uid="uid://cugqkomnvlhfl" path="res://assets/models/props/workbench/workbench.glb" id="1_dig1h"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x0rs0"]
+size = Vector3(0.9425049, 0.39916992, 0.44604492)
+
+[node name="StaticBody3D" type="StaticBody3D" unique_id=530126559]
+
+[node name="Sketchfab_Scene" parent="." unique_id=345162964 instance=ExtResource("1_dig1h")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1127946834]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.017456055, -0.3088379, -0.051513672)
+shape = SubResource("BoxShape3D_x0rs0")

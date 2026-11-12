@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://blfan5nsu83lp"]
+
+[ext_resource type="PackedScene" uid="uid://dm6hr2l77c1l4" path="res://assets/models/props/kitchen_cabinets/old_kitchen_cabinets.glb" id="1_jmcs6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_klgq2"]
+size = Vector3(0.94477844, 0.8635864, 1.8605957)
+
+[node name="StaticBody3D" type="StaticBody3D" unique_id=925051071]
+
+[node name="Sketchfab_Scene" parent="." unique_id=965966817 instance=ExtResource("1_jmcs6")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=838286997]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 1.0789642, -38.266987, -13.5138855)
+shape = SubResource("BoxShape3D_klgq2")

@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/generator.gd" id="1_gen"]
+[ext_resource type="PackedScene" path="res://assets/models/props/electricity_generator/electricity_genarator(1).glb" id="2_model"]
+[ext_resource type="AudioStream" uid="uid://wx6pc35arvac" path="res://assets/audio/sfx/ui_click.mp3" id="3_relay"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gen"]
+size = Vector3(0.62, 0.86, 1.36)
+
+[node name="Generator" type="StaticBody3D"]
+script = ExtResource("1_gen")
+promt_message = "Restore electricity"
+promt_input = "interact"
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.252, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43, 0)
+shape = SubResource("BoxShape3D_gen")
+
+[node name="Relay" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+stream = ExtResource("3_relay")
+volume_db = 4.0
+unit_size = 6.0
+
+[node name="PowerLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 0)
+light_color = Color(1, 0.82, 0.55, 1)
+light_energy = 0.0
+omni_range = 4.0
+
+[connection signal="interacted" from="." to="." method="_on_interacted"]

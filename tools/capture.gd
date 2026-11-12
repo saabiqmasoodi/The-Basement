@@ -34,13 +34,13 @@ func _run() -> void:
 	root.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
 
 	if mode == "menu":
-		change_scene_to_file("res://menu.tscn")
+		change_scene_to_file("res://scenes/ui/menu.tscn")
 		await _wait(50)
 		await _shot("horror_menu")
 		quit()
 		return
 
-	change_scene_to_file("res://World.tscn")
+	change_scene_to_file("res://scenes/world/World.tscn")
 	await _wait(12)
 
 	var world := current_scene

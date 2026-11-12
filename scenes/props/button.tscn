@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://k0k5fdpb2aqj"]
+
+[ext_resource type="PackedScene" uid="uid://bxn2fc700dgpj" path="res://assets/models/props/door_button/fnaf_door_button.glb" id="1_r04n3"]
+[ext_resource type="Script" uid="uid://dbjsjtkxmlrn" path="res://scripts/world/button.gd" id="1_vxja4"]
+[ext_resource type="AudioStream" uid="uid://wx6pc35arvac" path="res://assets/audio/sfx/ui_click.mp3" id="3_lt4la"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n4tde"]
+size = Vector3(2.4791794, 2.7572937, 1.0454102)
+
+[node name="Button" type="StaticBody3D" unique_id=895556071]
+script = ExtResource("1_vxja4")
+
+[node name="Sketchfab_Scene" parent="." unique_id=1880873895 instance=ExtResource("1_r04n3")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=328172350]
+transform = Transform3D(1, 0, 0, 0, 0.29002392, 0, 0, 0, 1.8992194, 0.336483, 0.2548286, -0.043121926)
+shape = SubResource("BoxShape3D_n4tde")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1676418861]
+stream = ExtResource("3_lt4la")
+
+[connection signal="interacted" from="." to="." method="_on_interacted"]

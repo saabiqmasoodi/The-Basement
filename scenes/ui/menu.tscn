@@ -1,0 +1,192 @@
+[gd_scene format=3 uid="uid://dpe1g0jmlueny"]
+
+[ext_resource type="Script" uid="uid://c8udx2xqls53" path="res://scripts/ui/menu.gd" id="1_menu"]
+[ext_resource type="AudioStream" uid="uid://wx6pc35arvac" path="res://assets/audio/sfx/ui_click.mp3" id="2_click"]
+[ext_resource type="Script" uid="uid://c8ddvvvv8afgm" path="res://scripts/ui/menu_portrait.gd" id="3_portrait"]
+
+[sub_resource type="SystemFont" id="SystemFont_ui"]
+font_names = PackedStringArray("Avenir Next", "Helvetica Neue", "Segoe UI", "Liberation Sans")
+font_weight = 500
+
+[sub_resource type="Theme" id="Theme_menu"]
+default_font = SubResource("SystemFont_ui")
+default_font_size = 15
+
+[sub_resource type="SystemFont" id="SystemFont_title"]
+font_names = PackedStringArray("Avenir Next Condensed", "Arial Narrow", "Liberation Sans Narrow")
+font_weight = 800
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
+content_margin_left = 22.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.008, 0.012, 0.011, 0.3)
+border_width_left = 2
+border_width_bottom = 1
+border_color = Color(0.3, 0.04, 0.024, 0.42)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btnhover"]
+content_margin_left = 22.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.09, 0.01, 0.007, 0.58)
+border_width_left = 4
+border_width_bottom = 1
+border_color = Color(0.74, 0.105, 0.055, 0.92)
+
+[node name="MainMenu" type="Control" unique_id=1912631557]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_menu")
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1686497965]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="." unique_id=344905038]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 74.0
+offset_right = 840.0
+offset_bottom = 170.0
+theme_override_colors/font_color = Color(0.86, 0.9, 0.86, 1)
+theme_override_colors/font_shadow_color = Color(0.2, 0.018, 0.01, 0.98)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 5
+theme_override_fonts/font = SubResource("SystemFont_title")
+theme_override_font_sizes/font_size = 76
+text = "Not To Love"
+vertical_alignment = 1
+
+[node name="Rule" type="ColorRect" parent="." unique_id=1036881201]
+layout_mode = 0
+offset_left = 92.0
+offset_top = 204.0
+offset_right = 224.0
+offset_bottom = 206.0
+mouse_filter = 2
+color = Color(0.6, 0.075, 0.045, 1)
+
+[node name="Subtitle" type="Label" parent="." unique_id=668190364]
+layout_mode = 0
+offset_left = 92.0
+offset_top = 218.0
+offset_right = 720.0
+offset_bottom = 246.0
+theme_override_colors/font_color = Color(0.43, 0.53, 0.48, 1)
+theme_override_font_sizes/font_size = 13
+text = "HE  IS  STILL  HUNGRY"
+vertical_alignment = 1
+
+[node name="Menu" type="VBoxContainer" parent="." unique_id=1476724758]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 90.0
+offset_top = -376.0
+offset_right = 472.0
+offset_bottom = -144.0
+grow_vertical = 0
+theme_override_constants/separation = 8
+
+[node name="NewGame" type="Button" parent="Menu" unique_id=172272269]
+custom_minimum_size = Vector2(382, 50)
+layout_mode = 2
+focus_mode = 1
+theme_override_colors/font_color = Color(0.83, 0.89, 0.85, 1)
+theme_override_colors/font_focus_color = Color(1, 0.79, 0.65, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.66, 0.5, 1)
+theme_override_colors/font_hover_color = Color(1, 0.79, 0.65, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btnhover")
+text = "NEW GAME"
+alignment = 0
+
+[node name="LoadGame" type="Button" parent="Menu" unique_id=1877814335]
+custom_minimum_size = Vector2(382, 50)
+layout_mode = 2
+focus_mode = 1
+theme_override_colors/font_color = Color(0.83, 0.89, 0.85, 1)
+theme_override_colors/font_focus_color = Color(1, 0.79, 0.65, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.66, 0.5, 1)
+theme_override_colors/font_hover_color = Color(1, 0.79, 0.65, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btnhover")
+text = "LOAD SAVED GAME"
+alignment = 0
+
+[node name="Settings" type="Button" parent="Menu" unique_id=2066778601]
+custom_minimum_size = Vector2(382, 50)
+layout_mode = 2
+focus_mode = 1
+theme_override_colors/font_color = Color(0.83, 0.89, 0.85, 1)
+theme_override_colors/font_focus_color = Color(1, 0.79, 0.65, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.66, 0.5, 1)
+theme_override_colors/font_hover_color = Color(1, 0.79, 0.65, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btnhover")
+text = "SETTINGS"
+alignment = 0
+
+[node name="Quit" type="Button" parent="Menu" unique_id=780399658]
+custom_minimum_size = Vector2(382, 50)
+layout_mode = 2
+focus_mode = 1
+theme_override_colors/font_color = Color(0.83, 0.89, 0.85, 1)
+theme_override_colors/font_focus_color = Color(1, 0.79, 0.65, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.66, 0.5, 1)
+theme_override_colors/font_hover_color = Color(1, 0.79, 0.65, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btnhover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btnhover")
+text = "QUIT"
+alignment = 0
+
+[node name="Status" type="Label" parent="." unique_id=974314126]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 92.0
+offset_top = -126.0
+offset_right = 660.0
+offset_bottom = -102.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.72, 0.24, 0.19, 1)
+theme_override_font_sizes/font_size = 15
+vertical_alignment = 1
+
+[node name="PortraitViewport" type="SubViewport" parent="." unique_id=1947453012]
+own_world_3d = true
+size = Vector2i(2560, 1440)
+render_target_update_mode = 4
+script = ExtResource("3_portrait")
+
+[node name="ClickPlayer" type="AudioStreamPlayer" parent="." unique_id=1633396398]
+stream = ExtResource("2_click")
+volume_db = -6.0
+bus = &"SFX"

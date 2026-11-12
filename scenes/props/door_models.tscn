@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bcsp1ccigspai"]
+
+[ext_resource type="PackedScene" uid="uid://btte3fjxg6r0u" path="res://assets/models/props/door/models.gltf" id="1_lu8lw"]
+
+[node name="models" unique_id=275080366 instance=ExtResource("1_lu8lw")]
+
+[node name="DoorArmature" parent="." index="6" unique_id=1062012054]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 107.65081, 0, 0)

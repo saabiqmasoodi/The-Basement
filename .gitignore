@@ -8,3 +8,6 @@ __MACOSX/
 
 # Local tooling (nested git repository / MCP server)
 godot-mcp/
+
+# Local builds and exports
+build/
