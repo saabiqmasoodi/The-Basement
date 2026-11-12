@@ -20,6 +20,7 @@ jobs:
   quality:
     name: Lint and format
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -41,9 +42,13 @@ jobs:
       - name: Check resource references
         run: python tests/check_references.py
 
+  # Godot 4.7's Linux editor can deadlock while importing this project's large
+  # GLB assets in a headless environment. The macOS editor handles the same
+  # assets reliably and can cross-export Windows and Linux builds.
   test:
     name: Headless tests
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
+    timeout-minutes: 30
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -51,77 +56,28 @@ jobs:
       - name: Install Godot
         run: |
           curl -fsSL --retry 3 -o "$RUNNER_TEMP/godot.zip" \
-            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_linux.x86_64.zip"
+            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_macos.universal.zip"
           unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP"
-          chmod +x "$RUNNER_TEMP/Godot_v${GODOT_VERSION}_linux.x86_64"
-          echo "GODOT_BIN=$RUNNER_TEMP/Godot_v${GODOT_VERSION}_linux.x86_64" >> "$GITHUB_ENV"
+          chmod +x "$RUNNER_TEMP/Godot.app/Contents/MacOS/Godot"
+          echo "GODOT_BIN=$RUNNER_TEMP/Godot.app/Contents/MacOS/Godot" >> "$GITHUB_ENV"
 
       - name: Import project
+        timeout-minutes: 20
         run: '"$GODOT_BIN" --headless --path . --import'
 
       - name: Type check GDScript
+        timeout-minutes: 10
         run: bash tests/check_scripts.sh
 
       - name: Run headless tests
+        timeout-minutes: 10
         run: '"$GODOT_BIN" --headless --path . --script res://tests/test_runner.gd'
 
-  export-linux-windows:
-    name: Export Linux and Windows
-    needs: [quality, test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out
-        uses: actions/checkout@v4
-
-      - name: Install Godot and export templates
-        run: |
-          curl -fsSL --retry 3 -o "$RUNNER_TEMP/godot.zip" \
-            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_linux.x86_64.zip"
-          unzip -q "$RUNNER_TEMP/godot.zip" -d "$RUNNER_TEMP"
-          chmod +x "$RUNNER_TEMP/Godot_v${GODOT_VERSION}_linux.x86_64"
-          echo "GODOT_BIN=$RUNNER_TEMP/Godot_v${GODOT_VERSION}_linux.x86_64" >> "$GITHUB_ENV"
-
-          curl -fsSL --retry 3 -o "$RUNNER_TEMP/templates.tpz" \
-            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_export_templates.tpz"
-          unzip -q "$RUNNER_TEMP/templates.tpz" -d "$RUNNER_TEMP/templates"
-          mkdir -p "$HOME/.local/share/godot/export_templates/${GODOT_NUMBER}.stable"
-          cp -R "$RUNNER_TEMP/templates/templates/." "$HOME/.local/share/godot/export_templates/${GODOT_NUMBER}.stable/"
-
-      - name: Import project
-        run: '"$GODOT_BIN" --headless --path . --import'
-
-      - name: Export Windows
-        run: |
-          mkdir -p build/releases/windows build/artifacts
-          "$GODOT_BIN" --headless --path . --export-release "Windows Desktop" build/releases/windows/NotToLove.exe
-          (cd build/releases/windows && zip -qr "$GITHUB_WORKSPACE/build/artifacts/NotToLove-windows.zip" .)
-
-      - name: Export Linux
-        run: |
-          mkdir -p build/releases/linux build/artifacts
-          "$GODOT_BIN" --headless --path . --export-release "Linux" build/releases/linux/NotToLove.x86_64
-          (cd build/releases/linux && zip -qr "$GITHUB_WORKSPACE/build/artifacts/NotToLove-linux.zip" .)
-
-      - name: Upload Windows build
-        uses: actions/upload-artifact@v4
-        with:
-          name: NotToLove-windows
-          path: build/artifacts/NotToLove-windows.zip
-          if-no-files-found: error
-          retention-days: 14
-
-      - name: Upload Linux build
-        uses: actions/upload-artifact@v4
-        with:
-          name: NotToLove-linux
-          path: build/artifacts/NotToLove-linux.zip
-          if-no-files-found: error
-          retention-days: 14
-
-  export-macos:
-    name: Export macOS
+  export:
+    name: Export Windows, macOS, and Linux
     needs: [quality, test]
     runs-on: macos-latest
+    timeout-minutes: 45
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -141,18 +97,43 @@ jobs:
           cp -R "$RUNNER_TEMP/templates/templates/." "$HOME/Library/Application Support/Godot/export_templates/${GODOT_NUMBER}.stable/"
 
       - name: Import project
+        timeout-minutes: 20
         run: '"$GODOT_BIN" --headless --path . --import'
 
-      - name: Export macOS
+      - name: Export releases
+        timeout-minutes: 30
         run: |
-          mkdir -p build/releases/macos build/artifacts
+          mkdir -p build/releases/windows build/releases/macos build/releases/linux build/artifacts
+
+          "$GODOT_BIN" --headless --path . --export-release "Windows Desktop" build/releases/windows/NotToLove.exe
+          (cd build/releases/windows && zip -qr "$GITHUB_WORKSPACE/build/artifacts/NotToLove-windows.zip" .)
+
           "$GODOT_BIN" --headless --path . --export-release "macOS" build/releases/macos/NotToLove.app
           ditto -c -k --sequesterRsrc --keepParent build/releases/macos/NotToLove.app build/artifacts/NotToLove-macos.zip
+
+          "$GODOT_BIN" --headless --path . --export-release "Linux" build/releases/linux/NotToLove.x86_64
+          (cd build/releases/linux && zip -qr "$GITHUB_WORKSPACE/build/artifacts/NotToLove-linux.zip" .)
+
+      - name: Upload Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: NotToLove-windows
+          path: build/artifacts/NotToLove-windows.zip
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Upload macOS build
         uses: actions/upload-artifact@v4
         with:
           name: NotToLove-macos
           path: build/artifacts/NotToLove-macos.zip
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload Linux build
+        uses: actions/upload-artifact@v4
+        with:
+          name: NotToLove-linux
+          path: build/artifacts/NotToLove-linux.zip
           if-no-files-found: error
           retention-days: 14

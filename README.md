@@ -88,6 +88,10 @@ GODOT_BIN=/Applications/Godot.app/Contents/MacOS/Godot make check
    GitHub Actions artifacts (`NotToLove-windows`, `NotToLove-linux`,
    `NotToLove-macos`) for 14 days.
 
+The test and export jobs run on macOS. Godot 4.7's Linux editor can deadlock
+while importing this project's large GLB assets in a headless CI container;
+the macOS editor imports them reliably and cross-exports all three targets.
+
 Export templates for the exact Godot version must be installed locally for
 `make build`. Release builds are written to `build/releases/` and zipped into
 `build/artifacts/`; both directories are ignored by Git.
