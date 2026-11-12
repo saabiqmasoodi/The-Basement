@@ -205,6 +205,24 @@ const GRAPHICS_QUALITY_MSAA := {
 	"very_high": 2,
 }
 
+# Keep the 3D render target bounded even on 4K/5K displays. The UI and the
+# post-process pass stay at native resolution; only the heavy scene pass is
+# upscaled. Without this cap a 4K fullscreen window renders 7-8 million 3D
+# pixels per frame and drops below 20 FPS on otherwise capable GPUs.
+const MAX_3D_WIDTH := {
+	"low": 1024,
+	"medium": 1152,
+	"high": 1280,
+	"very_high": 1440,
+}
+const MIN_RENDER_SCALE := 0.30
+const PERFORMANCE_SAMPLE_SECONDS := 1.5
+const SMOOTH_FPS := 58.0
+const LOW_FPS := 56.0
+
+var _base_render_scale := 1.0
+var _performance_elapsed := 0.0
+
 
 func get_setting(key: String):
 	return settings.get(key)
@@ -267,6 +285,89 @@ func _quality_render_scale(target_width: int, quality: String) -> float:
 			. get(quality, 1.0)
 		)
 	return 1.0
+
+
+func _render_target_width() -> int:
+	var viewport := get_viewport()
+	var width := int(settings["window_width"])
+	if viewport != null:
+		width = maxi(width, int(viewport.get_visible_rect().size.x))
+	width = maxi(width, DisplayServer.window_get_size().x)
+	if bool(settings["fullscreen"]):
+		width = maxi(width, DisplayServer.screen_get_size().x)
+	return maxi(width, 1)
+
+
+func _apply_render_scale() -> void:
+	if not is_inside_tree():
+		return
+	var vp := get_viewport()
+	if vp == null:
+		return
+	var target_width := _render_target_width()
+	var quality := get_graphics_quality()
+	var base_scale := _quality_render_scale(target_width, quality)
+	var max_width := int(MAX_3D_WIDTH.get(quality, 1440))
+	base_scale = minf(base_scale, float(max_width) / float(target_width))
+	base_scale = clampf(base_scale, MIN_RENDER_SCALE, 1.0)
+	_base_render_scale = base_scale
+
+	var level: int = int(settings["msaa"])
+	# MSAA multiplies the cost of every pixel. Skip it when the 3D pass is
+	# already being upscaled, and on large displays where it is hardly visible.
+	if target_width >= 1600 or base_scale < 0.95:
+		level = 0
+	if level == 0:
+		vp.msaa_3d = Viewport.MSAA_DISABLED
+	else:
+		vp.msaa_3d = Viewport.MSAA_2X if level == 2 else Viewport.MSAA_4X
+	_set_render_scale(base_scale)
+	_performance_elapsed = 0.0
+
+
+func _set_render_scale(render_scale: float) -> void:
+	var vp := get_viewport()
+	if vp == null:
+		return
+	render_scale = clampf(render_scale, MIN_RENDER_SCALE, 1.0)
+	vp.scaling_3d_scale = render_scale
+	if render_scale < 0.999 and OS.get_name() == "macOS":
+		vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_METALFX_SPATIAL
+	else:
+		vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
+	var quality := get_graphics_quality()
+	var target_width := _render_target_width()
+	var use_taa := (
+		(quality == "high" or quality == "very_high")
+		and render_scale >= 0.95
+		and target_width <= 1600
+	)
+	vp.use_taa = use_taa
+	vp.screen_space_aa = (
+		Viewport.SCREEN_SPACE_AA_DISABLED if use_taa else Viewport.SCREEN_SPACE_AA_FXAA
+	)
+
+
+func _process(delta: float) -> void:
+	var scene := get_tree().current_scene
+	if scene == null or not scene.scene_file_path.ends_with("/World.tscn"):
+		return
+	_performance_elapsed += delta
+	if _performance_elapsed < PERFORMANCE_SAMPLE_SECONDS:
+		return
+	_performance_elapsed = 0.0
+	var vp := get_viewport()
+	if vp == null:
+		return
+	var fps := Engine.get_frames_per_second()
+	if fps < 1.0:
+		return
+	var current := vp.scaling_3d_scale
+	var floor_scale := maxf(MIN_RENDER_SCALE, _base_render_scale * 0.55)
+	if fps < LOW_FPS and current > floor_scale + 0.001:
+		_set_render_scale(maxf(floor_scale, current - 0.06))
+	elif fps > SMOOTH_FPS and current < _base_render_scale - 0.001:
+		_set_render_scale(minf(_base_render_scale, current + 0.03))
 
 
 func set_setting(key: String, value) -> void:
@@ -365,26 +466,10 @@ func apply_settings():
 	DisplayServer.window_set_vsync_mode(vsync_mode)
 	# Graphics quality: MSAA is optional; the TAA in project.godot handles normal
 	# edge quality. Keep the 3D at native resolution on small windows, but scale
-	# the 3D internally on high-DPI / 4K displays so the M2 Pro stays smooth.
+	# the 3D internally on high-DPI / 4K displays so the game stays smooth.
 	# The UI and post-processing remain full-resolution.
-	var level: int = int(settings["msaa"])
-	var vp := get_viewport()
-	if vp and level == 0:
-		vp.msaa_3d = Viewport.MSAA_DISABLED
-	elif vp and level > 0:
-		vp.msaa_3d = Viewport.MSAA_2X if level == 2 else Viewport.MSAA_4X
-	if vp:
-		var target_w := int(settings["window_width"])
-		var quality := get_graphics_quality()
-		var render_scale := _quality_render_scale(target_w, quality)
-		vp.scaling_3d_scale = render_scale
-		if render_scale < 1.0 and OS.get_name() == "macOS":
-			vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_METALFX_SPATIAL
-		else:
-			vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
-		# TAA is part of the high-quality look. Disable it in the performance
-		# presets, where the render-scale reduction already does the heavy lifting.
-		vp.use_taa = quality == "high" or quality == "very_high"
+	_apply_render_scale()
+	call_deferred("_apply_render_scale")
 	# Input (apply stored keybinds directly; rebind_key() saves without
 	# re-entering apply_settings to avoid recursion).
 	for action in settings["keybinds"].keys():
@@ -407,6 +492,9 @@ func _set_bus_volume(bus_name: String, linear: float) -> void:
 
 func _ready():
 	load_settings()
+	var vp := get_viewport()
+	if vp != null and not vp.size_changed.is_connected(_apply_render_scale):
+		vp.size_changed.connect(_apply_render_scale)
 	apply_settings()
 
 

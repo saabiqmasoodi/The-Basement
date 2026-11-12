@@ -232,7 +232,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           cat > "$RUNNER_TEMP/release-notes.md" <<'EOF'
-          First public release of Not To Love.
+          Not To Love release.
+
+          This build keeps the 3D scene responsive on high-DPI and 4K displays
+          with adaptive render scaling while the UI stays at native resolution.
 
           ## Downloads
 

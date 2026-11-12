@@ -99,12 +99,9 @@ func _update_background_size() -> void:
 func _sync_portrait_msaa() -> void:
 	if portrait_viewport == null:
 		return
-	var level := int(GameState.get_setting("msaa"))
-	portrait_viewport.msaa_3d = (
-		Viewport.MSAA_DISABLED
-		if level == 0
-		else Viewport.MSAA_2X if level == 2 else Viewport.MSAA_4X
-	)
+	# The menu portrait renders at 720p as a background; MSAA there only adds
+	# cost without a visible benefit once the finished image is upscaled.
+	portrait_viewport.msaa_3d = Viewport.MSAA_DISABLED
 
 
 func _animate_intro() -> void:

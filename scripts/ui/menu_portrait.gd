@@ -18,7 +18,7 @@ const BLOOD_TEXTURE := "res://materials/generated/decal_blood.png"
 const BLOOD_SHADER := "res://materials/generated/wall_blood.gdshader"
 const HEADLESS_SHADER := "res://materials/generated/headless_cut.gdshader"
 
-const VIEW_SIZE := Vector2i(2560, 1440)
+const VIEW_SIZE := Vector2i(1280, 720)
 
 var _world: Node3D
 var _friend: Node3D
@@ -45,7 +45,9 @@ func _ready() -> void:
 	size = VIEW_SIZE
 	own_world_3d = true
 	render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	msaa_3d = Viewport.MSAA_2X
+	# The portrait is a moving background, not the gameplay view. Keeping it at
+	# 720p with MSAA off saves a large amount of GPU time on high-DPI screens.
+	msaa_3d = Viewport.MSAA_DISABLED
 	_build_environment()
 	_build_set()
 	await _build_friend()
@@ -129,10 +131,7 @@ func _build_environment() -> void:
 	env.tonemap_exposure = 1.16
 	env.tonemap_agx_white = 6.5
 	env.tonemap_agx_contrast = 1.08
-	env.ssao_enabled = true
-	env.ssao_radius = 1.2
-	env.ssao_intensity = 1.55
-	env.ssao_power = 1.7
+	env.ssao_enabled = false
 	env.glow_enabled = true
 	env.glow_intensity = 0.30
 	env.glow_strength = 0.8
@@ -493,7 +492,7 @@ func _build_lights() -> void:
 	key.spot_range = 5.0
 	key.spot_angle = 32.0
 	key.spot_attenuation = 1.1
-	key.shadow_enabled = true
+	key.shadow_enabled = false
 	_world.add_child(key)
 	key.look_at(Vector3(0.56, 1.10, 0.10), Vector3.UP)
 
@@ -504,7 +503,7 @@ func _build_lights() -> void:
 	rim.light_energy = 1.8
 	rim.omni_range = 2.1
 	rim.omni_attenuation = 1.5
-	rim.shadow_enabled = true
+	rim.shadow_enabled = false
 	_world.add_child(rim)
 
 	_red_wash = SpotLight3D.new()
@@ -549,7 +548,7 @@ func _build_lights() -> void:
 	top.spot_range = 3.5
 	top.spot_angle = 19.0
 	top.spot_attenuation = 1.4
-	top.shadow_enabled = true
+	top.shadow_enabled = false
 	_world.add_child(top)
 	top.look_at(Vector3(0.56, 1.42, 0.10), Vector3.UP)
 
