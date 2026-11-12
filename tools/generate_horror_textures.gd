@@ -118,7 +118,9 @@ func _make_mold() -> void:
 			var body := 1.0 - smoothstep(edge - 0.14, edge, r)
 			var specks := smoothstep(0.63, 0.82, _n01(n_fine, x * 3.2, y * 3.2))
 			var a := clampf(body * (0.25 + specks * 0.72), 0.0, 0.88)
-			var c := Color(0.030 + specks * 0.035, 0.052 + specks * 0.060, 0.027 + specks * 0.022, a)
+			var c := Color(
+				0.030 + specks * 0.035, 0.052 + specks * 0.060, 0.027 + specks * 0.022, a
+			)
 			img.set_pixel(x, y, c)
 	_save(img, "decal_mold.png")
 
@@ -231,7 +233,12 @@ func _make_hazard() -> void:
 			var stripe := fposmod((u + v) * 7.0, 1.0)
 			var yellow := stripe > 0.5
 			var wear := _n01(n_fine, x * 1.8, y * 1.8)
-			var edge_wear := smoothstep(0.02, 0.10, u) * smoothstep(0.02, 0.10, v) * (1.0 - smoothstep(0.90, 0.98, u)) * (1.0 - smoothstep(0.90, 0.98, v))
+			var edge_wear := (
+				smoothstep(0.02, 0.10, u)
+				* smoothstep(0.02, 0.10, v)
+				* (1.0 - smoothstep(0.90, 0.98, u))
+				* (1.0 - smoothstep(0.90, 0.98, v))
+			)
 			var a := 0.88 * edge_wear * smoothstep(0.36, 0.48, wear)
 			var c := Color(0.44, 0.30, 0.022, a) if yellow else Color(0.035, 0.030, 0.025, a)
 			img.set_pixel(x, y, c)
@@ -326,7 +333,9 @@ func _make_fabric() -> void:
 			var hd := heights[y0 * size + x]
 			var hu := heights[y1 * size + x]
 			var nrm := Vector3((hl - hr) * strength, (hd - hu) * strength, 1.0).normalized()
-			normal.set_pixel(x, y, Color(nrm.x * 0.5 + 0.5, nrm.y * 0.5 + 0.5, nrm.z * 0.5 + 0.5, 1.0))
+			normal.set_pixel(
+				x, y, Color(nrm.x * 0.5 + 0.5, nrm.y * 0.5 + 0.5, nrm.z * 0.5 + 0.5, 1.0)
+			)
 	_save(albedo, "friend_fabric_albedo.png")
 	_save(normal, "friend_fabric_normal.png")
 	_save(rough, "friend_fabric_roughness.png")

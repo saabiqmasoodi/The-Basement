@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b6cfm87asqgaj"
 path.s3tc="res://.godot/imported/dining_table_set_8.png-5b193d1c17d1fad83b67257c5e3c0b5a.s3tc.ctex"
+path.etc2="res://.godot/imported/dining_table_set_8.png-5b193d1c17d1fad83b67257c5e3c0b5a.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/props/dining_table_set/dining_table_set_8.png"
-dest_files=["res://.godot/imported/dining_table_set_8.png-5b193d1c17d1fad83b67257c5e3c0b5a.s3tc.ctex"]
+dest_files=["res://.godot/imported/dining_table_set_8.png-5b193d1c17d1fad83b67257c5e3c0b5a.s3tc.ctex", "res://.godot/imported/dining_table_set_8.png-5b193d1c17d1fad83b67257c5e3c0b5a.etc2.ctex"]
 
 [params]
 

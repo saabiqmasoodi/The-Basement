@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cq7icdmmoa2ev"
 path.s3tc="res://.godot/imported/crate_box_1.png-9577e1e8516082f75dbe52a4cd7f8d6c.s3tc.ctex"
+path.etc2="res://.godot/imported/crate_box_1.png-9577e1e8516082f75dbe52a4cd7f8d6c.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/props/crate_box/crate_box_1.png"
-dest_files=["res://.godot/imported/crate_box_1.png-9577e1e8516082f75dbe52a4cd7f8d6c.s3tc.ctex"]
+dest_files=["res://.godot/imported/crate_box_1.png-9577e1e8516082f75dbe52a4cd7f8d6c.s3tc.ctex", "res://.godot/imported/crate_box_1.png-9577e1e8516082f75dbe52a4cd7f8d6c.etc2.ctex"]
 
 [params]
 

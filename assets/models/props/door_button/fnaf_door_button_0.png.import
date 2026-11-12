@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://di4bphpdhmpe1"
 path.s3tc="res://.godot/imported/fnaf_door_button_0.png-23353feb1948eb8c1d6d605ca53e3aee.s3tc.ctex"
+path.etc2="res://.godot/imported/fnaf_door_button_0.png-23353feb1948eb8c1d6d605ca53e3aee.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/props/door_button/fnaf_door_button_0.png"
-dest_files=["res://.godot/imported/fnaf_door_button_0.png-23353feb1948eb8c1d6d605ca53e3aee.s3tc.ctex"]
+dest_files=["res://.godot/imported/fnaf_door_button_0.png-23353feb1948eb8c1d6d605ca53e3aee.s3tc.ctex", "res://.godot/imported/fnaf_door_button_0.png-23353feb1948eb8c1d6d605ca53e3aee.etc2.ctex"]
 
 [params]
 

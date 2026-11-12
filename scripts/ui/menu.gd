@@ -6,8 +6,10 @@ const WORLD_SCENE := "res://scenes/world/World.tscn"
 const MENU_BG_SHADER := "res://materials/shaders/menu_background.gdshader"
 
 const GRAPHICS_HELP := {
-	"low": "Fastest mode. Fog, practicals and the film grade; expensive effects are thinned for high FPS.",
-	"medium": "60 FPS target. Blood decals, glow and shadows return; volumetrics and SSAO stay off.",
+	"low":
+	"Fastest mode. Fog, practicals and the film grade; expensive effects are thinned for high FPS.",
+	"medium":
+	"60 FPS target. Blood decals, glow and shadows return; volumetrics and SSAO stay off.",
 	"high": "The horror mode. Volumetric fog, SSAO, particles and the full post grade.",
 	"very_high": "Showpiece mode. SDFGI, SSR, full fog and the cleanest, most detailed image.",
 }
@@ -37,7 +39,6 @@ const ACTIONS := [
 ## Offset from the centre of the screen: +X moves right, +Y moves down.
 ## (0, 0) = perfectly centred.
 @export var settings_panel_offset := Vector2.ZERO
-
 
 var settings_root: Control = null
 var settings_panel: PanelContainer = null
@@ -88,7 +89,9 @@ func _update_background_size() -> void:
 	if background_material == null:
 		return
 	var size := get_viewport_rect().size
-	background_material.set_shader_parameter("screen_size", Vector2(maxf(size.x, 1.0), maxf(size.y, 1.0)))
+	background_material.set_shader_parameter(
+		"screen_size", Vector2(maxf(size.x, 1.0), maxf(size.y, 1.0))
+	)
 	if portrait_viewport != null:
 		background_material.set_shader_parameter("image_size", Vector2(portrait_viewport.size))
 
@@ -98,9 +101,9 @@ func _sync_portrait_msaa() -> void:
 		return
 	var level := int(GameState.get_setting("msaa"))
 	portrait_viewport.msaa_3d = (
-		Viewport.MSAA_DISABLED if level == 0
-		else Viewport.MSAA_2X if level == 2
-		else Viewport.MSAA_4X
+		Viewport.MSAA_DISABLED
+		if level == 0
+		else Viewport.MSAA_2X if level == 2 else Viewport.MSAA_4X
 	)
 
 
@@ -147,8 +150,12 @@ func _on_menu_button_hover(button: Button, entered: bool) -> void:
 	if not is_instance_valid(button):
 		return
 	var tween := create_tween()
-	tween.tween_property(button, "scale", Vector2(1.018, 1.018) if entered else Vector2.ONE, 0.16) \
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	(
+		tween
+		. tween_property(button, "scale", Vector2(1.018, 1.018) if entered else Vector2.ONE, 0.16)
+		. set_trans(Tween.TRANS_QUAD)
+		. set_ease(Tween.EASE_OUT)
+	)
 
 
 func _click() -> void:
@@ -157,6 +164,7 @@ func _click() -> void:
 
 
 # ------------------------------------------------------------------- actions
+
 
 func _on_new_game() -> void:
 	_click()
@@ -190,6 +198,7 @@ func _on_quit() -> void:
 
 # ------------------------------------------------------------------ settings
 
+
 func _open_settings() -> void:
 	_click()
 	if settings_root == null:
@@ -221,8 +230,7 @@ func _build_settings() -> void:
 	# Clamp to the window so the window can never spill off-screen.
 	var vp_size: Vector2 = get_viewport_rect().size
 	settings_panel.custom_minimum_size = Vector2(
-		minf(settings_panel_size.x, vp_size.x * 0.92),
-		minf(settings_panel_size.y, vp_size.y * 0.92)
+		minf(settings_panel_size.x, vp_size.x * 0.92), minf(settings_panel_size.y, vp_size.y * 0.92)
 	)
 
 	# A CenterContainer keeps the window centred at any resolution; the
@@ -292,9 +300,10 @@ func _build_settings() -> void:
 	back.text = "BACK"
 	back.custom_minimum_size = Vector2(0, 42)
 	back.add_theme_font_size_override("font_size", 18)
-	back.pressed.connect(func() -> void:
-		_click()
-		settings_root.visible = false
+	back.pressed.connect(
+		func() -> void:
+			_click()
+			settings_root.visible = false
 	)
 	outer.add_child(back)
 
@@ -316,7 +325,9 @@ func _value_text(value: float, is_float: bool) -> String:
 	return "%d%%" % int(round(value * 100.0))
 
 
-func _add_slider(box: VBoxContainer, title: String, key: String, min_v: float, max_v: float, step: float) -> void:
+func _add_slider(
+	box: VBoxContainer, title: String, key: String, min_v: float, max_v: float, step: float
+) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 
@@ -339,9 +350,10 @@ func _add_slider(box: VBoxContainer, title: String, key: String, min_v: float, m
 	val.text = _value_text(slider.value, key == "mouse_sensitivity" or key == "fov")
 	row.add_child(val)
 
-	slider.value_changed.connect(func(v: float) -> void:
-		val.text = _value_text(v, key == "mouse_sensitivity" or key == "fov")
-		GameState.set_setting(key, v)
+	slider.value_changed.connect(
+		func(v: float) -> void:
+			val.text = _value_text(v, key == "mouse_sensitivity" or key == "fov")
+			GameState.set_setting(key, v)
 	)
 	box.add_child(row)
 
@@ -354,9 +366,7 @@ func _add_check(box: VBoxContainer, title: String, key: String) -> void:
 	row.add_child(lbl)
 	var check := CheckButton.new()
 	check.button_pressed = bool(GameState.get_setting(key))
-	check.toggled.connect(func(on: bool) -> void:
-		GameState.set_setting(key, on)
-	)
+	check.toggled.connect(func(on: bool) -> void: GameState.set_setting(key, on))
 	row.add_child(check)
 	box.add_child(row)
 
@@ -370,19 +380,27 @@ func _add_resolution(box: VBoxContainer) -> void:
 
 	var opt := OptionButton.new()
 	var modes := [
-		[1280, 720], [1600, 900], [1920, 1080], [2560, 1440], [3840, 2160],
+		[1280, 720],
+		[1600, 900],
+		[1920, 1080],
+		[2560, 1440],
+		[3840, 2160],
 	]
 	var current := 0
 	for i in modes.size():
 		var m: Array = modes[i]
 		opt.add_item("%d x %d" % [m[0], m[1]], i)
-		if int(GameState.get_setting("window_width")) == m[0] and int(GameState.get_setting("window_height")) == m[1]:
+		if (
+			int(GameState.get_setting("window_width")) == m[0]
+			and int(GameState.get_setting("window_height")) == m[1]
+		):
 			current = i
 	opt.select(current)
-	opt.item_selected.connect(func(idx: int) -> void:
-		var m: Array = modes[idx]
-		GameState.set_setting("window_width", m[0])
-		GameState.set_setting("window_height", m[1])
+	opt.item_selected.connect(
+		func(idx: int) -> void:
+			var m: Array = modes[idx]
+			GameState.set_setting("window_width", m[0])
+			GameState.set_setting("window_height", m[1])
 	)
 	row.add_child(opt)
 	box.add_child(row)
@@ -403,12 +421,13 @@ func _add_graphics_quality(box: VBoxContainer) -> void:
 		if quality == GameState.get_graphics_quality():
 			current = i
 	opt.select(current)
-	opt.item_selected.connect(func(idx: int) -> void:
-		var quality: String = GameState.GRAPHICS_QUALITY_ORDER[idx]
-		GameState.set_graphics_quality(quality)
-		if graphics_help != null:
-			graphics_help.text = str(GRAPHICS_HELP.get(quality, ""))
-		_sync_msaa_option()
+	opt.item_selected.connect(
+		func(idx: int) -> void:
+			var quality: String = GameState.GRAPHICS_QUALITY_ORDER[idx]
+			GameState.set_graphics_quality(quality)
+			if graphics_help != null:
+				graphics_help.text = str(GRAPHICS_HELP.get(quality, ""))
+			_sync_msaa_option()
 	)
 	row.add_child(opt)
 	box.add_child(row)
@@ -436,13 +455,14 @@ func _add_msaa(box: VBoxContainer) -> void:
 	opt.add_item("4x", 2)
 	var msaa_level: int = int(GameState.get_setting("msaa"))
 	opt.select(1 if msaa_level == 2 else (2 if msaa_level == 4 else 0))
-	opt.item_selected.connect(func(idx: int) -> void:
-		var level := 0
-		if idx == 1:
-			level = 2
-		elif idx == 2:
-			level = 4
-		GameState.set_setting("msaa", level)
+	opt.item_selected.connect(
+		func(idx: int) -> void:
+			var level := 0
+			if idx == 1:
+				level = 2
+			elif idx == 2:
+				level = 4
+			GameState.set_setting("msaa", level)
 	)
 	row.add_child(opt)
 	box.add_child(row)
@@ -468,9 +488,7 @@ func _add_keybind_row(box: VBoxContainer, action: String, title: String) -> void
 	btn.custom_minimum_size = Vector2(220, 30)
 	btn.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	btn.text = _key_text(action)
-	btn.pressed.connect(func() -> void:
-		_start_rebind(action, btn)
-	)
+	btn.pressed.connect(func() -> void: _start_rebind(action, btn))
 	rebind_buttons[action] = btn
 	row.add_child(btn)
 	box.add_child(row)

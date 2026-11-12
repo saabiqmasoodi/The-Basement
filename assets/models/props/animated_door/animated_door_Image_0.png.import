@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bnr4cdl7pra2k"
 path.s3tc="res://.godot/imported/animated_door_Image_0.png-f87598d6f6c7f8d76dc2faff6cc6a7be.s3tc.ctex"
+path.etc2="res://.godot/imported/animated_door_Image_0.png-f87598d6f6c7f8d76dc2faff6cc6a7be.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/props/animated_door/animated_door_Image_0.png"
-dest_files=["res://.godot/imported/animated_door_Image_0.png-f87598d6f6c7f8d76dc2faff6cc6a7be.s3tc.ctex"]
+dest_files=["res://.godot/imported/animated_door_Image_0.png-f87598d6f6c7f8d76dc2faff6cc6a7be.s3tc.ctex", "res://.godot/imported/animated_door_Image_0.png-f87598d6f6c7f8d76dc2faff6cc6a7be.etc2.ctex"]
 
 [params]
 

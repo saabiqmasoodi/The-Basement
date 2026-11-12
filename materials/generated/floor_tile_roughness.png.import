@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://creyne3guc0ad"
 path.s3tc="res://.godot/imported/floor_tile_roughness.png-ab4f5f6f4274f92c36bbd2fcd85d311e.s3tc.ctex"
+path.etc2="res://.godot/imported/floor_tile_roughness.png-ab4f5f6f4274f92c36bbd2fcd85d311e.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://materials/generated/floor_tile_roughness.png"
-dest_files=["res://.godot/imported/floor_tile_roughness.png-ab4f5f6f4274f92c36bbd2fcd85d311e.s3tc.ctex"]
+dest_files=["res://.godot/imported/floor_tile_roughness.png-ab4f5f6f4274f92c36bbd2fcd85d311e.s3tc.ctex", "res://.godot/imported/floor_tile_roughness.png-ab4f5f6f4274f92c36bbd2fcd85d311e.etc2.ctex"]
 
 [params]
 

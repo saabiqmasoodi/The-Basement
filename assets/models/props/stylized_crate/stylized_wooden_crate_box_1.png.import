@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dqbfxx76p2huy"
 path.s3tc="res://.godot/imported/stylized_wooden_crate_box_1.png-876b9591c8e4af0feb5ed2d15c0ec47c.s3tc.ctex"
+path.etc2="res://.godot/imported/stylized_wooden_crate_box_1.png-876b9591c8e4af0feb5ed2d15c0ec47c.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/props/stylized_crate/stylized_wooden_crate_box_1.png"
-dest_files=["res://.godot/imported/stylized_wooden_crate_box_1.png-876b9591c8e4af0feb5ed2d15c0ec47c.s3tc.ctex"]
+dest_files=["res://.godot/imported/stylized_wooden_crate_box_1.png-876b9591c8e4af0feb5ed2d15c0ec47c.s3tc.ctex", "res://.godot/imported/stylized_wooden_crate_box_1.png-876b9591c8e4af0feb5ed2d15c0ec47c.etc2.ctex"]
 
 [params]
 

@@ -19,7 +19,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_time += delta
-	var breath := (sin(_time * pulse_speed * TAU) * 0.5 + 0.5)
+	var breath := sin(_time * pulse_speed * TAU) * 0.5 + 0.5
 	breath = smoothstep(0.0, 1.0, breath)
 	var stutter := sin(_time * stutter_speed + sin(_time * 3.7) * 2.0) * stutter_amount
 	light_energy = _base_energy * lerpf(pulse_min, pulse_max, breath) * (1.0 + stutter)

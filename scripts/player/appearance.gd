@@ -40,7 +40,9 @@ func _polish_imported_materials(world: Node, friend: Node) -> void:
 		# Use it as the source so textures authored on the override are kept.
 		if mi.material_override != null:
 			if mi.material_override is StandardMaterial3D:
-				var overridden := _polish_material(mi.material_override as StandardMaterial3D, path_lower)
+				var overridden := _polish_material(
+					mi.material_override as StandardMaterial3D, path_lower
+				)
 				if overridden != null:
 					mi.material_override = overridden
 			continue
@@ -76,7 +78,12 @@ func _polish_material(source: StandardMaterial3D, path_lower: String) -> Standar
 
 	# Numerous Sketchfab exports tag every surface as rough metal.
 	if mat.metallic >= 0.95 and mat.roughness >= 0.95:
-		if name.contains("handle") or name.contains("metal") or name.contains("steel") or name.contains("iron"):
+		if (
+			name.contains("handle")
+			or name.contains("metal")
+			or name.contains("steel")
+			or name.contains("iron")
+		):
 			mat.metallic = 1.0
 			mat.roughness = 0.32
 		else:
@@ -121,7 +128,9 @@ func _polish_material(source: StandardMaterial3D, path_lower: String) -> Standar
 		mat.roughness = 0.28
 		mat.metallic_specular = 0.7
 		changed = true
-	elif name.contains("tv_tv") or (name == "material.002" and path_lower.contains("staticbody3d3")):
+	elif (
+		name.contains("tv_tv") or (name == "material.002" and path_lower.contains("staticbody3d3"))
+	):
 		mat.metallic = 0.12
 		mat.roughness = 0.32
 		mat.metallic_specular = 0.6
@@ -143,7 +152,11 @@ func _polish_material(source: StandardMaterial3D, path_lower: String) -> Standar
 		changed = true
 
 	# The fridge's outer shell is a light painted finish, not chalk.
-	if path_lower.contains("staticbody3d2") and mat.albedo_texture == null and mat.albedo_color.r > 0.6:
+	if (
+		path_lower.contains("staticbody3d2")
+		and mat.albedo_texture == null
+		and mat.albedo_color.r > 0.6
+	):
 		mat.albedo_color = Color(0.66, 0.68, 0.66, 1)
 		mat.metallic = 0.12
 		mat.roughness = 0.32
@@ -192,8 +205,12 @@ func _dress_friend(friend: Node) -> void:
 	hair.rim = 0.22
 	hair.rim_tint = 0.45
 
-	var jacket := _fabric_material(Color(0.27, 0.30, 0.25), fabric_albedo, fabric_normal, fabric_rough)
-	var pants := _fabric_material(Color(0.22, 0.25, 0.26), fabric_albedo, fabric_normal, fabric_rough)
+	var jacket := _fabric_material(
+		Color(0.27, 0.30, 0.25), fabric_albedo, fabric_normal, fabric_rough
+	)
+	var pants := _fabric_material(
+		Color(0.22, 0.25, 0.26), fabric_albedo, fabric_normal, fabric_rough
+	)
 	var shoe_upper := _friend_material(Color(0.020, 0.018, 0.016), 0.44, 0.12)
 	var shoe_sole := _friend_material(Color(0.032, 0.030, 0.027), 0.8, 0.0)
 
@@ -256,10 +273,7 @@ func _dress_friend(friend: Node) -> void:
 
 
 func _fabric_material(
-	color: Color,
-	albedo: Texture2D,
-	normal_map: Texture2D,
-	roughness_map: Texture2D
+	color: Color, albedo: Texture2D, normal_map: Texture2D, roughness_map: Texture2D
 ) -> StandardMaterial3D:
 	var mat := _friend_material(color, 0.92, 0.0)
 	mat.albedo_texture = albedo

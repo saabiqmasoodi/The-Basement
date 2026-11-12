@@ -11,7 +11,8 @@ extends Node
 #   Very High - SDFGI + SSR + full atmosphere; the clean showpiece mode
 
 const PRESETS := {
-	"low": {
+	"low":
+	{
 		"sdfgi": false,
 		"ssr": false,
 		"ssao": false,
@@ -34,7 +35,8 @@ const PRESETS := {
 		"post_desaturation": 0.22,
 		"post_contrast": 1.06,
 	},
-	"medium": {
+	"medium":
+	{
 		"sdfgi": false,
 		"ssr": false,
 		"ssao": false,
@@ -57,7 +59,8 @@ const PRESETS := {
 		"post_desaturation": 0.24,
 		"post_contrast": 1.08,
 	},
-	"high": {
+	"high":
+	{
 		"sdfgi": false,
 		"ssr": false,
 		"ssao": true,
@@ -80,7 +83,8 @@ const PRESETS := {
 		"post_desaturation": 0.26,
 		"post_contrast": 1.10,
 	},
-	"very_high": {
+	"very_high":
+	{
 		"sdfgi": true,
 		"ssr": true,
 		"ssao": true,
@@ -213,7 +217,9 @@ func _apply_preset() -> void:
 
 	if _grade_material != null:
 		_grade_material.set_shader_parameter("grain_amount", float(preset["post_grain"]))
-		_grade_material.set_shader_parameter("chromatic_aberration", float(preset["post_chromatic"]))
+		_grade_material.set_shader_parameter(
+			"chromatic_aberration", float(preset["post_chromatic"])
+		)
 		_grade_material.set_shader_parameter("lens_dirt_amount", float(preset["post_lens"]))
 		_grade_material.set_shader_parameter("desaturation", float(preset["post_desaturation"]))
 		_grade_material.set_shader_parameter("contrast", float(preset["post_contrast"]))

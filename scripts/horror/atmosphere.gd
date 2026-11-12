@@ -39,12 +39,14 @@ func _ready() -> void:
 	process.lifetime_randomness = 0.7
 
 	var grad := Gradient.new()
-	grad.colors = PackedColorArray([
-		Color(1, 1, 1, 1),
-		Color(1, 1, 1, 0.72),
-		Color(1, 1, 1, 0.12),
-		Color(1, 1, 1, 0),
-	])
+	grad.colors = PackedColorArray(
+		[
+			Color(1, 1, 1, 1),
+			Color(1, 1, 1, 0.72),
+			Color(1, 1, 1, 0.12),
+			Color(1, 1, 1, 0),
+		]
+	)
 	grad.offsets = PackedFloat32Array([0.0, 0.35, 0.7, 1.0])
 
 	var sprite := GradientTexture2D.new()
@@ -80,7 +82,10 @@ func _ready() -> void:
 	particles.fixed_fps = 30
 	particles.interpolate = true
 	particles.local_coords = false
-	particles.visibility_aabb = AABB(Vector3(-DUST_RADIUS, -DUST_HEIGHT, -DUST_RADIUS), Vector3(DUST_RADIUS * 2.0, DUST_HEIGHT * 2.0, DUST_RADIUS * 2.0))
+	particles.visibility_aabb = AABB(
+		Vector3(-DUST_RADIUS, -DUST_HEIGHT, -DUST_RADIUS),
+		Vector3(DUST_RADIUS * 2.0, DUST_HEIGHT * 2.0, DUST_RADIUS * 2.0)
+	)
 	particles.process_material = process
 	particles.draw_pass_1 = quad
 	particles.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

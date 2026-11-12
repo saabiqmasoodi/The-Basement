@@ -72,19 +72,24 @@ func _process(delta: float) -> void:
 		sin(_camera_time * 0.13) * 0.105 + sin(_camera_time * 0.041 + 0.7) * 0.035
 	)
 	_camera.position = _camera_home + drift
-	_camera.look_at(_camera_target + Vector3(
-		sin(_camera_time * 0.13) * 0.022,
-		sin(_camera_time * 0.19) * 0.016,
-		0.0
-	), Vector3.UP)
+	_camera.look_at(
+		(
+			_camera_target
+			+ Vector3(sin(_camera_time * 0.13) * 0.022, sin(_camera_time * 0.19) * 0.016, 0.0)
+		),
+		Vector3.UP
+	)
 
 	# Let the whole body breathe against the wall. This is separate from the
 	# imported idle so the silhouette keeps moving even in the quiet beats.
 	if _friend != null:
-		_friend.position = _friend_home + Vector3(
-			sin(_time * 0.21) * 0.012,
-			sin(_time * 0.37 + 0.4) * 0.006,
-			sin(_time * 0.17 + 1.4) * 0.008
+		_friend.position = (
+			_friend_home
+			+ Vector3(
+				sin(_time * 0.21) * 0.012,
+				sin(_time * 0.37 + 0.4) * 0.006,
+				sin(_time * 0.17 + 1.4) * 0.008
+			)
 		)
 		_friend.rotation.y = _friend_yaw + sin(_time * 0.19) * 0.010
 
@@ -104,16 +109,12 @@ func _process(delta: float) -> void:
 		var twitch := sin(_time * 0.83) * 0.016 + sin(_time * 2.17) * 0.007
 		if fmod(_time, 6.0) < 0.16:
 			twitch += 0.050 * sin((_time - floor(_time / 6.0) * 6.0) / 0.16 * PI)
-		_skeleton.set_bone_pose_rotation(
-			_wound_bone,
-			base * Quaternion(Vector3.RIGHT, twitch)
-		)
+		_skeleton.set_bone_pose_rotation(_wound_bone, base * Quaternion(Vector3.RIGHT, twitch))
 	if _skeleton != null and _spine_bone >= 0:
 		var spine_base := _skeleton.get_bone_pose_rotation(_spine_bone)
 		var breath := sin(_time * 0.55) * 0.006
 		_skeleton.set_bone_pose_rotation(
-			_spine_bone,
-			spine_base * Quaternion(Vector3.RIGHT, breath)
+			_spine_bone, spine_base * Quaternion(Vector3.RIGHT, breath)
 		)
 
 
@@ -226,9 +227,15 @@ func _build_set() -> void:
 	# Wall blood is deliberately readable and strongly red. These unshaded
 	# quads sit just in front of the concrete, so the mark never disappears in
 	# a dark corner of the lighting; the neck wound provides the wet detail.
-	_add_wall_blood(Vector3(0.56, 1.62, -1.165), Vector2(2.35, 2.30), 0.08, Color(0.68, 0.010, 0.006, 1.0))
-	_add_wall_blood(Vector3(0.93, 2.03, -1.160), Vector2(1.18, 1.05), -0.36, Color(0.52, 0.006, 0.004, 1.0))
-	_add_wall_blood(Vector3(-0.45, 1.35, -1.162), Vector2(0.92, 0.74), 0.44, Color(0.42, 0.005, 0.003, 1.0))
+	_add_wall_blood(
+		Vector3(0.56, 1.62, -1.165), Vector2(2.35, 2.30), 0.08, Color(0.68, 0.010, 0.006, 1.0)
+	)
+	_add_wall_blood(
+		Vector3(0.93, 2.03, -1.160), Vector2(1.18, 1.05), -0.36, Color(0.52, 0.006, 0.004, 1.0)
+	)
+	_add_wall_blood(
+		Vector3(-0.45, 1.35, -1.162), Vector2(0.92, 0.74), 0.44, Color(0.42, 0.005, 0.003, 1.0)
+	)
 	# Long drips under the impact.
 	for i in range(5):
 		var x := -0.18 + float(i) * 0.24
@@ -241,7 +248,9 @@ func _build_set() -> void:
 		)
 
 	# A floor pool catches the red wash and grounds the body.
-	_add_wall_blood(Vector3(0.16, 0.012, 0.34), Vector2(1.9, 0.7), 0.0, Color(0.28, 0.004, 0.003, 1.0), true)
+	_add_wall_blood(
+		Vector3(0.16, 0.012, 0.34), Vector2(1.9, 0.7), 0.0, Color(0.28, 0.004, 0.003, 1.0), true
+	)
 
 	# No flat billboard dust here. Soft volumetric haze and practical light
 	# do the atmosphere; hard square particles read as artifacts at menu size.
@@ -297,7 +306,9 @@ func _lift_friend_materials(friend: Node3D) -> void:
 		var roughness := 0.78 if key == "body" else 0.88
 		var m := ShaderMaterial.new()
 		m.shader = headless_shader
-		m.set_shader_parameter("albedo", Color(0.70, 0.70, 0.70) if key == "body" else Color(0.78, 0.78, 0.78))
+		m.set_shader_parameter(
+			"albedo", Color(0.70, 0.70, 0.70) if key == "body" else Color(0.78, 0.78, 0.78)
+		)
 		m.set_shader_parameter("emission_color", Color(0.008, 0.006, 0.005))
 		m.set_shader_parameter("roughness", roughness)
 		m.set_shader_parameter("rim_strength", 0.28)
@@ -422,7 +433,9 @@ func _add_neck_wound(friend: Node3D) -> void:
 		drip.material_override = _blood
 		var side := -0.07 + float(i) * 0.035
 		friend.add_child(drip)
-		drip.global_position = Vector3(neck_pos.x + side, neck_pos.y - 0.17 - float(i) * 0.02, neck_pos.z + 0.10)
+		drip.global_position = Vector3(
+			neck_pos.x + side, neck_pos.y - 0.17 - float(i) * 0.02, neck_pos.z + 0.10
+		)
 
 	_wound_light = OmniLight3D.new()
 	_wound_light.name = "WoundLight"
@@ -552,7 +565,9 @@ func _build_camera() -> void:
 	_camera.look_at(_camera_target, Vector3.UP)
 
 
-func _add_wall_blood(pos: Vector3, size: Vector2, rotation: float, color: Color, floor := false) -> void:
+func _add_wall_blood(
+	pos: Vector3, size: Vector2, rotation: float, color: Color, floor := false
+) -> void:
 	var mat := ShaderMaterial.new()
 	mat.shader = _wall_blood_shader
 	mat.set_shader_parameter("blood_texture", load(BLOOD_TEXTURE))
@@ -571,7 +586,15 @@ func _add_wall_blood(pos: Vector3, size: Vector2, rotation: float, color: Color,
 	_world.add_child(mi)
 
 
-func _cylinder(parent: Node3D, radius: float, height: float, pos: Vector3, rot: Vector3, mat: Material, segments: int) -> void:
+func _cylinder(
+	parent: Node3D,
+	radius: float,
+	height: float,
+	pos: Vector3,
+	rot: Vector3,
+	mat: Material,
+	segments: int
+) -> void:
 	var mesh := CylinderMesh.new()
 	mesh.top_radius = radius
 	mesh.bottom_radius = radius

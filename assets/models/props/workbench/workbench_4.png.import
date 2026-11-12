@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c3txftjimp3to"
 path.s3tc="res://.godot/imported/workbench_4.png-c145fb2c2c3e383b354d70c14c4448cd.s3tc.ctex"
+path.etc2="res://.godot/imported/workbench_4.png-c145fb2c2c3e383b354d70c14c4448cd.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/props/workbench/workbench_4.png"
-dest_files=["res://.godot/imported/workbench_4.png-c145fb2c2c3e383b354d70c14c4448cd.s3tc.ctex"]
+dest_files=["res://.godot/imported/workbench_4.png-c145fb2c2c3e383b354d70c14c4448cd.s3tc.ctex", "res://.godot/imported/workbench_4.png-c145fb2c2c3e383b354d70c14c4448cd.etc2.ctex"]
 
 [params]
 

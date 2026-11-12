@@ -52,15 +52,22 @@ func _refresh() -> void:
 	var fuzes: int = GameState.get_fuzes()
 	var done_fuses: bool = fuzes >= GameState.MAX_FUZES
 
-	lines = [{
-		"text": "Collect fuses (%d/%d)" % [fuzes, GameState.MAX_FUZES],
-		"done": done_fuses,
-	}]
+	lines = [
+		{
+			"text": "Collect fuses (%d/%d)" % [fuzes, GameState.MAX_FUZES],
+			"done": done_fuses,
+		}
+	]
 	if done_fuses:
-		lines.append({
-			"text": "Restore electricity",
-			"done": GameState.electricity_on,
-		})
+		(
+			lines
+			. append(
+				{
+					"text": "Restore electricity",
+					"done": GameState.electricity_on,
+				}
+			)
+		)
 
 	# Grow/shrink the panel to the number of visible objectives.
 	var font: Font = get_theme_default_font()
@@ -81,14 +88,21 @@ func _draw() -> void:
 	# Header + hairline rule.
 	var header_y: float = PAD.y + font.get_ascent(HEADER_SIZE)
 	draw_string(
-		font, Vector2(PAD.x, header_y), "OBJECTIVES",
-		HORIZONTAL_ALIGNMENT_LEFT, -1, HEADER_SIZE, HEADER_COLOR
+		font,
+		Vector2(PAD.x, header_y),
+		"OBJECTIVES",
+		HORIZONTAL_ALIGNMENT_LEFT,
+		-1,
+		HEADER_SIZE,
+		HEADER_COLOR
 	)
 	var rule_y: float = header_y + 7.0
 	draw_line(
 		Vector2(PAD.x, rule_y),
 		Vector2(size.x - PAD.x, rule_y),
-		Color(0.58, 0.14, 0.14, 0.32), 1.0, true
+		Color(0.58, 0.14, 0.14, 0.32),
+		1.0,
+		true
 	)
 
 	var ascent: float = font.get_ascent(FONT_SIZE)
@@ -101,12 +115,12 @@ func _draw() -> void:
 		_draw_text(font, Vector2(PAD.x, y), full_text)
 
 		if line["done"]:
-			var bullet_w: float = font.get_string_size(
-				bullet, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE
-			).x
-			var text_w: float = font.get_string_size(
-				full_text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE
-			).x
+			var bullet_w: float = (
+				font.get_string_size(bullet, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE).x
+			)
+			var text_w: float = (
+				font.get_string_size(full_text, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE).x
+			)
 			# Sit the line through the middle of the lower-case letters.
 			var strike_y: float = y - ascent * 0.42
 			draw_line(
@@ -121,10 +135,6 @@ func _draw() -> void:
 
 func _draw_text(font: Font, pos: Vector2, value: String) -> void:
 	draw_string_outline(
-		font, pos, value, HORIZONTAL_ALIGNMENT_LEFT, -1,
-		FONT_SIZE, OUTLINE_SIZE, OUTLINE_COLOR
+		font, pos, value, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, OUTLINE_SIZE, OUTLINE_COLOR
 	)
-	draw_string(
-		font, pos, value, HORIZONTAL_ALIGNMENT_LEFT, -1,
-		FONT_SIZE, TEXT_COLOR
-	)
+	draw_string(font, pos, value, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE, TEXT_COLOR)

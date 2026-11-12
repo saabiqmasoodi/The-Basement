@@ -30,7 +30,9 @@ func get_promt() -> String:
 	if GameState.electricity_on:
 		return "Generator running"
 	if GameState.get_fuzes() < GameState.MAX_FUZES:
-		return "%s: needs 3 fuses (%d/%d)" % [display_name, GameState.get_fuzes(), GameState.MAX_FUZES]
+		return (
+			"%s: needs 3 fuses (%d/%d)" % [display_name, GameState.get_fuzes(), GameState.MAX_FUZES]
+		)
 	var key_name := ""
 	for ev in InputMap.action_get_events(promt_input):
 		if ev is InputEventKey:

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://tf345wbbl2qr"
 path.s3tc="res://.godot/imported/old_kitchen_cabinets_1.png-97f9e8b4ec2fb7e653295bf7828cc5e0.s3tc.ctex"
+path.etc2="res://.godot/imported/old_kitchen_cabinets_1.png-97f9e8b4ec2fb7e653295bf7828cc5e0.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/props/kitchen_cabinets/old_kitchen_cabinets_1.png"
-dest_files=["res://.godot/imported/old_kitchen_cabinets_1.png-97f9e8b4ec2fb7e653295bf7828cc5e0.s3tc.ctex"]
+dest_files=["res://.godot/imported/old_kitchen_cabinets_1.png-97f9e8b4ec2fb7e653295bf7828cc5e0.s3tc.ctex", "res://.godot/imported/old_kitchen_cabinets_1.png-97f9e8b4ec2fb7e653295bf7828cc5e0.etc2.ctex"]
 
 [params]
 

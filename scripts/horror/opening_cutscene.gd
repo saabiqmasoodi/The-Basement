@@ -14,8 +14,8 @@ const EXIT_YAW := PI / 2.0
 
 const DIALOGUE := "I forgot something in the basement. Let me get it quickly."
 
-const SCREAM_DELAY := 5.0      # after the friend enters the basement
-const EAT_DELAY := 2.6         # after the scream (=> ~7.6s)
+const SCREAM_DELAY := 5.0  # after the friend enters the basement
+const EAT_DELAY := 2.6  # after the scream (=> ~7.6s)
 
 const LOOK_HEIGHT := 1.25
 
@@ -69,6 +69,7 @@ func _run() -> void:
 
 
 # ------------------------------------------------------------------ cutscene
+
 
 func _play_opening_cutscene() -> void:
 	GameState.cutscene_done = false
@@ -125,6 +126,7 @@ func _end_cutscene() -> void:
 
 # ------------------------------------------------------------------ continue
 
+
 func _restore_loaded_game(data: Dictionary) -> void:
 	GameState.apply_save(data)
 
@@ -157,6 +159,7 @@ func _restore_loaded_game(data: Dictionary) -> void:
 
 
 # -------------------------------------------------------------- camera follow
+
 
 func _focus_point() -> Vector3:
 	if friend and friend.visible:
@@ -192,7 +195,9 @@ func _process(delta: float) -> void:
 
 	var want_yaw: float = atan2(-dir.x, -dir.z) - player.rotation.y
 	want_yaw = wrapf(want_yaw, -PI, PI)
-	var want_pitch: float = clampf(atan2(dir.y, maxf(flat, 0.001)), deg_to_rad(-55.0), deg_to_rad(45.0))
+	var want_pitch: float = clampf(
+		atan2(dir.y, maxf(flat, 0.001)), deg_to_rad(-55.0), deg_to_rad(45.0)
+	)
 
 	# Subtle breathing / handheld sway.
 	want_yaw += sin(sway_time * 0.5) * 0.006
@@ -213,10 +218,13 @@ func _aim_immediate() -> void:
 		var dir: Vector3 = target_point - cam_pos
 		var flat := Vector2(dir.x, dir.z).length()
 		head.rotation.y = wrapf(atan2(-dir.x, -dir.z) - player.rotation.y, -PI, PI)
-		camera_node.rotation.x = clampf(atan2(dir.y, maxf(flat, 0.001)), deg_to_rad(-55.0), deg_to_rad(45.0))
+		camera_node.rotation.x = clampf(
+			atan2(dir.y, maxf(flat, 0.001)), deg_to_rad(-55.0), deg_to_rad(45.0)
+		)
 
 
 # ------------------------------------------------------------------ dialogue
+
 
 func _show_dialogue(text: String) -> void:
 	if dialogue_panel == null:
@@ -234,7 +242,8 @@ func _hide_dialogue() -> void:
 		return
 	var tw := create_tween()
 	tw.tween_property(dialogue_panel, "modulate:a", 0.0, 0.5)
-	tw.tween_callback(func() -> void:
-		if dialogue_panel:
-			dialogue_panel.visible = false
+	tw.tween_callback(
+		func() -> void:
+			if dialogue_panel:
+				dialogue_panel.visible = false
 	)

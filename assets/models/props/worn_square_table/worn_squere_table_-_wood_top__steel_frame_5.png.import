@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bhogf6omymqj8"
 path.s3tc="res://.godot/imported/worn_squere_table_-_wood_top__steel_frame_5.png-d57fb387616d79773a793a806093f039.s3tc.ctex"
+path.etc2="res://.godot/imported/worn_squere_table_-_wood_top__steel_frame_5.png-d57fb387616d79773a793a806093f039.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/props/worn_square_table/worn_squere_table_-_wood_top__steel_frame_5.png"
-dest_files=["res://.godot/imported/worn_squere_table_-_wood_top__steel_frame_5.png-d57fb387616d79773a793a806093f039.s3tc.ctex"]
+dest_files=["res://.godot/imported/worn_squere_table_-_wood_top__steel_frame_5.png-d57fb387616d79773a793a806093f039.s3tc.ctex", "res://.godot/imported/worn_squere_table_-_wood_top__steel_frame_5.png-d57fb387616d79773a793a806093f039.etc2.ctex"]
 
 [params]
 

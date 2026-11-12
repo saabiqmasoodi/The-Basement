@@ -1,0 +1,9 @@
+# gdtoolkit configuration for Not To Love.
+# Class declaration order is intentionally relaxed: gameplay scripts keep their
+# authored declaration order, while naming, formatting, and line length are enforced.
+disable:
+  - class-definitions-order
+max-line-length: 120
+max-file-lines: 1200
+max-public-methods: 30
+function-arguments-number: 10

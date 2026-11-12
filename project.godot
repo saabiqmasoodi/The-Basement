@@ -78,16 +78,29 @@ pause={
 ]
 }
 
+[debug]
+
+gdscript/warnings/untyped_declaration=1
+gdscript/warnings/inferred_declaration=1
+gdscript/warnings/unsafe_property_access=1
+gdscript/warnings/unsafe_method_access=1
+gdscript/warnings/unsafe_cast=1
+gdscript/warnings/unsafe_call_argument=1
+gdscript/warnings/return_value_discarded=1
+gdscript/warnings/missing_await=1
+gdscript/warnings/inference_on_variant=2
+
 [physics]
 
-common/physics_ticks_per_second=180
+common/physics_ticks_per_second=60
 3d/physics_engine="Jolt Physics"
 
 [rendering]
 
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method.mobile="forward_plus"
-textures/default_filters/anisotropic_filtering_level=4
+textures/default_filters/anisotropic_filtering_level=2
+textures/vram_compression/import_etc2_astc=true
 anti_aliasing/quality/use_debanding=true
 environment/defaults/default_clear_color=Color(0.004, 0.005, 0.007, 1)
 anti_aliasing/quality/use_taa=true

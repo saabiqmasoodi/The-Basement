@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cqj1xmoqqqmvy"
 path.s3tc="res://.godot/imported/free_airlock_door_5.png-bcebbd5ca2c4de4bf57cf0939b4cc796.s3tc.ctex"
+path.etc2="res://.godot/imported/free_airlock_door_5.png-bcebbd5ca2c4de4bf57cf0939b4cc796.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/textures/props/doors/free_airlock_door_5.png"
-dest_files=["res://.godot/imported/free_airlock_door_5.png-bcebbd5ca2c4de4bf57cf0939b4cc796.s3tc.ctex"]
+dest_files=["res://.godot/imported/free_airlock_door_5.png-bcebbd5ca2c4de4bf57cf0939b4cc796.s3tc.ctex", "res://.godot/imported/free_airlock_door_5.png-bcebbd5ca2c4de4bf57cf0939b4cc796.etc2.ctex"]
 
 [params]
 

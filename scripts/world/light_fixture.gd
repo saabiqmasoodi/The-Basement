@@ -72,7 +72,9 @@ func _make_materials() -> void:
 
 func _build_bare_bulb() -> void:
 	if cord_length > 0.02:
-		_add_cylinder("Cord", 0.006, cord_length, Vector3(0, 0.06 + cord_length * 0.5, 0), _metal_mat)
+		_add_cylinder(
+			"Cord", 0.006, cord_length, Vector3(0, 0.06 + cord_length * 0.5, 0), _metal_mat
+		)
 		_add_cylinder("CeilingRose", 0.055, 0.022, Vector3(0, cord_length + 0.06, 0), _metal_mat)
 	_add_cylinder("Socket", 0.035, 0.09, Vector3(0, 0.07, 0), _metal_mat)
 	_add_sphere("Bulb", 0.052, 0.104, Vector3.ZERO, _bulb_mat, false)
@@ -82,15 +84,20 @@ func _build_bare_bulb() -> void:
 		for i in 4:
 			var a := TAU * float(i) / 4.0
 			var m := _add_cylinder(
-				"CageBar%d" % i, 0.004, 0.17,
-				Vector3(cos(a) * 0.095, -0.037, sin(a) * 0.095), _rim_mat
+				"CageBar%d" % i,
+				0.004,
+				0.17,
+				Vector3(cos(a) * 0.095, -0.037, sin(a) * 0.095),
+				_rim_mat
 			)
 			m.rotation = Vector3(0, a, 0)
 
 
 func _build_pendant() -> void:
 	if cord_length > 0.02:
-		_add_cylinder("Cord", 0.007, cord_length, Vector3(0, 0.05 + cord_length * 0.5, 0), _metal_mat)
+		_add_cylinder(
+			"Cord", 0.007, cord_length, Vector3(0, 0.05 + cord_length * 0.5, 0), _metal_mat
+		)
 		_add_cylinder("CeilingRose", 0.06, 0.024, Vector3(0, cord_length + 0.05, 0), _metal_mat)
 	_add_cylinder("Socket", 0.033, 0.09, Vector3(0, 0.07, 0), _metal_mat)
 	_add_sphere("Bulb", 0.05, 0.10, Vector3.ZERO, _bulb_mat, false)
@@ -115,7 +122,9 @@ func _build_floor_lamp() -> void:
 	_add_torus("ShadeRim", 0.27, 0.285, 24, 8, Vector3(0, 0.065, 0), _rim_mat)
 
 
-func _add_cylinder(node_name: String, radius: float, height: float, pos: Vector3, mat: Material, shadows := true) -> MeshInstance3D:
+func _add_cylinder(
+	node_name: String, radius: float, height: float, pos: Vector3, mat: Material, shadows := true
+) -> MeshInstance3D:
 	var mesh := CylinderMesh.new()
 	mesh.top_radius = radius
 	mesh.bottom_radius = radius
@@ -125,7 +134,15 @@ func _add_cylinder(node_name: String, radius: float, height: float, pos: Vector3
 	return _add_mesh(node_name, mesh, pos, Vector3.ZERO, mat, shadows)
 
 
-func _add_cone(node_name: String, top_radius: float, bottom_radius: float, height: float, pos: Vector3, mat: Material, shadows := true) -> MeshInstance3D:
+func _add_cone(
+	node_name: String,
+	top_radius: float,
+	bottom_radius: float,
+	height: float,
+	pos: Vector3,
+	mat: Material,
+	shadows := true
+) -> MeshInstance3D:
 	var mesh := CylinderMesh.new()
 	mesh.top_radius = top_radius
 	mesh.bottom_radius = bottom_radius
@@ -137,7 +154,9 @@ func _add_cone(node_name: String, top_radius: float, bottom_radius: float, heigh
 	return _add_mesh(node_name, mesh, pos, Vector3.ZERO, mat, shadows)
 
 
-func _add_sphere(node_name: String, radius: float, height: float, pos: Vector3, mat: Material, shadows := true) -> MeshInstance3D:
+func _add_sphere(
+	node_name: String, radius: float, height: float, pos: Vector3, mat: Material, shadows := true
+) -> MeshInstance3D:
 	var mesh := SphereMesh.new()
 	mesh.radius = radius
 	mesh.height = height
@@ -146,7 +165,16 @@ func _add_sphere(node_name: String, radius: float, height: float, pos: Vector3, 
 	return _add_mesh(node_name, mesh, pos, Vector3.ZERO, mat, shadows)
 
 
-func _add_torus(node_name: String, inner: float, outer: float, rings: int, segments: int, pos: Vector3, mat: Material, shadows := true) -> MeshInstance3D:
+func _add_torus(
+	node_name: String,
+	inner: float,
+	outer: float,
+	rings: int,
+	segments: int,
+	pos: Vector3,
+	mat: Material,
+	shadows := true
+) -> MeshInstance3D:
 	var mesh := TorusMesh.new()
 	mesh.inner_radius = inner
 	mesh.outer_radius = outer
@@ -155,13 +183,19 @@ func _add_torus(node_name: String, inner: float, outer: float, rings: int, segme
 	return _add_mesh(node_name, mesh, pos, Vector3.ZERO, mat, shadows)
 
 
-func _add_mesh(node_name: String, mesh: Mesh, pos: Vector3, rot: Vector3, mat: Material, shadows := true) -> MeshInstance3D:
+func _add_mesh(
+	node_name: String, mesh: Mesh, pos: Vector3, rot: Vector3, mat: Material, shadows := true
+) -> MeshInstance3D:
 	var mi := MeshInstance3D.new()
 	mi.name = node_name
 	mi.mesh = mesh
 	mi.material_override = mat
 	mi.position = pos
 	mi.rotation = rot
-	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if shadows else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mi.cast_shadow = (
+		GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		if shadows
+		else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	)
 	add_child(mi)
 	return mi

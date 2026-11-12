@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://dg67a5bj0kc17"
 path.s3tc="res://.godot/imported/small_tv_stand_2.png-1cf690d1a69a6c9da7a3e0028d22e9ad.s3tc.ctex"
+path.etc2="res://.godot/imported/small_tv_stand_2.png-1cf690d1a69a6c9da7a3e0028d22e9ad.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/props/small_tv_stand/small_tv_stand_2.png"
-dest_files=["res://.godot/imported/small_tv_stand_2.png-1cf690d1a69a6c9da7a3e0028d22e9ad.s3tc.ctex"]
+dest_files=["res://.godot/imported/small_tv_stand_2.png-1cf690d1a69a6c9da7a3e0028d22e9ad.s3tc.ctex", "res://.godot/imported/small_tv_stand_2.png-1cf690d1a69a6c9da7a3e0028d22e9ad.etc2.ctex"]
 
 [params]
 

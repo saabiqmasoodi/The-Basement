@@ -21,7 +21,7 @@ extends Node3D
 
 var playback: AnimationNodeStateMachinePlayback
 
-signal entered_basement   # friend finished walking down into the basement
+signal entered_basement  # friend finished walking down into the basement
 signal sequence_finished  # whole cutscene route done
 
 # CUTSCENE SETTINGS (legacy straight-walk mode kept for compatibility)
@@ -93,8 +93,12 @@ func play_cutscene() -> void:
 	var move := create_tween()
 	if stand_move_delay > 0.0:
 		move.tween_interval(stand_move_delay)
-	move.tween_property(self, "global_position", _stand_target, stand_move_time) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	(
+		move
+		. tween_property(self, "global_position", _stand_target, stand_move_time)
+		. set_trans(Tween.TRANS_SINE)
+		. set_ease(Tween.EASE_IN_OUT)
+	)
 
 	# Play the whole stand-up clip; only then blend into the idle pose.
 	await get_tree().create_timer(stand_len, false).timeout
@@ -151,6 +155,7 @@ func _play_waypoint_route() -> void:
 
 
 # ------------------------------------------------------------------ movement
+
 
 func _yaw_to(target: Vector3) -> float:
 	var dir := target - global_position
@@ -209,6 +214,7 @@ func _turn_yaw(target_yaw: float) -> void:
 
 
 # ------------------------------------------------------------------ helpers
+
 
 func get_head_position() -> Vector3:
 	var skel := get_node_or_null("Skeleton3D") as Skeleton3D

@@ -1,4 +1,3 @@
-
 extends CharacterBody3D
 
 var speed: float
@@ -58,7 +57,7 @@ func enter_cutscene_pose(pos: Vector3, look_yaw: float, look_pitch: float) -> vo
 	controls_enabled = false
 	velocity = Vector3.ZERO
 	global_position = pos
-	head.position.y = -0.5792575 # sofa-height head (value saved in World.tscn)
+	head.position.y = -0.5792575  # sofa-height head (value saved in World.tscn)
 	head.rotation.y = look_yaw
 	camera.rotation.x = look_pitch
 	camera.fov = GameState.get_setting("fov")
@@ -90,11 +89,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if bool(GameState.get_setting("invert_y")):
 			pitch_delta = -pitch_delta
 		camera.rotate_x(pitch_delta)
-		camera.rotation.x = clamp(
-			camera.rotation.x,
-			deg_to_rad(-40),
-			deg_to_rad(60)
-		)
+		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-40), deg_to_rad(60))
 
 
 func _physics_process(delta: float) -> void:
@@ -129,13 +124,9 @@ func _physics_process(delta: float) -> void:
 		flashlight.visible = not flashlight.visible
 
 	# WASD movement relative to the player's actual facing direction.
-	var input_dir := Input.get_vector(
-		"left", "right", "forward", "backward"
-	)
+	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 
-	var direction := head.global_basis * Vector3(
-		input_dir.x, 0.0, input_dir.y
-	)
+	var direction := head.global_basis * Vector3(input_dir.x, 0.0, input_dir.y)
 
 	direction.y = 0.0
 	direction = direction.normalized()

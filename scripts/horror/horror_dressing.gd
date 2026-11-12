@@ -20,6 +20,16 @@ const TEX_PUDDLE_NORMAL := preload("res://materials/generated/decal_puddle_norma
 const TEX_PUDDLE_ORM := preload("res://materials/generated/decal_puddle_orm.png")
 const TEX_HAZARD := preload("res://materials/generated/decal_hazard.png")
 const TEX_SCRATCHES := preload("res://materials/generated/decal_scratches.png")
+const DECAL_TEXTURES: Dictionary = {
+	"water": TEX_WATER,
+	"rust": TEX_RUST,
+	"mold": TEX_MOLD,
+	"blood": TEX_BLOOD,
+	"hand": TEX_HAND,
+	"puddle": TEX_PUDDLE,
+	"hazard": TEX_HAZARD,
+	"scratches": TEX_SCRATCHES,
+}
 
 const DECAL_DEPTH := 0.55
 const DECAL_OFFSET := DECAL_DEPTH * 0.5
@@ -36,7 +46,9 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	_rng.seed = 0xBA5E
-	_rust = _textured_metal("res://materials/generated/decal_rust.png", Color(0.42, 0.30, 0.20), 0.55)
+	_rust = _textured_metal(
+		"res://materials/generated/decal_rust.png", Color(0.42, 0.30, 0.20), 0.55
+	)
 	_dark_metal = _plain_material(Color(0.052, 0.058, 0.055), 0.42, 0.65)
 	_wood = _plain_material(Color(0.075, 0.058, 0.042), 0.88, 0.0)
 	_concrete = _plain_material(Color(0.20, 0.215, 0.205), 0.92, 0.0)
@@ -63,36 +75,241 @@ func _build() -> void:
 
 # ---------------------------------------------------------------- surface marks
 
+
 func _build_decals() -> void:
 	# Living room. Damp tracks lead from the front door toward the back room.
-	_floor_decal(-13.1, -6.1, 1.4, 1.8, "water", Vector2(1.7, 3.1), 0.12, Color(0.72, 0.84, 0.84), "DampEntry")
-	_floor_decal(-1.9, -8.2, 1.4, 1.8, "puddle", Vector2(2.8, 2.3), -0.36, Color(0.78, 0.91, 0.91), "SofaPuddle")
-	_floor_decal(8.7, -4.6, 1.4, 1.8, "blood", Vector2(1.0, 1.7), 0.65, Color(0.78, 0.72, 0.70), "OldSmear")
-	_floor_decal(-13.1, 7.2, 1.4, 1.8, "hazard", Vector2(2.4, 0.86), 0.0, Color(0.72, 0.72, 0.68), "StairHazard")
+	_floor_decal(
+		-13.1,
+		-6.1,
+		1.4,
+		1.8,
+		"water",
+		Vector2(1.7, 3.1),
+		0.12,
+		Color(0.72, 0.84, 0.84),
+		"DampEntry"
+	)
+	_floor_decal(
+		-1.9,
+		-8.2,
+		1.4,
+		1.8,
+		"puddle",
+		Vector2(2.8, 2.3),
+		-0.36,
+		Color(0.78, 0.91, 0.91),
+		"SofaPuddle"
+	)
+	_floor_decal(
+		8.7, -4.6, 1.4, 1.8, "blood", Vector2(1.0, 1.7), 0.65, Color(0.78, 0.72, 0.70), "OldSmear"
+	)
+	_floor_decal(
+		-13.1,
+		7.2,
+		1.4,
+		1.8,
+		"hazard",
+		Vector2(2.4, 0.86),
+		0.0,
+		Color(0.72, 0.72, 0.68),
+		"StairHazard"
+	)
 
 	# Back room and the top of the stairs.
-	_floor_decal(-13.1, 11.1, 1.4, 1.8, "water", Vector2(2.0, 3.1), -0.1, Color(0.72, 0.86, 0.85), "StairWater")
-	_floor_decal(-7.1, 15.1, 1.4, 1.8, "mold", Vector2(1.8, 2.2), 0.4, Color(0.75, 0.86, 0.76), "BackRoomMold")
+	_floor_decal(
+		-13.1,
+		11.1,
+		1.4,
+		1.8,
+		"water",
+		Vector2(2.0, 3.1),
+		-0.1,
+		Color(0.72, 0.86, 0.85),
+		"StairWater"
+	)
+	_floor_decal(
+		-7.1,
+		15.1,
+		1.4,
+		1.8,
+		"mold",
+		Vector2(1.8, 2.2),
+		0.4,
+		Color(0.75, 0.86, 0.76),
+		"BackRoomMold"
+	)
 
 	# Basement floor. The wet trail continues under the door.
-	_floor_decal(-13.1, 16.2, -0.68, 4.35, "puddle", Vector2(2.3, 2.6), 0.2, Color(0.82, 0.94, 0.94), "BasementPuddle")
-	_floor_decal(-10.0, 22.3, -0.68, 4.35, "water", Vector2(3.0, 3.8), -0.2, Color(0.72, 0.85, 0.83), "LongWater")
-	_floor_decal(3.3, 19.2, -0.68, 4.35, "blood", Vector2(1.4, 2.1), -0.5, Color(0.8, 0.7, 0.68), "FuseBlood")
-	_floor_decal(-13.0, 31.0, -0.68, 4.35, "rust", Vector2(2.4, 2.6), 0.35, Color(0.72, 0.62, 0.50), "FloorRust")
-	_floor_decal(-6.0, 26.0, -0.68, 4.35, "puddle", Vector2(2.6, 3.0), -0.8, Color(0.82, 0.94, 0.94), "GeneratorPuddle")
-	_floor_decal(-8.6, 29.4, -0.68, 4.35, "hazard", Vector2(2.2, 1.1), 0.0, Color(0.68, 0.68, 0.64), "GeneratorHazard")
-	_floor_decal(5.4, 24.7, -0.68, 4.35, "water", Vector2(1.8, 2.4), 0.7, Color(0.74, 0.88, 0.88), "RightRoomWater")
-	_floor_decal(-11.8, 29.3, -0.68, 4.35, "scratches", Vector2(1.5, 2.1), 0.1, Color(0.62, 0.64, 0.60), "FloorScratches")
+	_floor_decal(
+		-13.1,
+		16.2,
+		-0.68,
+		4.35,
+		"puddle",
+		Vector2(2.3, 2.6),
+		0.2,
+		Color(0.82, 0.94, 0.94),
+		"BasementPuddle"
+	)
+	_floor_decal(
+		-10.0,
+		22.3,
+		-0.68,
+		4.35,
+		"water",
+		Vector2(3.0, 3.8),
+		-0.2,
+		Color(0.72, 0.85, 0.83),
+		"LongWater"
+	)
+	_floor_decal(
+		3.3, 19.2, -0.68, 4.35, "blood", Vector2(1.4, 2.1), -0.5, Color(0.8, 0.7, 0.68), "FuseBlood"
+	)
+	_floor_decal(
+		-13.0,
+		31.0,
+		-0.68,
+		4.35,
+		"rust",
+		Vector2(2.4, 2.6),
+		0.35,
+		Color(0.72, 0.62, 0.50),
+		"FloorRust"
+	)
+	_floor_decal(
+		-6.0,
+		26.0,
+		-0.68,
+		4.35,
+		"puddle",
+		Vector2(2.6, 3.0),
+		-0.8,
+		Color(0.82, 0.94, 0.94),
+		"GeneratorPuddle"
+	)
+	_floor_decal(
+		-8.6,
+		29.4,
+		-0.68,
+		4.35,
+		"hazard",
+		Vector2(2.2, 1.1),
+		0.0,
+		Color(0.68, 0.68, 0.64),
+		"GeneratorHazard"
+	)
+	_floor_decal(
+		5.4,
+		24.7,
+		-0.68,
+		4.35,
+		"water",
+		Vector2(1.8, 2.4),
+		0.7,
+		Color(0.74, 0.88, 0.88),
+		"RightRoomWater"
+	)
+	_floor_decal(
+		-11.8,
+		29.3,
+		-0.68,
+		4.35,
+		"scratches",
+		Vector2(1.5, 2.1),
+		0.1,
+		Color(0.62, 0.64, 0.60),
+		"FloorScratches"
+	)
 
 	# Handprints, blood and mold on the walls.
-	_wall_decal(-7.1, 1.62, 3.55, Vector3(0, 0, -1), "hand", Vector2(0.70, 0.82), 0.08, Color(0.84, 0.78, 0.76), "WallHandprint")
-	_wall_decal(-18.9, 1.25, 6.0, Vector3(1, 0, 0), "mold", Vector2(1.55, 2.3), -0.2, Color(0.76, 0.88, 0.76), "WestMold")
-	_wall_decal(12.18, 1.8, 0.0, Vector3(-1, 0, 0), "scratches", Vector2(1.45, 1.1), 0.0, Color(0.72, 0.74, 0.70), "EastScratches")
-	_wall_decal(-11.0, 1.18, -12.35, Vector3(0, 0, 1), "blood", Vector2(1.6, 2.1), 0.2, Color(0.80, 0.68, 0.66), "NorthBlood")
-	_wall_decal(-13.0, -3.0, 14.98, Vector3(0, 0, 1), "hand", Vector2(0.78, 0.90), -0.18, Color(0.82, 0.76, 0.72), "StairHandprint")
-	_wall_decal(7.97, -3.0, 22.0, Vector3(-1, 0, 0), "scratches", Vector2(1.8, 1.25), 0.0, Color(0.70, 0.72, 0.68), "FuseScratches")
-	_wall_decal(-20.75, -3.0, 24.0, Vector3(1, 0, 0), "mold", Vector2(1.8, 2.7), 0.3, Color(0.74, 0.86, 0.74), "BasementMold")
-	_wall_decal(-8.0, -3.2, 28.06, Vector3(0, 0, -1), "blood", Vector2(1.25, 1.8), -0.35, Color(0.80, 0.68, 0.66), "GeneratorBlood")
+	_wall_decal(
+		-7.1,
+		1.62,
+		3.55,
+		Vector3(0, 0, -1),
+		"hand",
+		Vector2(0.70, 0.82),
+		0.08,
+		Color(0.84, 0.78, 0.76),
+		"WallHandprint"
+	)
+	_wall_decal(
+		-18.9,
+		1.25,
+		6.0,
+		Vector3(1, 0, 0),
+		"mold",
+		Vector2(1.55, 2.3),
+		-0.2,
+		Color(0.76, 0.88, 0.76),
+		"WestMold"
+	)
+	_wall_decal(
+		12.18,
+		1.8,
+		0.0,
+		Vector3(-1, 0, 0),
+		"scratches",
+		Vector2(1.45, 1.1),
+		0.0,
+		Color(0.72, 0.74, 0.70),
+		"EastScratches"
+	)
+	_wall_decal(
+		-11.0,
+		1.18,
+		-12.35,
+		Vector3(0, 0, 1),
+		"blood",
+		Vector2(1.6, 2.1),
+		0.2,
+		Color(0.80, 0.68, 0.66),
+		"NorthBlood"
+	)
+	_wall_decal(
+		-13.0,
+		-3.0,
+		14.98,
+		Vector3(0, 0, 1),
+		"hand",
+		Vector2(0.78, 0.90),
+		-0.18,
+		Color(0.82, 0.76, 0.72),
+		"StairHandprint"
+	)
+	_wall_decal(
+		7.97,
+		-3.0,
+		22.0,
+		Vector3(-1, 0, 0),
+		"scratches",
+		Vector2(1.8, 1.25),
+		0.0,
+		Color(0.70, 0.72, 0.68),
+		"FuseScratches"
+	)
+	_wall_decal(
+		-20.75,
+		-3.0,
+		24.0,
+		Vector3(1, 0, 0),
+		"mold",
+		Vector2(1.8, 2.7),
+		0.3,
+		Color(0.74, 0.86, 0.74),
+		"BasementMold"
+	)
+	_wall_decal(
+		-8.0,
+		-3.2,
+		28.06,
+		Vector3(0, 0, -1),
+		"blood",
+		Vector2(1.25, 1.8),
+		-0.35,
+		Color(0.80, 0.68, 0.66),
+		"GeneratorBlood"
+	)
 
 
 func _floor_decal(
@@ -175,27 +392,11 @@ func _add_decal(
 
 
 func _decal_texture(kind: String) -> Texture2D:
-	match kind:
-		"water":
-			return TEX_WATER
-		"rust":
-			return TEX_RUST
-		"mold":
-			return TEX_MOLD
-		"blood":
-			return TEX_BLOOD
-		"hand":
-			return TEX_HAND
-		"puddle":
-			return TEX_PUDDLE
-		"hazard":
-			return TEX_HAZARD
-		"scratches":
-			return TEX_SCRATCHES
-	return TEX_WATER
+	return DECAL_TEXTURES.get(kind, TEX_WATER) as Texture2D
 
 
 # --------------------------------------------------------------------- pipes
+
 
 func _build_pipes() -> void:
 	var root := Node3D.new()
@@ -203,23 +404,90 @@ func _build_pipes() -> void:
 	add_child(root)
 
 	# Main overhead runs. They give the basement a low, industrial ceiling.
-	_add_cylinder(root, "CeilingPipeA", 0.105, 16.0, Vector3(-8.3, -1.02, 22.5), Vector3(PI * 0.5, 0, 0), _rust, 16)
-	_add_cylinder(root, "CeilingPipeB", 0.070, 12.4, Vector3(-2.9, -1.16, 27.9), Vector3(0, 0, PI * 0.5), _dark_metal, 12)
-	_add_cylinder(root, "CeilingPipeC", 0.085, 10.1, Vector3(4.5, -1.18, 21.0), Vector3(PI * 0.5, 0, 0), _rust, 14)
+	_add_cylinder(
+		root,
+		"CeilingPipeA",
+		0.105,
+		16.0,
+		Vector3(-8.3, -1.02, 22.5),
+		Vector3(PI * 0.5, 0, 0),
+		_rust,
+		16
+	)
+	_add_cylinder(
+		root,
+		"CeilingPipeB",
+		0.070,
+		12.4,
+		Vector3(-2.9, -1.16, 27.9),
+		Vector3(0, 0, PI * 0.5),
+		_dark_metal,
+		12
+	)
+	_add_cylinder(
+		root,
+		"CeilingPipeC",
+		0.085,
+		10.1,
+		Vector3(4.5, -1.18, 21.0),
+		Vector3(PI * 0.5, 0, 0),
+		_rust,
+		14
+	)
 	_add_cylinder(root, "DropPipe", 0.075, 3.8, Vector3(-12.9, -2.9, 27.0), Vector3.ZERO, _rust, 12)
 
 	# Support brackets and collars.
 	for z in [-9.0, -3.0, 1.0, 5.0]:
-		_add_box(root, "PipeBracket", Vector3(0.12, 0.42, 0.10), Vector3(-8.3, -0.80, 22.5 + z), Vector3.ZERO, _dark_metal)
+		_add_box(
+			root,
+			"PipeBracket",
+			Vector3(0.12, 0.42, 0.10),
+			Vector3(-8.3, -0.80, 22.5 + z),
+			Vector3.ZERO,
+			_dark_metal
+		)
 	for x in [-6.7, -3.0, 0.7]:
-		_add_box(root, "PipeBracketB", Vector3(0.10, 0.34, 0.12), Vector3(x, -0.99, 27.9), Vector3.ZERO, _dark_metal)
+		_add_box(
+			root,
+			"PipeBracketB",
+			Vector3(0.10, 0.34, 0.12),
+			Vector3(x, -0.99, 27.9),
+			Vector3.ZERO,
+			_dark_metal
+		)
 	for z in [-2.8, 1.0, 4.6]:
-		_add_box(root, "PipeBracketC", Vector3(0.11, 0.40, 0.10), Vector3(4.5, -0.98, 21.0 + z), Vector3.ZERO, _dark_metal)
-	_add_cylinder(root, "PipeCollar", 0.145, 0.24, Vector3(-8.3, -1.02, 16.6), Vector3(PI * 0.5, 0, 0), _dark_metal, 10)
-	_add_cylinder(root, "PipeCollar2", 0.145, 0.24, Vector3(-8.3, -1.02, 28.4), Vector3(PI * 0.5, 0, 0), _dark_metal, 10)
+		_add_box(
+			root,
+			"PipeBracketC",
+			Vector3(0.11, 0.40, 0.10),
+			Vector3(4.5, -0.98, 21.0 + z),
+			Vector3.ZERO,
+			_dark_metal
+		)
+	_add_cylinder(
+		root,
+		"PipeCollar",
+		0.145,
+		0.24,
+		Vector3(-8.3, -1.02, 16.6),
+		Vector3(PI * 0.5, 0, 0),
+		_dark_metal,
+		10
+	)
+	_add_cylinder(
+		root,
+		"PipeCollar2",
+		0.145,
+		0.24,
+		Vector3(-8.3, -1.02, 28.4),
+		Vector3(PI * 0.5, 0, 0),
+		_dark_metal,
+		10
+	)
 
 
 # -------------------------------------------------------------------- chains
+
 
 func _build_chains() -> void:
 	var torus := TorusMesh.new()
@@ -263,6 +531,7 @@ func _build_chains() -> void:
 
 # ---------------------------------------------------------------------- cage
 
+
 func _build_cage() -> void:
 	var root := Node3D.new()
 	root.name = "HangingCage"
@@ -275,15 +544,61 @@ func _build_cage() -> void:
 
 	for x in [-half_x, 0.0, half_x]:
 		for z in [-half_z, half_z]:
-			_add_cylinder(root, "CageBar", 0.018, 2.0, Vector3(x, center.y, z) + Vector3(center.x, 0, center.z), Vector3.ZERO, _dark_metal, 6)
+			_add_cylinder(
+				root,
+				"CageBar",
+				0.018,
+				2.0,
+				Vector3(x, center.y, z) + Vector3(center.x, 0, center.z),
+				Vector3.ZERO,
+				_dark_metal,
+				6
+			)
 	for x in [-half_x, half_x]:
-		_add_cylinder(root, "CageBar", 0.018, 2.0, Vector3(center.x + x, center.y, center.z), Vector3.ZERO, _dark_metal, 6)
+		_add_cylinder(
+			root,
+			"CageBar",
+			0.018,
+			2.0,
+			Vector3(center.x + x, center.y, center.z),
+			Vector3.ZERO,
+			_dark_metal,
+			6
+		)
 	for x in [-half_x, half_x]:
-		_add_box(root, "CageTopRail", Vector3(0.035, 0.035, half_z * 2.0), Vector3(center.x + x, top, center.z), Vector3.ZERO, _dark_metal)
-		_add_box(root, "CageBottomRail", Vector3(0.035, 0.035, half_z * 2.0), Vector3(center.x + x, bottom, center.z), Vector3.ZERO, _dark_metal)
+		_add_box(
+			root,
+			"CageTopRail",
+			Vector3(0.035, 0.035, half_z * 2.0),
+			Vector3(center.x + x, top, center.z),
+			Vector3.ZERO,
+			_dark_metal
+		)
+		_add_box(
+			root,
+			"CageBottomRail",
+			Vector3(0.035, 0.035, half_z * 2.0),
+			Vector3(center.x + x, bottom, center.z),
+			Vector3.ZERO,
+			_dark_metal
+		)
 	for z in [-half_z, half_z]:
-		_add_box(root, "CageTopRail", Vector3(half_x * 2.0, 0.035, 0.035), Vector3(center.x, top, center.z + z), Vector3.ZERO, _dark_metal)
-		_add_box(root, "CageBottomRail", Vector3(half_x * 2.0, 0.035, 0.035), Vector3(center.x, bottom, center.z + z), Vector3.ZERO, _dark_metal)
+		_add_box(
+			root,
+			"CageTopRail",
+			Vector3(half_x * 2.0, 0.035, 0.035),
+			Vector3(center.x, top, center.z + z),
+			Vector3.ZERO,
+			_dark_metal
+		)
+		_add_box(
+			root,
+			"CageBottomRail",
+			Vector3(half_x * 2.0, 0.035, 0.035),
+			Vector3(center.x, bottom, center.z + z),
+			Vector3.ZERO,
+			_dark_metal
+		)
 
 	# A weak red lamp inside the cage is the only light in that corner.
 	var lamp := OmniLight3D.new()
@@ -300,6 +615,7 @@ func _build_cage() -> void:
 
 # ----------------------------------------------------------- barrels and junk
 
+
 func _build_barrels_and_debris() -> void:
 	var root := Node3D.new()
 	root.name = "RustedJunk"
@@ -311,25 +627,106 @@ func _build_barrels_and_debris() -> void:
 	_add_barrel(root, Vector3(-19.2, -4.40, 30.7), 0.7)
 
 	# Broken planks and collapsed crates.
-	_add_box(root, "Plank", Vector3(0.16, 0.045, 1.45), Vector3(-11.5, -4.86, 24.2), Vector3(0.15, 0.55, 0.10), _wood)
-	_add_box(root, "Plank", Vector3(0.14, 0.04, 1.1), Vector3(-10.9, -4.85, 24.6), Vector3(-0.1, 0.24, -0.08), _wood)
-	_add_box(root, "Crate", Vector3(0.52, 0.48, 0.50), Vector3(-16.7, -4.66, 30.4), Vector3(0, 0.4, 0), _wood)
-	_add_box(root, "Crate", Vector3(0.44, 0.40, 0.46), Vector3(-16.2, -4.70, 30.8), Vector3(0, -0.2, 0), _wood)
-	_add_box(root, "Crate", Vector3(0.60, 0.55, 0.52), Vector3(6.9, -4.62, 18.0), Vector3(0, 1.0, 0), _wood)
+	_add_box(
+		root,
+		"Plank",
+		Vector3(0.16, 0.045, 1.45),
+		Vector3(-11.5, -4.86, 24.2),
+		Vector3(0.15, 0.55, 0.10),
+		_wood
+	)
+	_add_box(
+		root,
+		"Plank",
+		Vector3(0.14, 0.04, 1.1),
+		Vector3(-10.9, -4.85, 24.6),
+		Vector3(-0.1, 0.24, -0.08),
+		_wood
+	)
+	_add_box(
+		root,
+		"Crate",
+		Vector3(0.52, 0.48, 0.50),
+		Vector3(-16.7, -4.66, 30.4),
+		Vector3(0, 0.4, 0),
+		_wood
+	)
+	_add_box(
+		root,
+		"Crate",
+		Vector3(0.44, 0.40, 0.46),
+		Vector3(-16.2, -4.70, 30.8),
+		Vector3(0, -0.2, 0),
+		_wood
+	)
+	_add_box(
+		root,
+		"Crate",
+		Vector3(0.60, 0.55, 0.52),
+		Vector3(6.9, -4.62, 18.0),
+		Vector3(0, 1.0, 0),
+		_wood
+	)
 
 	# A fallen bucket and a short length of pipe on the ground.
-	_add_cylinder(root, "Bucket", 0.20, 0.34, Vector3(-15.9, -4.72, 24.0), Vector3(0.1, 0.0, 1.35), _dark_metal, 10)
-	_add_cylinder(root, "LoosePipe", 0.055, 1.9, Vector3(-12.0, -4.85, 31.0), Vector3(0, 0.3, PI * 0.5), _rust, 10)
+	_add_cylinder(
+		root,
+		"Bucket",
+		0.20,
+		0.34,
+		Vector3(-15.9, -4.72, 24.0),
+		Vector3(0.1, 0.0, 1.35),
+		_dark_metal,
+		10
+	)
+	_add_cylinder(
+		root,
+		"LoosePipe",
+		0.055,
+		1.9,
+		Vector3(-12.0, -4.85, 31.0),
+		Vector3(0, 0.3, PI * 0.5),
+		_rust,
+		10
+	)
 
 
 func _add_barrel(parent: Node3D, pos: Vector3, yaw: float) -> void:
 	_add_cylinder(parent, "Barrel", 0.35, 1.0, pos, Vector3(0, yaw, 0), _rust, 14)
-	_add_cylinder(parent, "BarrelRing", 0.37, 0.035, pos + Vector3(0, 0.29, 0), Vector3(0, yaw, 0), _dark_metal, 14)
-	_add_cylinder(parent, "BarrelRing", 0.37, 0.035, pos + Vector3(0, -0.29, 0), Vector3(0, yaw, 0), _dark_metal, 14)
-	_add_cylinder(parent, "BarrelLid", 0.31, 0.012, pos + Vector3(0, 0.504, 0), Vector3(0, yaw, 0), _dark_metal, 14)
+	_add_cylinder(
+		parent,
+		"BarrelRing",
+		0.37,
+		0.035,
+		pos + Vector3(0, 0.29, 0),
+		Vector3(0, yaw, 0),
+		_dark_metal,
+		14
+	)
+	_add_cylinder(
+		parent,
+		"BarrelRing",
+		0.37,
+		0.035,
+		pos + Vector3(0, -0.29, 0),
+		Vector3(0, yaw, 0),
+		_dark_metal,
+		14
+	)
+	_add_cylinder(
+		parent,
+		"BarrelLid",
+		0.31,
+		0.012,
+		pos + Vector3(0, 0.504, 0),
+		Vector3(0, yaw, 0),
+		_dark_metal,
+		14
+	)
 
 
 # --------------------------------------------------------------------- signs
+
 
 func _build_signs() -> void:
 	var keep_out := Label3D.new()
@@ -361,6 +758,7 @@ func _build_signs() -> void:
 
 
 # ----------------------------------------------------------------- particles
+
 
 func _build_extra_lights() -> void:
 	# A single failing work lamp over the generator. The old scene left the
@@ -507,7 +905,9 @@ func _particle_material(tint: Color, additive: bool) -> StandardMaterial3D:
 	material.albedo_color = tint
 	material.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
 	material.billboard_keep_scale = true
-	material.blend_mode = BaseMaterial3D.BLEND_MODE_ADD if additive else BaseMaterial3D.BLEND_MODE_MIX
+	material.blend_mode = (
+		BaseMaterial3D.BLEND_MODE_ADD if additive else BaseMaterial3D.BLEND_MODE_MIX
+	)
 	material.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_DISABLED
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
@@ -516,12 +916,14 @@ func _particle_material(tint: Color, additive: bool) -> StandardMaterial3D:
 
 func _radial_texture() -> GradientTexture2D:
 	var gradient := Gradient.new()
-	gradient.colors = PackedColorArray([
-		Color(1, 1, 1, 1),
-		Color(1, 1, 1, 0.55),
-		Color(1, 1, 1, 0.12),
-		Color(1, 1, 1, 0),
-	])
+	gradient.colors = PackedColorArray(
+		[
+			Color(1, 1, 1, 1),
+			Color(1, 1, 1, 0.55),
+			Color(1, 1, 1, 0.12),
+			Color(1, 1, 1, 0),
+		]
+	)
 	gradient.offsets = PackedFloat32Array([0.0, 0.32, 0.7, 1.0])
 	var texture := GradientTexture2D.new()
 	texture.gradient = gradient
@@ -534,6 +936,7 @@ func _radial_texture() -> GradientTexture2D:
 
 
 # ------------------------------------------------------------------ primitives
+
 
 func _add_cylinder(
 	parent: Node3D,

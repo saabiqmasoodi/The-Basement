@@ -12,9 +12,7 @@ const SAVE_PATH := "user://save_game.json"
 const SETTINGS_PATH := "user://settings.json"
 
 # Legacy generic state storage kept intact (fuze counter lives here).
-var state := {
-	"fuze": 0
-}
+var state := {"fuze": 0}
 
 # Progression tracked for task HUD + saves.
 var collected_fuzes: Array[String] = []
@@ -26,6 +24,7 @@ var basement_seen := false
 var pending_start := "new_game"
 
 # ---------------------------------- fuzes ----------------------------------
+
 
 func get_value(key: String):
 	if state.has(key):
@@ -41,6 +40,7 @@ func set_value(key: String, value) -> void:
 func get_fuzes() -> int:
 	return get_value("fuze") if state.has("fuze") else 0
 
+
 # Returns true if the fuse was accepted (not yet at 3, not already collected).
 func add_fuze(fuze_name: String) -> bool:
 	if get_fuzes() >= MAX_FUZES:
@@ -51,13 +51,16 @@ func add_fuze(fuze_name: String) -> bool:
 	state["fuze"] = get_fuzes() + 1
 	fuzes_changed.emit(get_fuzes())
 	if get_fuzes() >= MAX_FUZES:
-		save_game() # progress checkpoint
+		save_game()  # progress checkpoint
 	return true
+
 
 func get_collected_fuzes() -> Array[String]:
 	return collected_fuzes
 
+
 # --------------------------------- tasks ------------------------------------
+
 
 func complete_electricity():
 	if electricity_on:
@@ -66,16 +69,20 @@ func complete_electricity():
 	electricity_restored.emit()
 	save_game()
 
+
 # ------------------------ new game / load game flow --------------------------
+
 
 func start_new_game():
 	_reset_run_state()
 	pending_start = "new_game"
 
+
 func start_loaded_game(data: Dictionary):
 	_reset_run_state()
 	pending_start = "continue"
 	loaded_save = data
+
 
 func _reset_run_state():
 	state["fuze"] = 0
@@ -84,6 +91,7 @@ func _reset_run_state():
 	cutscene_done = false
 	basement_seen = false
 	loaded_save = null
+
 
 # ------------------------------- save system --------------------------------
 
@@ -97,27 +105,39 @@ func has_save() -> bool:
 
 func save_game():
 	if not cutscene_done:
-		return # never checkpoint the unfinished opening cutscene
+		return  # never checkpoint the unfinished opening cutscene
 	var world = get_tree().current_scene if get_tree() != null else null
 	if world == null or not world.has_node("Player"):
-		return # menu / no playable world active
+		return  # menu / no playable world active
 	var data := {
 		"scene": "res://scenes/world/World.tscn",
 	}
 	if world and world.has_node("Player"):
 		var player: Node3D = world.get_node("Player")
-		data["player_position"] = [player.global_position.x, player.global_position.y, player.global_position.z]
+		data["player_position"] = [
+			player.global_position.x, player.global_position.y, player.global_position.z
+		]
 		data["player_yaw"] = player.rotation.y
 	var f = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	f.store_string(JSON.stringify({
-		"fuzes": get_fuzes(),
-		"collected_fuzes": collected_fuzes,
-		"electricity_restored": electricity_on,
-		"basement_seen": basement_seen,
-		"position": data.get("player_position"),
-		"yaw": data.get("player_yaw"),
-		"scene": data["scene"],
-	}))
+	(
+		f
+		. store_string(
+			(
+				JSON
+				. stringify(
+					{
+						"fuzes": get_fuzes(),
+						"collected_fuzes": collected_fuzes,
+						"electricity_restored": electricity_on,
+						"basement_seen": basement_seen,
+						"position": data.get("player_position"),
+						"yaw": data.get("player_yaw"),
+						"scene": data["scene"],
+					}
+				)
+			)
+		)
+	)
 	f.close()
 	print("GameState: game saved.")
 	game_saved.emit()
@@ -143,11 +163,12 @@ func apply_save(data: Dictionary) -> void:
 			collected_fuzes.append(str(c))
 	electricity_on = bool(data.get("electricity_restored", false))
 	basement_seen = bool(data.get("basement_seen", false))
-	cutscene_done = true # a save implies the opening cutscene was already seen
+	cutscene_done = true  # a save implies the opening cutscene was already seen
 	# Notify any listeners (task HUD) that the restored values are in place.
 	fuzes_changed.emit(get_fuzes())
 	if electricity_on:
 		electricity_restored.emit()
+
 
 # --------------------------------- settings ---------------------------------
 
@@ -160,12 +181,12 @@ var settings := {
 	"window_width": 1280,
 	"window_height": 720,
 	"vsync": true,
-	"msaa": 0, # 0, 2, 4
-	"graphics_quality": "high", # low, medium, high, very_high
-	"mouse_sensitivity": 1.0,   # multiplier applied to the existing 0.003 step
+	"msaa": 0,  # 0, 2, 4
+	"graphics_quality": "high",  # low, medium, high, very_high
+	"mouse_sensitivity": 1.0,  # multiplier applied to the existing 0.003 step
 	"invert_y": false,
 	"fov": 75.0,
-	"keybinds": {},             # {"action": physical_keycode}
+	"keybinds": {},  # {"action": physical_keycode}
 }
 
 const SETTINGS_SAVE_FORMAT := "{settings}"
@@ -206,33 +227,45 @@ func set_graphics_quality(quality: String) -> void:
 
 func _quality_render_scale(target_width: int, quality: String) -> float:
 	if target_width >= 3200:
-		return {
-			"low": 0.50,
-			"medium": 0.65,
-			"high": 0.80,
-			"very_high": 1.00,
-		}.get(quality, 0.80)
+		return (
+			{
+				"low": 0.50,
+				"medium": 0.65,
+				"high": 0.80,
+				"very_high": 1.00,
+			}
+			. get(quality, 0.80)
+		)
 	if target_width >= 2400:
-		return {
-			"low": 0.60,
-			"medium": 0.75,
-			"high": 0.88,
-			"very_high": 1.00,
-		}.get(quality, 0.88)
+		return (
+			{
+				"low": 0.60,
+				"medium": 0.75,
+				"high": 0.88,
+				"very_high": 1.00,
+			}
+			. get(quality, 0.88)
+		)
 	if target_width >= 1800:
-		return {
-			"low": 0.80,
-			"medium": 0.90,
-			"high": 1.00,
-			"very_high": 1.00,
-		}.get(quality, 1.0)
+		return (
+			{
+				"low": 0.80,
+				"medium": 0.90,
+				"high": 1.00,
+				"very_high": 1.00,
+			}
+			. get(quality, 1.0)
+		)
 	if target_width >= 1500:
-		return {
-			"low": 0.90,
-			"medium": 0.96,
-			"high": 1.00,
-			"very_high": 1.00,
-		}.get(quality, 1.0)
+		return (
+			{
+				"low": 0.90,
+				"medium": 0.96,
+				"high": 1.00,
+				"very_high": 1.00,
+			}
+			. get(quality, 1.0)
+		)
 	return 1.0
 
 
@@ -259,13 +292,21 @@ func rebind_key(action: String, physical_keycode: int) -> void:
 
 func reset_keybinds() -> void:
 	settings["keybinds"].clear()
-	for action in ["forward", "backward", "left", "right", "Jump", "Sprint", "flashlight", "interact"]:
+	for action in [
+		"forward", "backward", "left", "right", "Jump", "Sprint", "flashlight", "interact"
+	]:
 		if InputMap.has_action(action):
 			InputMap.action_erase_events(action)
 			var ev := InputEventKey.new()
 			var default_codes := {
-				"forward": KEY_W, "backward": KEY_S, "left": KEY_A, "right": KEY_D,
-				"Jump": KEY_SPACE, "Sprint": KEY_SHIFT, "flashlight": KEY_F, "interact": KEY_E,
+				"forward": KEY_W,
+				"backward": KEY_S,
+				"left": KEY_A,
+				"right": KEY_D,
+				"Jump": KEY_SPACE,
+				"Sprint": KEY_SHIFT,
+				"flashlight": KEY_F,
+				"interact": KEY_E,
 			}
 			ev.physical_keycode = default_codes[action]
 			InputMap.action_add_event(action, ev)
@@ -308,11 +349,19 @@ func apply_settings():
 	_set_bus_volume("Music", settings["music_volume"])
 	_set_bus_volume("SFX", settings["sfx_volume"])
 	# Display
-	var mode := DisplayServer.WINDOW_MODE_FULLSCREEN if settings["fullscreen"] else DisplayServer.WINDOW_MODE_WINDOWED
+	var mode := (
+		DisplayServer.WINDOW_MODE_FULLSCREEN
+		if settings["fullscreen"]
+		else DisplayServer.WINDOW_MODE_WINDOWED
+	)
 	DisplayServer.window_set_mode(mode)
 	if not settings["fullscreen"]:
-		DisplayServer.window_set_size(Vector2i(int(settings["window_width"]), int(settings["window_height"])))
-	var vsync_mode := DisplayServer.VSYNC_ENABLED if settings["vsync"] else DisplayServer.VSYNC_DISABLED
+		DisplayServer.window_set_size(
+			Vector2i(int(settings["window_width"]), int(settings["window_height"]))
+		)
+	var vsync_mode := (
+		DisplayServer.VSYNC_ENABLED if settings["vsync"] else DisplayServer.VSYNC_DISABLED
+	)
 	DisplayServer.window_set_vsync_mode(vsync_mode)
 	# Graphics quality: MSAA is optional; the TAA in project.godot handles normal
 	# edge quality. Keep the 3D at native resolution on small windows, but scale
@@ -333,6 +382,9 @@ func apply_settings():
 			vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_METALFX_SPATIAL
 		else:
 			vp.scaling_3d_mode = Viewport.SCALING_3D_MODE_BILINEAR
+		# TAA is part of the high-quality look. Disable it in the performance
+		# presets, where the render-scale reduction already does the heavy lifting.
+		vp.use_taa = quality == "high" or quality == "very_high"
 	# Input (apply stored keybinds directly; rebind_key() saves without
 	# re-entering apply_settings to avoid recursion).
 	for action in settings["keybinds"].keys():
@@ -356,6 +408,7 @@ func _set_bus_volume(bus_name: String, linear: float) -> void:
 func _ready():
 	load_settings()
 	apply_settings()
+
 
 # quick save key (F5)
 func _unhandled_key_input(event: InputEvent) -> void:

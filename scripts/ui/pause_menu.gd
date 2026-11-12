@@ -47,6 +47,7 @@ func _ready() -> void:
 
 # --------------------------------------------------------------------- input
 
+
 func _input(event: InputEvent) -> void:
 	# A key is being captured for a control rebind.
 	if _awaiting_action != "":
@@ -83,6 +84,7 @@ func _on_escape() -> void:
 
 
 # ---------------------------------------------------------------------- open
+
 
 func _open() -> void:
 	visible = true
@@ -133,6 +135,7 @@ func _click() -> void:
 
 # ---------------------------------------------------------------- settings UI
 
+
 func _open_settings() -> void:
 	_click()
 	if _settings_root == null:
@@ -175,8 +178,7 @@ func _build_settings() -> void:
 
 	var vp_size := get_viewport().get_visible_rect().size
 	_settings_panel.custom_minimum_size = Vector2(
-		minf(700.0, vp_size.x * 0.92),
-		minf(640.0, vp_size.y * 0.92)
+		minf(700.0, vp_size.x * 0.92), minf(640.0, vp_size.y * 0.92)
 	)
 	center.add_child(_settings_panel)
 
@@ -261,7 +263,9 @@ func _value_text(value: float, is_float: bool) -> String:
 	return "%d%%" % int(round(value * 100.0))
 
 
-func _add_slider(box: VBoxContainer, title_text: String, key: String, min_v: float, max_v: float, step: float) -> void:
+func _add_slider(
+	box: VBoxContainer, title_text: String, key: String, min_v: float, max_v: float, step: float
+) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 
@@ -284,9 +288,10 @@ func _add_slider(box: VBoxContainer, title_text: String, key: String, min_v: flo
 	val.text = _value_text(slider.value, key == "mouse_sensitivity" or key == "fov")
 	row.add_child(val)
 
-	slider.value_changed.connect(func(v: float) -> void:
-		val.text = _value_text(v, key == "mouse_sensitivity" or key == "fov")
-		GameState.set_setting(key, v)
+	slider.value_changed.connect(
+		func(v: float) -> void:
+			val.text = _value_text(v, key == "mouse_sensitivity" or key == "fov")
+			GameState.set_setting(key, v)
 	)
 	box.add_child(row)
 
@@ -299,9 +304,7 @@ func _add_check(box: VBoxContainer, title_text: String, key: String) -> void:
 	row.add_child(lbl)
 	var check := CheckButton.new()
 	check.button_pressed = bool(GameState.get_setting(key))
-	check.toggled.connect(func(on: bool) -> void:
-		GameState.set_setting(key, on)
-	)
+	check.toggled.connect(func(on: bool) -> void: GameState.set_setting(key, on))
 	row.add_child(check)
 	box.add_child(row)
 
@@ -315,19 +318,27 @@ func _add_resolution(box: VBoxContainer) -> void:
 
 	var opt := OptionButton.new()
 	var modes := [
-		[1280, 720], [1600, 900], [1920, 1080], [2560, 1440], [3840, 2160],
+		[1280, 720],
+		[1600, 900],
+		[1920, 1080],
+		[2560, 1440],
+		[3840, 2160],
 	]
 	var current := 0
 	for i in modes.size():
 		var m: Array = modes[i]
 		opt.add_item("%d x %d" % [m[0], m[1]], i)
-		if int(GameState.get_setting("window_width")) == m[0] and int(GameState.get_setting("window_height")) == m[1]:
+		if (
+			int(GameState.get_setting("window_width")) == m[0]
+			and int(GameState.get_setting("window_height")) == m[1]
+		):
 			current = i
 	opt.select(current)
-	opt.item_selected.connect(func(idx: int) -> void:
-		var m: Array = modes[idx]
-		GameState.set_setting("window_width", m[0])
-		GameState.set_setting("window_height", m[1])
+	opt.item_selected.connect(
+		func(idx: int) -> void:
+			var m: Array = modes[idx]
+			GameState.set_setting("window_width", m[0])
+			GameState.set_setting("window_height", m[1])
 	)
 	row.add_child(opt)
 	box.add_child(row)
@@ -348,9 +359,10 @@ func _add_graphics_quality(box: VBoxContainer) -> void:
 		if quality == GameState.get_graphics_quality():
 			current = i
 	opt.select(current)
-	opt.item_selected.connect(func(idx: int) -> void:
-		GameState.set_graphics_quality(GameState.GRAPHICS_QUALITY_ORDER[idx])
-		_sync_msaa_option()
+	opt.item_selected.connect(
+		func(idx: int) -> void:
+			GameState.set_graphics_quality(GameState.GRAPHICS_QUALITY_ORDER[idx])
+			_sync_msaa_option()
 	)
 	row.add_child(opt)
 	box.add_child(row)
@@ -370,13 +382,14 @@ func _add_msaa(box: VBoxContainer) -> void:
 	opt.add_item("4x", 2)
 	var msaa_level: int = int(GameState.get_setting("msaa"))
 	opt.select(1 if msaa_level == 2 else (2 if msaa_level == 4 else 0))
-	opt.item_selected.connect(func(idx: int) -> void:
-		var level := 0
-		if idx == 1:
-			level = 2
-		elif idx == 2:
-			level = 4
-		GameState.set_setting("msaa", level)
+	opt.item_selected.connect(
+		func(idx: int) -> void:
+			var level := 0
+			if idx == 1:
+				level = 2
+			elif idx == 2:
+				level = 4
+			GameState.set_setting("msaa", level)
 	)
 	row.add_child(opt)
 	box.add_child(row)
@@ -402,9 +415,7 @@ func _add_keybind_row(box: VBoxContainer, action: String, title_text: String) ->
 	btn.custom_minimum_size = Vector2(220, 30)
 	btn.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	btn.text = _key_text(action)
-	btn.pressed.connect(func() -> void:
-		_start_rebind(action, btn)
-	)
+	btn.pressed.connect(func() -> void: _start_rebind(action, btn))
 	_rebind_buttons[action] = btn
 	row.add_child(btn)
 	box.add_child(row)
