@@ -78,8 +78,6 @@ jobs:
     needs: [quality, test]
     runs-on: macos-latest
     timeout-minutes: 45
-    permissions:
-      contents: write
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -108,19 +106,24 @@ jobs:
           mkdir -p build/releases/windows build/releases/macos build/releases/linux build/artifacts
 
           "$GODOT_BIN" --headless --path . --export-release "Windows Desktop" build/releases/windows/NotToLove.exe
-          (cd build/releases/windows && zip -qr "$GITHUB_WORKSPACE/build/artifacts/NotToLove-windows.zip" .)
+          cp build/releases/windows/NotToLove.exe build/artifacts/NotToLove-Windows-x86_64.exe
 
           "$GODOT_BIN" --headless --path . --export-release "macOS" build/releases/macos/NotToLove.app
-          ditto -c -k --sequesterRsrc --keepParent build/releases/macos/NotToLove.app build/artifacts/NotToLove-macos.zip
-
           "$GODOT_BIN" --headless --path . --export-release "Linux" build/releases/linux/NotToLove.x86_64
-          (cd build/releases/linux && zip -qr "$GITHUB_WORKSPACE/build/artifacts/NotToLove-linux.zip" .)
+          cp build/releases/linux/NotToLove.x86_64 build/artifacts/NotToLove-Linux-x86_64
+
+          DMG_STAGE="$RUNNER_TEMP/dmg"
+          rm -rf "$DMG_STAGE"
+          mkdir -p "$DMG_STAGE"
+          cp -R build/releases/macos/NotToLove.app "$DMG_STAGE/Not To Love.app"
+          ln -s /Applications "$DMG_STAGE/Applications"
+          hdiutil create -volname "Not To Love" -srcfolder "$DMG_STAGE" -ov -format UDZO build/artifacts/NotToLove-macOS-universal.dmg
 
       - name: Upload Windows build
         uses: actions/upload-artifact@v4
         with:
           name: NotToLove-windows
-          path: build/artifacts/NotToLove-windows.zip
+          path: build/artifacts/NotToLove-Windows-x86_64.exe
           if-no-files-found: error
           retention-days: 14
 
@@ -128,20 +131,103 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: NotToLove-macos
-          path: build/artifacts/NotToLove-macos.zip
+          path: build/artifacts/NotToLove-macOS-universal.dmg
           if-no-files-found: error
           retention-days: 14
 
-      - name: Upload Linux build
+      - name: Upload Linux binary
         uses: actions/upload-artifact@v4
         with:
-          name: NotToLove-linux
-          path: build/artifacts/NotToLove-linux.zip
+          name: NotToLove-linux-binary
+          path: build/artifacts/NotToLove-Linux-x86_64
           if-no-files-found: error
           retention-days: 14
 
-      - name: Publish GitHub release
-        if: startsWith(github.ref, 'refs/tags/')
+  package-linux:
+    name: Package Linux portable builds
+    needs: export
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Download Linux binary
+        uses: actions/download-artifact@v4
+        with:
+          name: NotToLove-linux-binary
+          path: build/linux
+
+      - name: Create AppImage and tarball
+        run: |
+          mkdir -p build/artifacts build/appimage/AppDir/usr/bin
+          chmod +x build/linux/NotToLove-Linux-x86_64
+
+          tar -C build/linux -czf build/artifacts/NotToLove-Linux-x86_64.tar.gz NotToLove-Linux-x86_64
+
+          cp build/linux/NotToLove-Linux-x86_64 build/appimage/AppDir/usr/bin/NotToLove
+          cp icon.png build/appimage/AppDir/not-to-love.png
+          cat > build/appimage/AppDir/not-to-love.desktop <<'EOF'
+          [Desktop Entry]
+          Name=Not To Love
+          Exec=NotToLove
+          Icon=not-to-love
+          Type=Application
+          Categories=Game;
+          Terminal=false
+          EOF
+          cat > build/appimage/AppDir/AppRun <<'EOF'
+          #!/bin/sh
+          HERE="$(dirname "$(readlink -f "$0")")"
+          exec "$HERE/usr/bin/NotToLove" "$@"
+          EOF
+          chmod +x build/appimage/AppDir/AppRun
+
+          curl -fsSL --retry 3 -o "$RUNNER_TEMP/appimagetool" \
+            "https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage"
+          chmod +x "$RUNNER_TEMP/appimagetool"
+          ARCH=x86_64 APPIMAGE_EXTRACT_AND_RUN=1 "$RUNNER_TEMP/appimagetool" \
+            build/appimage/AppDir build/artifacts/NotToLove-Linux-x86_64.AppImage
+
+      - name: Upload Linux portable builds
+        uses: actions/upload-artifact@v4
+        with:
+          name: NotToLove-linux-portable
+          path: |
+            build/artifacts/NotToLove-Linux-x86_64.AppImage
+            build/artifacts/NotToLove-Linux-x86_64.tar.gz
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    name: Publish GitHub release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [export, package-linux]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Download release files
+        uses: actions/download-artifact@v4
+        with:
+          pattern: NotToLove-*
+          path: release-assets
+          merge-multiple: true
+
+      - name: Create checksums
+        run: |
+          cd release-assets
+          sha256sum \
+            NotToLove-Windows-x86_64.exe \
+            NotToLove-macOS-universal.dmg \
+            NotToLove-Linux-x86_64.AppImage \
+            NotToLove-Linux-x86_64.tar.gz > SHA256SUMS.txt
+
+      - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -150,20 +236,24 @@ jobs:
 
           ## Downloads
 
-          - Windows x86_64 (`.zip`)
-          - macOS universal (`.zip`)
-          - Linux x86_64 (`.zip`)
+          - Windows portable: `NotToLove-Windows-x86_64.exe`
+          - macOS universal: `NotToLove-macOS-universal.dmg`
+          - Linux portable: `NotToLove-Linux-x86_64.AppImage`
+          - Linux tarball: `NotToLove-Linux-x86_64.tar.gz`
+          - Checksums: `SHA256SUMS.txt`
 
           ## Notes
 
           These builds are unsigned. On macOS, right-click the app and choose
           **Open** the first time. On Windows, SmartScreen may ask you to choose
-          **More info → Run anyway**. On Linux, mark the extracted binary as
-          executable with `chmod +x NotToLove.x86_64` if needed.
+          **More info → Run anyway**. On Linux, mark the AppImage as executable
+          with `chmod +x NotToLove-Linux-x86_64.AppImage` before running it.
           EOF
           gh release create "$GITHUB_REF_NAME" \
-            build/artifacts/NotToLove-windows.zip \
-            build/artifacts/NotToLove-macos.zip \
-            build/artifacts/NotToLove-linux.zip \
+            release-assets/NotToLove-Windows-x86_64.exe \
+            release-assets/NotToLove-macOS-universal.dmg \
+            release-assets/NotToLove-Linux-x86_64.AppImage \
+            release-assets/NotToLove-Linux-x86_64.tar.gz \
+            release-assets/SHA256SUMS.txt \
             --title "Not To Love $GITHUB_REF_NAME" \
             --notes-file "$RUNNER_TEMP/release-notes.md"

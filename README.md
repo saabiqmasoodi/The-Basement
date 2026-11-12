@@ -84,17 +84,18 @@ GODOT_BIN=/Applications/Godot.app/Contents/MacOS/Godot make check
 
 1. GDScript lint, format, and `res://` reference checks.
 2. Godot `--check-only` type checks and headless tests.
-3. Release exports for Windows, Linux, and macOS. Builds are uploaded as
-   GitHub Actions artifacts (`NotToLove-windows`, `NotToLove-linux`,
-   `NotToLove-macos`) for 14 days.
+3. Release exports for Windows, Linux, and macOS. Version tags (`v*`) publish
+   a GitHub release with a portable Windows `.exe`, a macOS `.dmg`, a Linux
+   `.AppImage`, a Linux `.tar.gz`, and SHA-256 checksums.
 
 The test and export jobs run on macOS. Godot 4.7's Linux editor can deadlock
 while importing this project's large GLB assets in a headless CI container;
 the macOS editor imports them reliably and cross-exports all three targets.
 
 Export templates for the exact Godot version must be installed locally for
-`make build`. Release builds are written to `build/releases/` and zipped into
-`build/artifacts/`; both directories are ignored by Git.
+`make build`. Local release builds are written to `build/releases/` and
+packaged into `build/artifacts/`; both directories are ignored by Git. The
+Linux AppImage is assembled in CI on Ubuntu.
 
 The project defaults are tuned for responsive play: Jolt Physics at a 60 Hz
 simulation tick, 4× anisotropic filtering, render-scale reduction on high-DPI

@@ -15,25 +15,34 @@ cd "${ROOT_DIR}"
 mkdir -p build/releases/windows build/releases/macos build/releases/linux build/artifacts
 
 if [[ "${PLATFORM}" == "all" || "${PLATFORM}" == "windows" ]]; then
-  rm -f build/releases/windows/NotToLove.exe
+  rm -f build/releases/windows/NotToLove.exe build/artifacts/NotToLove-Windows-x86_64.exe
   "${GODOT_BIN}" --headless --path "${ROOT_DIR}" --export-release "Windows Desktop" build/releases/windows/NotToLove.exe
-  (cd build/releases/windows && zip -qr "${ROOT_DIR}/build/artifacts/NotToLove-windows.zip" .)
+  cp build/releases/windows/NotToLove.exe build/artifacts/NotToLove-Windows-x86_64.exe
 fi
 
 if [[ "${PLATFORM}" == "all" || "${PLATFORM}" == "macos" ]]; then
-  rm -rf build/releases/macos/NotToLove.app
+  rm -rf build/releases/macos/NotToLove.app build/artifacts/NotToLove-macOS-universal.dmg
   "${GODOT_BIN}" --headless --path "${ROOT_DIR}" --export-release "macOS" build/releases/macos/NotToLove.app
-  if command -v ditto >/dev/null 2>&1; then
-    ditto -c -k --sequesterRsrc --keepParent build/releases/macos/NotToLove.app build/artifacts/NotToLove-macos.zip
+  if command -v hdiutil >/dev/null 2>&1; then
+    STAGE="${ROOT_DIR}/build/dmg-stage"
+    rm -rf "${STAGE}"
+    mkdir -p "${STAGE}"
+    cp -R build/releases/macos/NotToLove.app "${STAGE}/Not To Love.app"
+    ln -s /Applications "${STAGE}/Applications"
+    hdiutil create -volname "Not To Love" -srcfolder "${STAGE}" -ov -format UDZO \
+      build/artifacts/NotToLove-macOS-universal.dmg
   else
-    (cd build/releases/macos && zip -qry "${ROOT_DIR}/build/artifacts/NotToLove-macos.zip" NotToLove.app)
+    echo "hdiutil not found; a DMG can only be created on macOS." >&2
+    exit 1
   fi
 fi
 
 if [[ "${PLATFORM}" == "all" || "${PLATFORM}" == "linux" ]]; then
-  rm -f build/releases/linux/NotToLove.x86_64
+  rm -f build/releases/linux/NotToLove.x86_64 build/artifacts/NotToLove-Linux-x86_64 \
+    build/artifacts/NotToLove-Linux-x86_64.tar.gz
   "${GODOT_BIN}" --headless --path "${ROOT_DIR}" --export-release "Linux" build/releases/linux/NotToLove.x86_64
-  (cd build/releases/linux && zip -qr "${ROOT_DIR}/build/artifacts/NotToLove-linux.zip" .)
+  cp build/releases/linux/NotToLove.x86_64 build/artifacts/NotToLove-Linux-x86_64
+  tar -C build/artifacts -czf build/artifacts/NotToLove-Linux-x86_64.tar.gz NotToLove-Linux-x86_64
 fi
 
 ls -lh build/artifacts
