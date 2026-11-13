@@ -44,7 +44,7 @@ addons/                      Third-party Godot plugins
 build/                       Local exports and archives (ignored by Git)
 ```
 
-`default_bus_layout.tres`, `export_presets.cfg`, `icon.svg`, and
+`default_bus_layout.tres`, `export_presets.cfg`, `icon.png`, and
 `project.godot` intentionally remain at the project root.
 
 ## Controls

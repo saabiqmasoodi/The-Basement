@@ -246,6 +246,10 @@ jobs:
           cat > "$RUNNER_TEMP/release-notes.md" <<'EOF'
           Not To Love release.
 
+          v1.0.4 refreshes the application icon across every platform. The
+          macOS disk image now uses the same artwork for the mounted volume,
+          and all downloads are rebuilt from the current release tree.
+
           New Game now preloads the basement on a background thread, with a
           horror-styled loading screen if you start before it is ready. The
           export also bakes Forward+ shaders into each build, so the first

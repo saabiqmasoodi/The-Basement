@@ -18,6 +18,10 @@ background = os.path.abspath(
     defines.get("background", "packaging/dmg-background.png")
 )
 
+# Mounted-volume icon. The app bundle carries the same artwork for the icon
+# shown beside it in Finder.
+icon = os.path.abspath(defines.get("icon", "packaging/not-to-love.icns"))
+
 icon_locations = {
     app_name: (210, 222),
     "Applications": (790, 222),
